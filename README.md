@@ -3,11 +3,11 @@
 
 A ideia é que a ferramenta possa disponibilizar recursos de gestão específicos para que seja possível à empresas setorizadas, que possuem a necessidade de alocar seus diversos recursos ao longo de atividades paralelas de uma maneira simplicada e eficiente. 
 
-Arda é desenvolvida com tecnologias 100% Microsoft e utiliza diversos recursos de computação em nuvem do Microsoft Azure. A aplicação foi projetada desta maneira para que fosse possível aos TE's a utilizarem como exemplo de apresentações em eventos, clientes, POC's, etc.
+Arda é uma ferramenta web desenvolvida com tecnologias 100% Microsoft e utiliza diversos recursos de computação em nuvem do Microsoft Azure. A aplicação foi projetada desta maneira para que fosse possível aos TE's a utilizarem como exemplo de apresentações em eventos, clientes, POC's, etc.
 
 Internamente Arda é entregue como uma solução SaaS, entretanto, como o código está aberto no GitHub, outras empresas podem baixar e utilizar em seus ambientes de negócio.
 
-## Edit this ReadMe and commit your change to a topic branch
+## Aberta
 In Git, branches are cheap.  You should use them whenever you're making changes to your repository.  Edit this file by clicking on the edit icon.
 
 Then make some changes to this ReadMe file.
