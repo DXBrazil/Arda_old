@@ -23,17 +23,18 @@ Primeiro pull request?  [Saiba mais](http://go.microsoft.com/fwlink/?LinkId=5332
 ## Tecnologias
 Para contribuir com Arda, você precisa ter/conhecer as seguintes tecnologias:
 
-- ASP.NET Core 1.0 [Saiba mais]()
-- Entity Framework Core 1.0 [Saiba mais]()
-- Visual Studio 2015 (ou Visual Studio Code) [Saiba mais]()
+- ASP.NET Core 1.0 [Saiba mais](https://www.asp.net/vnext)
+- Node.js [Saiba mais](https://nodejs.org/en/)
+- Entity Framework Core 1.0 [Saiba mais](https://www.asp.net/entity-framework)
+- Visual Studio 2015 (ou Visual Studio Code) [Saiba mais](https://code.visualstudio.com/)
+- HTML 5 & CSS 3
+- Gulp [Saiba mais](http://gulpjs.com/)
+- Grunt [Saiba mais](http://gruntjs.com/)
+- NPM [Saiba mais](https://www.npmjs.com/)
+- Bootstrap [Saiba mais](http://getbootstrap.com/)
+
+Todo o backend da aplicação está hosteado no Microsoft Azure [Saiba mais](https://azure.microsoft.com/pt-br/).
 
 
-# Next steps
-
-If you haven't done so yet:
-* [Install Visual Studio](http://go.microsoft.com/fwlink/?LinkId=309297&clcid=0x409&slcid=0x409)
-* [Install Git](http://git-scm.com/downloads)
-
-Then clone this repo to your local machine to get started with your own project.
 
 Happy coding!
