@@ -18,7 +18,7 @@ Clique na página **Pull Requests** no aba **CODE** e então clique em "New Pull
 
 Quando terminar de adicionar seus detalhes, clique "Create Pull request". Uma vez que o pull request foi enviado, os revisores poderão ver suas mudanças, recomendar mudanças ou mesmo commitar suas solicitações na branch master.
 
-First time creating a pull request?  [Learn more](http://go.microsoft.com/fwlink/?LinkId=533211&clcid=0x409)
+Primeiro pull request?  [Saiba mais](http://go.microsoft.com/fwlink/?LinkId=533211&clcid=0x409)
 
 ### Congratulations! You've completed the grand tour of the CODE hub!
 
