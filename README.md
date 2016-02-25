@@ -12,12 +12,11 @@ Arda é open source. Isso quer dizer que todo o código fonte está aberto e dis
 
 Um dos princípios do Arda é que a comunidade de desenvolvedores possa colaborar com este trabalho. Portanto, se você gostou da ideia e gostaria de contribuir com a Microsoft no desenvolvimento desta solução _join us_, sua contribuição será muito bem vinda.
 
-## Create a pull request to contribute your changes back into master
-Pull requests are the way to move changes from a topic branch back into the master branch.
+_Pull requests_ são o caminho mais seguro para mover suas contribuições para a branch Master.
 
-Click on the **Pull Requests** page in the **CODE** hub, then click "New Pull Request" to create a new pull request from your topic branch to the master branch.
+Clique na página **Pull Requests** no aba **CODE** e então clique em "New Pull Request" para criar um novo pull request para a Master.
 
-When you are done adding details, click "Create Pull request". Once a pull request is sent, reviewers can see your changes, recommend modifications, or even push follow-up commits.
+Quando terminar de adicionar seus detalhes, clique "Create Pull request". Uma vez que o pull request foi enviado, os revisores poderão ver suas mudanças, recomendar mudanças ou mesmo commitar suas solicitações na branch master.
 
 First time creating a pull request?  [Learn more](http://go.microsoft.com/fwlink/?LinkId=533211&clcid=0x409)
 
