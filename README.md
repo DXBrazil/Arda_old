@@ -20,7 +20,13 @@ Quando terminar de adicionar seus detalhes, clique "Create Pull request". Uma ve
 
 Primeiro pull request?  [Saiba mais](http://go.microsoft.com/fwlink/?LinkId=533211&clcid=0x409)
 
-### Congratulations! You've completed the grand tour of the CODE hub!
+## Tecnologias
+Para contribuir com Arda, você precisa ter/conhecer as seguintes tecnologias:
+
+- ASP.NET Core 1.0 [Saiba mais]()
+- Entity Framework Core 1.0 [Saiba mais]()
+- Visual Studio 2015 (ou Visual Studio Code) [Saiba mais]()
+
 
 # Next steps
 
