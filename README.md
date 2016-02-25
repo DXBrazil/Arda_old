@@ -1,5 +1,7 @@
-# You've added your first ReadMe file!
-A README.md file is intended to quickly orient readers to what your project can do.  New to Markdown? [Learn more](http://go.microsoft.com/fwlink/p/?LinkId=524306&clcid=0x409)
+# Arda, o que é?
+**Arda** é uma solução para gerenciamento de alocação de recursos desenvolvida pelo time de Technical Evangelists da Microsoft Brasil.
+
+A ideia é que a ferramenta possa disponibilizar recursos de gestão específicos para que seja possível à empresas setorizadas, que possuem a necessidade de alocar seus diversos recursos ao longo de atividades paralelas de uma maneira simplicada e eficiente. 
 
 ## Edit this ReadMe and commit your change to a topic branch
 In Git, branches are cheap.  You should use them whenever you're making changes to your repository.  Edit this file by clicking on the edit icon.
