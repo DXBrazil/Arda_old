@@ -1,4 +1,4 @@
-# Arda, o que é?
+# Arda - Visão geral
 **Arda** é uma solução para gerenciamento de alocação de recursos desenvolvida pelo time de Technical Evangelists da Microsoft Brasil.
 
 A ideia é que a ferramenta possa disponibilizar recursos de gestão específicos para que seja possível à empresas setorizadas, que possuem a necessidade de alocar seus diversos recursos ao longo de atividades paralelas de uma maneira simplicada e eficiente. 
@@ -8,13 +8,9 @@ Arda é uma ferramenta web desenvolvida com tecnologias 100% Microsoft e utiliza
 Internamente Arda é entregue como uma solução SaaS, entretanto, como o código está aberto no GitHub, outras empresas podem baixar e utilizar em seus ambientes de negócio.
 
 ## Aberta
-In Git, branches are cheap.  You should use them whenever you're making changes to your repository.  Edit this file by clicking on the edit icon.
+Arda é open source. Isso quer dizer que todo o código fonte está aberto e disponível no GitHub (http://github.com) sob a licença MIT [Saiba mais](https://opensource.org/licenses/MIT).
 
-Then make some changes to this ReadMe file.
-
-> Make some **edits** to _this_ blockquote
-
-When you are done, click the dropdown arrow next to the save button - that will allow you to commit your changes to a new branch.
+Um dos princípios do Arda é que a comunidade de desenvolvedores possa colaborar com este trabalho. Portanto, se você gostou da ideia e gostaria de contribuir com a Microsoft no desenvolvimento desta solução _join us_, sua contribuição será muito bem vinda.
 
 ## Create a pull request to contribute your changes back into master
 Pull requests are the way to move changes from a topic branch back into the master branch.
