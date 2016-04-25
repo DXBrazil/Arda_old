@@ -24,14 +24,35 @@
                         Remember me
                     </label>
                     
-                    <a href="#" class="pull-right need-help">Need help?</a>
+                    <a asp-controller="ClientAuthentication" asp-action="NeedHelp" class="pull-right need-help" data-toggle="modal" data-target="#modalLogin">Need help?</a>
                     
                     <span class="clearfix"></span>
 
                 </form>
             </div>
 
-            <a href="#" class="text-center new-account">Request a new account </a>
+            <a asp-controller="ClientAuthentication" asp-action="RequestNewAccount" class="text-center new-account">Request a new account </a>
         </div>
+    </div>
+</div>
+
+<!-- Modal body -->
+<div id="modalLogin" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
     </div>
 </div>

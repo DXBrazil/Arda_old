@@ -35,10 +35,17 @@
                     <ul class="nav navbar-nav">
                         
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="Home" asp-action="Support">Get support</a></li>
+                        <li><a asp-controller="Home" asp-action="GetSupport">Get support</a></li>
                     </ul>
                     <ul class="nav navbar-nav" style="float: right">
-                        <li><a asp-controller="ClientAuthentication" asp-action="Login"><strong>Log in</strong></a></li>
+                        <li>
+                            <p class="navbar-btn">
+                                <a asp-controller="ClientAuthentication" asp-action="Login" class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-lock"></span>&nbsp;
+                                    System access
+                                </a>
+                            </p>
+                        </li>
                     </ul>
                 </div>
             </div>
