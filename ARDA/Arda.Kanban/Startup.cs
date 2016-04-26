@@ -36,6 +36,8 @@ namespace Arda.Kanban
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddSingleton<ITaskRepository, TaskRepository>();
+
             services.AddMvc();
         }
 
