@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,6 +37,12 @@ namespace Arda.Kanban
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<TaskDbContext>(options =>
+                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
+                );
+            
             services.AddSingleton<ITaskRepository, TaskRepository>();
 
             services.AddMvc();
@@ -56,6 +63,8 @@ namespace Arda.Kanban
             app.UseStaticFiles();
 
             app.UseMvc();
+
+            TaskDatabaseSetup.InitSamples(app.ApplicationServices);
         }
 
         // Entry point for the application.
