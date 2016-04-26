@@ -45,7 +45,7 @@ namespace Arda.Kanban
 
             
             //services.AddSingleton<ITaskRepository, TaskRepository>();
-            services.AddSingleton<ITaskRepository, TaskRepositorySQL>();
+            services.AddScoped<ITaskRepository, TaskRepositorySQL>();
 
             services.AddMvc();
         }
