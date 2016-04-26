@@ -42,8 +42,10 @@ namespace Arda.Kanban
                 .AddDbContext<TaskDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
                 );
+
             
-            services.AddSingleton<ITaskRepository, TaskRepository>();
+            //services.AddSingleton<ITaskRepository, TaskRepository>();
+            services.AddSingleton<ITaskRepository, TaskRepositorySQL>();
 
             services.AddMvc();
         }
