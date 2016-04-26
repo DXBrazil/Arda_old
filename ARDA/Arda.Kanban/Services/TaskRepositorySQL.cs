@@ -15,18 +15,20 @@ namespace Arda.Kanban
             _context = context;            
         }
 
+        // Need to fix the primary key generation
         private int _newId = 100;
 
         string NewId()
         {
-            return "d" + (_newId++);
+            return "d" + (_newId++) + ":" + DateTime.Now;
         }
 
         public void Add(TaskItem item)
         {
             string id = item.Id = NewId();
 
-            //_tasksDict.Add(id, item);
+            _context.Add(item);
+            _context.SaveChanges();
         }
 
         public IEnumerable<TaskItem> GetAll()
@@ -36,27 +38,25 @@ namespace Arda.Kanban
 
         public TaskItem GetById(string id)
         {
-            //if (!_tasksDict.ContainsKey(id))
-                return null;
-
-            //return _tasksDict[id];
+            return _context.Tasks.Where(t => t.Id == id).First();
         }
 
         public bool Remove(string id)
         {
-            //if (!_tasksDict.ContainsKey(id))
-                return false;
-
-            //_tasksDict.Remove(id);
-            //return true;
+            _context.Remove(new TaskItem() { Id = id });
+            _context.SaveChanges();
+            return true;
         }
 
         public void Update(TaskItem item)
         {
-            //if (!_tasksDict.ContainsKey(item.Id))
-                return;
+            var initial = GetById(item.Id);
 
-            //_tasksDict[item.Id] = item;
+            initial.Name = item.Name;
+            initial.State = item.State;
+            initial.Description = item.Description;
+
+            _context.SaveChanges();
         }
     }
 
