@@ -7,32 +7,34 @@ namespace Arda.Kanban
 {
     class TaskRepository : ITaskRepository
     {
-        TaskItem[] _tasks = new TaskItem[]
-        {
-            new TaskItem() { Id="t0", Name="Visual Studio Community" },
-            new TaskItem() { Id="t1", Name="Visual Studio Enterprise Edition" },
-            new TaskItem() { Id="t2", Name="VS Code" },
-        };
         Dictionary<string, TaskItem> _tasksDict;
 
         public TaskRepository()
         {
+            // Fake data
             _tasksDict = new Dictionary<string, TaskItem>();
-            foreach(var t in _tasks)
-            {
-                _tasksDict.Add(t.Id, t);
-            }
-            
+            Add(new TaskItem() { Name = "Visual Studio Community" });
+            Add(new TaskItem() { Name = "Visual Studio Enterprise Edition" });
+            Add(new TaskItem() { Name = "VS Code" });
+        }
+
+        private int _newId = 0;
+
+        string NewId()
+        {
+            return "t" + (_newId++);
         }
 
         public void Add(TaskItem item)
         {
-            throw new NotImplementedException();
+            string id = item.Id = NewId();
+
+            _tasksDict.Add(id, item);
         }
 
         public IEnumerable<TaskItem> GetAll()
         {
-            return _tasks;
+            return _tasksDict.Values;
         }
 
         public TaskItem GetById(string id)
@@ -45,12 +47,19 @@ namespace Arda.Kanban
 
         public bool Remove(string id)
         {
-            throw new NotImplementedException();
+            if (!_tasksDict.ContainsKey(id))
+                return false;
+
+            _tasksDict.Remove(id);
+            return true;
         }
 
         public void Update(TaskItem item)
         {
-            throw new NotImplementedException();
+            if (!_tasksDict.ContainsKey(item.Id))
+                return;
+
+            _tasksDict[item.Id] = item;
         }
     }
 }

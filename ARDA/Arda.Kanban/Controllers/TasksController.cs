@@ -32,16 +32,17 @@ namespace Arda.Kanban.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]TaskItem item)
         {
-            throw new NotImplementedException();
+            bool valid = ModelState.IsValid;
+            _tasks.Add(item);
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public void Put([FromBody]TaskItem item)
         {
-            throw new NotImplementedException();
+            _tasks.Update(item);
         }
 
         // DELETE api/values/5
