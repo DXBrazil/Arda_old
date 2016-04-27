@@ -115,3 +115,9 @@ textarea {
     margin-top: 10px;
     margin-bottom:20px;
 }
+
+/* General classes */
+.p-modal-body
+{
+    font-weight: 400;
+}
