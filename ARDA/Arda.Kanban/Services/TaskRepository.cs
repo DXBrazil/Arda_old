@@ -25,11 +25,13 @@ namespace Arda.Kanban
             return "t" + (_newId++);
         }
 
-        public void Add(TaskItem item)
+        public TaskItem Add(TaskItem item)
         {
             string id = item.Id = NewId();
 
             _tasksDict.Add(id, item);
+
+            return item;
         }
 
         public IEnumerable<TaskItem> GetAll()

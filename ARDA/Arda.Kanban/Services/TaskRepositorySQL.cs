@@ -23,12 +23,14 @@ namespace Arda.Kanban
             return "d" + (_newId++) + ":" + DateTime.Now;
         }
 
-        public void Add(TaskItem item)
+        public TaskItem Add(TaskItem item)
         {
             string id = item.Id = NewId();
-
-            _context.Add(item);
+                        
+            var saved = _context.Add(item);
             _context.SaveChanges();
+
+            return saved.Entity;
         }
 
         public IEnumerable<TaskItem> GetAll()

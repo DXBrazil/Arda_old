@@ -7,12 +7,33 @@ function httpGet(cmd, data, callback) {
     $.get(KANBAN_ENDPOINT + cmd, data, callback);
 }
 
+function httpPost(cmd, data, callback) {
+    $.ajax({
+        url: KANBAN_ENDPOINT + cmd,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function (data) {
+            callback(data);
+        },
+        error: function (result) {
+            alert('Error');
+        }
+    });
+}
+
 function create(name) {
-    httpGet('create', { name: name }, function (data) {
-        var task = JSON.parse(data);
+    
+    httpPost('', { Name: name, Description: 'blabla', State: 0 }, function (data) {
+        //var task = JSON.parse(data);
+        var task = data;
 
         _activeTaskList.push(task);
-        render();
+
+        // render();
+        var taskId = task.Id;
+        var taskName = task.Name;
+        createTaskInFolder(taskId, taskName, '.folder-active');
 
     });
 }
@@ -55,7 +76,6 @@ function tasklist(callback) {
         callback(data);
     });
 
-    return _tasks;
 }
 
 var tasks;

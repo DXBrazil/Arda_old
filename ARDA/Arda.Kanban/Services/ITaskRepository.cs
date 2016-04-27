@@ -7,7 +7,7 @@ namespace Arda.Kanban
 {
     public interface ITaskRepository
     {
-        void Add(TaskItem item);
+        TaskItem Add(TaskItem item);
         IEnumerable<TaskItem> GetAll();
         TaskItem GetById(string id);
         void Update(TaskItem item);

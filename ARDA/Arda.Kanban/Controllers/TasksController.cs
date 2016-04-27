@@ -32,10 +32,13 @@ namespace Arda.Kanban.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]TaskItem item)
+        public TaskItem Post([FromBody]TaskItem item)
         {
             bool valid = ModelState.IsValid;
-            _tasks.Add(item);
+
+            if (!valid) return null; 
+
+            return _tasks.Add(item);            
         }
 
         // PUT api/values/5

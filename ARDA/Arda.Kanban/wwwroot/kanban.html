@@ -76,13 +76,16 @@
 
         var btnAdd = $('#btnAdd');
         var txtAdd = $('#txtAdd');
-        var globalId = 0;
+
         btnAdd.click(function () {
             var taskName = txtAdd.val();
 
             if (taskName != null && taskName != '') {
-                var taskId = 'id' + (globalId++);
-                createTask(taskId, taskName);
+
+                //var taskId = 'id' + (globalId++);
+                // createTask(taskId, taskName);
+
+                create(taskName);
             }            
         });
 
