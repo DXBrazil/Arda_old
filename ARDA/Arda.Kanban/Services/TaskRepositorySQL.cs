@@ -54,9 +54,10 @@ namespace Arda.Kanban
         {
             var initial = GetById(item.Id);
 
-            initial.Name = item.Name;
+            if (item.Name != null)   initial.Name = item.Name;
+            if (item.Description != null)  initial.Description = item.Description;
+
             initial.State = item.State;
-            initial.Description = item.Description;
 
             _context.SaveChanges();
         }

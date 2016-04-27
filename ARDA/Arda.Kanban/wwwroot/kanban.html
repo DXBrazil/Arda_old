@@ -16,7 +16,7 @@
             </div>
         </div>
         <h1 class="title">Active</h1>
-        <div class="folder folder-active">
+        <div class="folder folder-active" data-state="0">
             <!--<div id="t1-initial" class="task">
                 <span class="task-text" contenteditable>Projeto Galinha Pintadinha</span>                               
             </div>
@@ -43,7 +43,7 @@
                 </div>
             </template>                  
         </div>
-        <div class="folder folder-done">
+        <div class="folder folder-done" data-state="1">
         </div>        
     </div>
     <script>
@@ -60,7 +60,11 @@
             ev.preventDefault();
             var data = ev.dataTransfer.getData('text');
             var elem = document.getElementById(data);
-            target.appendChild(elem)
+            target.appendChild(elem);
+
+            var state = (target.dataset['state']) | 0;
+            var task = { Id: elem.id, State: state };
+            update(task);
         }
         var tasks = $('.task');
         tasks.map(function(i, task) {

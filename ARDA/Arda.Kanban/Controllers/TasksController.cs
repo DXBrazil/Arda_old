@@ -45,6 +45,10 @@ namespace Arda.Kanban.Controllers
         [HttpPut]
         public void Put([FromBody]TaskItem item)
         {
+            bool valid = ModelState.IsValid;
+
+            if (!valid) return;
+
             _tasks.Update(item);
         }
 

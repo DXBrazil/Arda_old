@@ -3,14 +3,29 @@ var _doneTaskList;
 
 var KANBAN_ENDPOINT = 'http://localhost:5000/api/tasks/';
 
-function httpGet(cmd, data, callback) {
-    $.get(KANBAN_ENDPOINT + cmd, data, callback);
+function httpGet(data, callback) {
+    $.get(KANBAN_ENDPOINT, data, callback);
 }
 
 function httpPost(cmd, data, callback) {
     $.ajax({
         url: KANBAN_ENDPOINT + cmd,
         type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function (data) {
+            callback(data);
+        },
+        error: function (result) {
+            alert('Error');
+        }
+    });
+}
+
+function httpCommand(cmd, data, callback) {
+    $.ajax({
+        url: KANBAN_ENDPOINT,
+        type: cmd,
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(data),
         success: function (data) {
@@ -38,14 +53,10 @@ function create(name) {
     });
 }
 
-function update(task, props) {
-    //alert('API: update');
-    props.id = task.id;
+function update(props) {
 
     // assume the update always works
-    httpGet('update', props, function () {
-
-        (props.name != null) && (task.name = props.name);
+    httpCommand('PUT', { Id: props.Id, State: props.State }, function () {
 
         if (props.status != null) {
             var srcList = (task.status == 0) ? _activeTaskList : _doneTaskList;
@@ -72,7 +83,7 @@ function update(task, props) {
 
 function tasklist(callback) {
 
-    httpGet('', null, function (data) {
+    httpGet(null, function (data) {
         callback(data);
     });
 
