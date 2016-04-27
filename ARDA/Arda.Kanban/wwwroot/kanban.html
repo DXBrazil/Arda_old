@@ -17,7 +17,7 @@
         </div>
         <h1 class="title">Active</h1>
         <div class="folder folder-active">
-            <div id="t1-initial" class="task">
+            <!--<div id="t1-initial" class="task">
                 <span class="task-text" contenteditable>Projeto Galinha Pintadinha</span>                               
             </div>
             <div id="t2-initial" class="task">
@@ -32,7 +32,7 @@
                     <span class="tag tag-isv">ISV</span>                               
                     <span class="tag tag-metric">metric</span>                               
                 </div>
-            </div>        
+            </div>-->        
             <template id="templateTask">
                 <div id="templateId" class="task" draggable="true">
                     <span id="templateText" class="task-text2">templateText</span>
@@ -43,7 +43,7 @@
                 </div>
             </template>                  
         </div>
-        <div class="folder">
+        <div class="folder folder-done">
         </div>        
     </div>
     <script>
@@ -98,6 +98,21 @@
 
             folder.appendChild(clone, true);
         }
+
+        function createTaskInFolder(taskId, taskName, folderClass) {
+            var content = document.querySelector('#templateTask').content;
+            var clone = document.importNode(content, true);
+            var folder = document.querySelector(folderClass);
+
+            clone.querySelector('.task').id = taskId;
+            clone.querySelector('.task #templateText').textContent = taskName;
+
+            clone.querySelector('.task').addEventListener('dragstart', dragstart);
+
+            folder.appendChild(clone, true);
+        }
+
     </script>
+    <script src="kanban.js"></script>
 </body>
 </html>
