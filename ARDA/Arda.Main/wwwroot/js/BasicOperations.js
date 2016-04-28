@@ -32,10 +32,10 @@ function MountNeedHelpModal() {
 
 function MountRequestNewAccountModal() {
     var ModalTitle = "Request a new account";
-    var ModalBody = "<p style='margin-bottom:20px;' class='p-modal-body'>Please, fill all requested informations at form below.</p>";
+    var ModalBody = "<p style='margin-bottom:20px;' class='p-modal-body'>Please, fill all requested informations at form below and click 'Request account'.</p>";
     
     //Injecting contents
     $("#GenericModal .modal-title").html("<strong>" + ModalTitle + "</strong>");
     $("#GenericModal .modal-body").html(ModalBody);
-    $("#GenericModal .modal-footer").html("<button type='button' class='btn btn-success' data-dismiss='modal'><span class='glyphicon glyphicon-floppy-disk'></span>&nbsp;Save</button>");
+    $("#GenericModal .modal-footer").html("<button type='button' class='btn btn-success' data-dismiss='modal'><span class='glyphicon glyphicon-ok'></span>&nbsp;Request account</button>");
 }
