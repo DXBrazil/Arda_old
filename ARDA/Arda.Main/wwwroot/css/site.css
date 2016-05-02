@@ -14,7 +14,7 @@
 input,
 select,
 textarea {
-    max-width: 300px;
+    max-width: 100%;
 }
 
 /* Carousel */
