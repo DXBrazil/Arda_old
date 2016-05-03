@@ -1,29 +1,44 @@
-﻿//Functions with automatic initialization
+﻿// Functions with automatic initialization
 $(function ($) {
 
-//Send the new account request to specific service in Arda.Authentication
-$("#RequestAccountButton").click(function () {
-        var Name = $("#Name").val();
-        var Email = $("#Email").val();
-        var Phone = $("#Phone").val();
-        var Justification = $("#Justification").val();
+    // Send the new account request to specific controller/action in Arda.Main.
+    $("form").submit(function (e) {
+        e.preventDefault();
+
+        $("#RequestAccountButton").attr("disabled", "disabled");
+        $("#RequestAccountButton").text("Requesting...");
+
+        var pName = $("#Name").val();
+        var pEmail = $("#Email").val();
+        var pPhone = $("#Phone").val();
+        var pJustification = $("#Justification").val();
         
         $.ajax({
-            url: "http://localhost:49493/api/Values",
-            type: "Post",
-            data: JSON.stringify([name, address, dob]), //{ Name: name, 
-                                              // Address: address, DOB: dob },
-            contentType: 'application/json; charset=utf-8',
-            success: function (data) { },
-            error: function () { alert('error'); }
+            url: "/ClientAuthentication/RequestNewAccount",
+            type: "POST",
+            data: { Name: pName, Email: pEmail, Phone: pPhone, Justification: pJustification },
+            success: function (data) {
+                if (data.Status == "Ok") {
+                    $("#MessagePanel").html("<div class='alert alert-success'><strong>Success!</strong> Your request was sent. Thank you.</div>");
+                    $("#RequestAccountButton").removeAttr("disabled");
+                    $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Request account");
+                    ClearModalForm();
+                }
+            },
+            error: function () {
+                $("#MessagePanel").html("<div class='alert alert-danger'><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Request account");
+            }
         });
+    
     });
+
 
 });
 
-//General functions
+// General functions
 
-//Modal Login
+// Modal Login
 
 function MountNeedHelpModal() {
     //Defining values
@@ -70,9 +85,16 @@ function MountRequestNewAccountModal() {
             ModalBody += "<textarea class='form-control' id='Justification' placeholder='Tell us: why you need this account?' required></textarea>";
             ModalBody += "</fieldset>";
      ModalBody += "</p>";
+     ModalBody += "<div id='MessagePanel'></div>";
     
     //Injecting contents
     $("#GenericModal .modal-title").html("<strong>" + ModalTitle + "</strong>");
     $("#GenericModal .modal-body").html(ModalBody);
     $("#GenericModal .modal-footer").html("<button type='submit' class='btn btn-success' id='RequestAccountButton'><span class='glyphicon glyphicon-ok'></span>&nbsp;Request account</button>");
+}
+
+// Another functions
+
+function ClearModalForm() {
+    $("form").trigger("reset");
 }

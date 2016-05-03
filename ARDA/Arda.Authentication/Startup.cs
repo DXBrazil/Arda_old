@@ -7,6 +7,8 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Arda.Authentication.Models;
+using Microsoft.Data.Entity;
 
 namespace Arda.Authentication
 {
@@ -37,6 +39,10 @@ namespace Arda.Authentication
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            // Adding database connection by dependency injection.
+            var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Authentication;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            services.AddEntityFramework().AddSqlServer().AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

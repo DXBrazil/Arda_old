@@ -3,42 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Arda.Authentication.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Arda.Authentication.Controllers
 {
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        ILogger<UsersController> _logger;
+
+        public UsersController(ILogger<UsersController> logger)
         {
-            return new string[] { "value1", "value2" };
+            this._logger = logger;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("trylogin")]
+        public User TryLogin()
         {
-            return "value";
+            _logger.LogInformation("Anonymous login");
+
+            return new User()
+            {
+                UserID = Guid.NewGuid(),
+                Name = "Anonymous User"
+            };
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("login")]
+        public User Login([FromForm]string Email, [FromForm]string Password)
         {
+            if (Email == null)
+            {
+                return null;
+            }
+
+            return new User()
+            {
+                UserID = Guid.NewGuid(),
+                Name = "Authenticated user"
+            };
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
