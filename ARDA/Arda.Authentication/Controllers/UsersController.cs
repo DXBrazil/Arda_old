@@ -30,6 +30,17 @@ namespace Arda.Authentication.Controllers
             };
         }
 
+        //public User TryLogin()
+        //{
+        //    _logger.LogInformation("Anonymous login");
+
+        //    return new User()
+        //    {
+        //        UserID = Guid.NewGuid(),
+        //        Name = "Anonymous User"
+        //    };
+        //}
+
         // POST api/values
         [HttpPost("login")]
         public UserProfile Login([FromForm]string user, [FromForm]string password)
@@ -46,6 +57,5 @@ namespace Arda.Authentication.Controllers
                 Name = "Authenticated user"
             };
         }
-        
     }
 }
