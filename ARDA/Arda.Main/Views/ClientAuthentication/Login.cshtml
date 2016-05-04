@@ -24,7 +24,7 @@
                         Remember me
                     </label>
                     
-                    <a class="pull-right need-help" data-toggle="modal" data-target="#GenericModal" onclick="MountNeedHelpModal()" href="javascript:void()">Need help?</a>
+                    <a class="pull-right need-help" data-toggle="modal" data-target="#GenericModal2" onclick="MountNeedHelpModal()" href="javascript:void()">Need help?</a>
                     
                     <span class="clearfix"></span>
 
@@ -36,14 +36,14 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal New Account -->
 <div id="GenericModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
         <div class="modal-content">
             
-            <form role='form' data-toggle='validator'>
+            <form id="NewAccountRequest" role='form' data-toggle='validator'>
                 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -57,6 +57,33 @@
             </div>
             </form>
             
+        </div>
+
+    </div>
+</div>
+<!-- End modal -->
+
+<!-- Modal Need Help -->
+<div id="GenericModal2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <form id="RadioGroup" role='form' data-toggle='validator'>
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><!-- Dynamic content --></h4>
+                </div>
+                <div class="modal-body">
+                    <!-- Dynamic content -->
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+
         </div>
 
     </div>

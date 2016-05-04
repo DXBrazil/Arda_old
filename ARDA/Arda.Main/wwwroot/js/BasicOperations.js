@@ -2,7 +2,7 @@
 $(function ($) {
 
     // Send the new account request to specific controller/action in Arda.Main.
-    $("form").submit(function (e) {
+    $("#NewAccountRequest").submit(function (e) {
         e.preventDefault();
 
         $("#RequestAccountButton").attr("disabled", "disabled");
@@ -12,27 +12,68 @@ $(function ($) {
         var pEmail = $("#Email").val();
         var pPhone = $("#Phone").val();
         var pJustification = $("#Justification").val();
-        
+
         $.ajax({
-            url: "/ClientAuthentication/RequestNewAccount",
+            url: "http://localhost:2787/api/accountoperations/requestnewaccount",
             type: "POST",
             data: { Name: pName, Email: pEmail, Phone: pPhone, Justification: pJustification },
-            success: function (data) {
-                if (data.Status == "Ok") {
-                    $("#MessagePanel").html("<div class='alert alert-success'><strong>Success!</strong> Your request was sent. Thank you.</div>");
-                    $("#RequestAccountButton").removeAttr("disabled");
-                    $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Request account");
-                    ClearModalForm();
-                }
-            },
-            error: function () {
-                $("#MessagePanel").html("<div class='alert alert-danger'><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+            dataType: "json"
+        }).done(function (data) {
+            if (data.Status == "Ok") {
+                $("#MessagePanel").html("<div class='alert alert-success'><strong>Success!</strong> Your request was sent. Thank you.</div>");
+                $("#RequestAccountButton").removeAttr("disabled");
                 $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Request account");
+                ClearModalForm();
             }
+        }).fail(function (e, f) {
+            $("#MessagePanel").html("<div class='alert alert-danger'><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+            $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Request account");
         });
     
     });
 
+    // Send the help request to specific controller/action in Arda.Main.
+    $("#RadioGroup").submit(function (e) {
+        e.preventDefault();
+
+        $("#SendHelpRequest").attr("disabled", "disabled");
+        $("#SendHelpRequest").text("Requesting...");
+
+        var Value;
+
+        if ($("input[name='radiooption']:checked").val() == "1") {
+            Value = $("#YourCompleteName").val();
+        }
+        else if($("input[name='radiooption']:checked").val() == "2") {
+            Value = $("#YourEmail").val();
+        }
+        else {
+            Value = $("#YourDescription").val();
+        }
+
+        // Sending the help request
+        $.ajax({
+            url: "http://localhost:2787/api/accountoperations/requesthelp",
+            type: "POST",
+            data: { RequestType: Value },
+            dataType: "json"
+        }).done(function (data) {
+            if (data.Status == "Ok") {
+                $("#MessagePanel").html("<div class='alert alert-success'><strong>Success!</strong> Your help request was sent. Thank you.</div>");
+                $("#SendHelpRequest").removeAttr("disabled");
+                $("#SendHelpRequest").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Send help request");
+                ClearModalForm();
+            }
+            else {
+                $("#MessagePanel").html("<div class='alert alert-danger'><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#SendHelpRequest").removeAttr("disabled");
+                $("#SendHelpRequest").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Send help request");
+            }
+        }).fail(function () {
+            $("#MessagePanel").html("<div class='alert alert-danger'><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+            $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Send help request");
+        });
+    });
 
 });
 
@@ -47,20 +88,25 @@ function MountNeedHelpModal() {
     ModalBody += "<p class='p-modal-body'>";
     ModalBody += "<div>";
     ModalBody += "<div class='radio'>";
-    ModalBody += "<label><input type='radio' name='radiooption' id='RadioEmail'>I'm having problems with my email</label>";
+    ModalBody += "<label><input type='radio' name='radiooption' id='RadioEmail' value='1' onchange='CheckRadio();'>I'm having problems with my email (manual process)</label>";
     ModalBody += "</div>";
+    ModalBody += "<div id='YourCompleteNameField'></div>"
     ModalBody += "<div class='radio'>";
-    ModalBody += "<label><input type='radio' name='radiooption' id='RadioPassword'>I'm having problems with my password</label>";
+    ModalBody += "<label><input type='radio' name='radiooption' id='RadioPassword' value='2' onchange='CheckRadio();'>I'm having problems with my password (automatic process)</label>";
     ModalBody += "</div>";
+    ModalBody += "<div id='YourEmailField'></div>"
     ModalBody += "<div class='radio'>";
-    ModalBody += "<label><input type='radio' name='radiooption' id='RadioAnother'>I'm having another kind of problem</label>";
+    ModalBody += "<label><input type='radio' name='radiooption' id='RadioAnother' value='3' onchange='CheckRadio();'>I'm having another kind of problem (manual process)</label>";
     ModalBody += "</div>";
+    ModalBody += "<div id='DescriptionField'></div>"
     ModalBody += "</p>";
     ModalBody += "</div>";
+    ModalBody += "<div id='MessagePanel'></div>";
     
     //Injecting contents
-    $("#GenericModal .modal-title").html("<strong>" + ModalTitle + "</strong>");
-    $("#GenericModal .modal-body").html("<strong>" + ModalBody + "</strong>");
+    $("#GenericModal2 .modal-title").html("<strong>" + ModalTitle + "</strong>");
+    $("#GenericModal2 .modal-body").html("<strong>" + ModalBody + "</strong>");
+    $("#GenericModal2 .modal-footer").html("<button type='submit' class='btn btn-success' id='SendHelpRequest' disabled='disabled'><span class='glyphicon glyphicon-ok'></span>&nbsp;Send help request</button>");
 }
 
 function MountRequestNewAccountModal() {
@@ -97,4 +143,24 @@ function MountRequestNewAccountModal() {
 
 function ClearModalForm() {
     $("form").trigger("reset");
+}
+
+function CheckRadio() {
+    $("#SendHelpRequest").removeAttr("disabled");
+
+    if ($("input[name='radiooption']:checked").val() == "1") {
+        $("#YourCompleteNameField").html("<fieldset class='form-group'><input type='text' class='form-control' id='YourCompleteName' placeholder='Your complete name here' required></fieldset>");
+        $("#YourEmailField").html("");
+        $("#DescriptionField").html("");
+    }
+    else if ($("input[name='radiooption']:checked").val() == "2") {
+        $("#YourEmailField").html("<fieldset class='form-group'><input type='text' class='form-control' id='YourEmail' placeholder='Your email here' required></fieldset>");
+        $("#YourCompleteNameField").html("");
+        $("#DescriptionField").html("");
+    }
+    else {
+        $("#DescriptionField").html("<fieldset class='form-group'><textarea class='form-control' id='YourDescription' placeholder='Describes your problem here' required></textarea></fieldset>");
+        $("#YourCompleteNameField").html("");
+        $("#YourEmailField").html("");
+    }
 }
