@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Arda.Authentication.Models;
 using Microsoft.Data.Entity;
+using Arda.Athentication.Repository.Emails;
+using Arda.Authentication.Interfaces;
 
 namespace Arda.Authentication
 {
@@ -37,12 +39,16 @@ namespace Arda.Authentication
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
             services.AddMvc();
 
             // Adding database connection by dependency injection.
             var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Authentication;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             services.AddEntityFramework().AddSqlServer().AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Connection));
+
+            services.AddScoped<IEmailRepository, EmailRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -58,6 +64,8 @@ namespace Arda.Authentication
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            app.UseCors("AllowAll");
 
             app.UseMvc();
         }
