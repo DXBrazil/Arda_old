@@ -33,7 +33,6 @@
         "MailKit": "1.2.21"
       }
     }
-    //"dnxcore50": { }
   },
 
   "exclude": [
