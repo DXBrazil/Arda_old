@@ -2,6 +2,59 @@
 $(function ($) {
 
     // Send the new account request to specific controller/action in Arda.Main.
+    $("#loginform").submit(function (e) {
+        e.preventDefault();
+
+        $("#email").attr("disabled", "disabled");
+        $("#password").attr("disabled", "disabled");
+        $("#signin").attr("disabled", "disabled");
+
+        $("#signin").text("Validating user data...");
+
+        var email = $("#email").val();
+        var password = $("#password").val();
+
+        $.ajax({
+            url: "http://localhost:2787/api/authentication/userauthentication",
+            type: "POST",
+            data: { Email: email, Password: password },
+            dataType: "json"
+        }).done(function (data) {
+            if (data.Status == "Ok") {
+                ClearModalForm();
+                RedirectTo("http://localhost:2168/Dashboard/Index");
+            }
+            else if (data.Status == "Inactive")
+            {
+                $("#MessagePanelLogin").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> The requested user is here but is inactive. Please, consult the system admin.</div>");
+                $("#signin").html("Sign in");
+                ClearModalForm();
+                $("#email").removeAttr("disabled");
+                $("#password").removeAttr("disabled");
+                $("#signin").removeAttr("disabled");
+                
+            }
+            else
+            {
+                $("#MessagePanelLogin").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#signin").html("Sign in");
+                ClearModalForm();
+                $("#email").removeAttr("disabled");
+                $("#password").removeAttr("disabled");
+                $("#signin").removeAttr("disabled");
+            }
+        }).fail(function (e, f) {
+            $("#MessagePanelLogin").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+            $("#signin").html("Sign in");
+            ClearModalForm();
+            $("#email").removeAttr("disabled");
+            $("#password").removeAttr("disabled");
+            $("#signin").removeAttr("disabled");
+        });
+
+    });
+
+    // Send the new account request to specific controller/action in Arda.Main.
     $("#NewAccountRequest").submit(function (e) {
         e.preventDefault();
 
@@ -163,4 +216,9 @@ function CheckRadio() {
         $("#YourCompleteNameField").html("");
         $("#YourEmailField").html("");
     }
+}
+
+function RedirectTo(url)
+{
+    window.location = url;
 }

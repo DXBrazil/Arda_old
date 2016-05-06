@@ -8,9 +8,10 @@ using Arda.Authentication.Models;
 namespace Arda.Authentication.Migrations
 {
     [DbContext(typeof(AuthenticationContext))]
-    partial class AuthenticationContextModelSnapshot : ModelSnapshot
+    [Migration("20160505191710_MigrationAuthentication_05052016_1617")]
+    partial class MigrationAuthentication_05052016_1617
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
