@@ -29,5 +29,11 @@ namespace Arda.Authentication.Models
         public string Password { get; set; }
 
         public string Avatar { get; set; }
+
+        [Required]
+        public byte Status { get; set; }
+
+        [Required]
+        public string Token { get; set; }
     }
 }

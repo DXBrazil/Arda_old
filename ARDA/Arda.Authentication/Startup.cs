@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Arda.Authentication.Models;
 using Microsoft.Data.Entity;
 using Arda.Athentication.Repository.Emails;
+using Arda.Authentication.Repositories.Authentication;
 using Arda.Authentication.Interfaces;
 
 namespace Arda.Authentication
@@ -48,6 +49,7 @@ namespace Arda.Authentication
             services.AddEntityFramework().AddSqlServer().AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Connection));
 
             services.AddScoped<IEmailRepository, EmailRepository>();
+            services.AddScoped<IAuthentication, Repositories.Authentication.AthenticationRepository>();
 
         }
 
