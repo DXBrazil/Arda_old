@@ -12,6 +12,8 @@ using Microsoft.Data.Entity;
 using Arda.Athentication.Repository.Emails;
 using Arda.Authentication.Repositories.Authentication;
 using Arda.Authentication.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
 
 namespace Arda.Authentication
 {
@@ -42,12 +44,24 @@ namespace Arda.Authentication
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
+            // Adding session module to application.
+            services.AddSession();
+
+            // Adding MVC module to application.
             services.AddMvc();
 
             // Adding database connection by dependency injection.
             var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Authentication;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             services.AddEntityFramework().AddSqlServer().AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Connection));
 
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+                    {
+                        Configuration = "arda.redis.cache.windows.net:6380,password=66Tw+4fc8tkeHWr1Els4jtGF1pIhCSP0ncIXB4PuyDk=,ssl=True,abortConnect=False",
+                        InstanceName = "arda.redis.cache.windows.net"
+            }));
+
+            // Registering another dependencies.
             services.AddScoped<IEmailRepository, EmailRepository>();
             services.AddScoped<IAuthentication, Repositories.Authentication.AthenticationRepository>();
 
@@ -68,6 +82,8 @@ namespace Arda.Authentication
             app.UseStaticFiles();
 
             app.UseCors("AllowAll");
+
+            app.UseSession();
 
             app.UseMvc();
         }
