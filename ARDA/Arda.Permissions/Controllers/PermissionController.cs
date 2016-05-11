@@ -25,7 +25,7 @@ namespace Arda.Permissions.Controllers
             try
             {
                 var response = _permission.GetPermissionSetByUserIDAndToken(token);
-                return Json(new { token = response.token, permissions = response.permissionsOfUser });
+                return Json(new { permissions = response.permissionsOfUser });
             }
             catch (Exception)
             {

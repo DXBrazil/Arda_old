@@ -8,6 +8,7 @@ using Arda.Authentication.Interfaces;
 using Arda.Authentication.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,13 +46,22 @@ namespace Arda.Authentication.Controllers
                     // Get user permissions based on his token.
                     string url = client.BaseAddress + "permissions/getpermissionsetbyuseridandtoken?token=" + user.Token;
                     var response = client.GetAsync(url).Result;
+                    var responseData = response.Content.ReadAsStringAsync().Result; // json raw data
+                    var permissions = JsonConvert.DeserializeObject(responseData); // json treated data
 
                     if (user.Status == 1 && response.IsSuccessStatusCode)
                     {
                         // Register token and user permitions in Azure Redis Cache.
-                        // Call here.                        
+                        bool writtingResponse = _authentication.WriteTokenAndUserPermissions(user.Token, permissions.ToString());
 
-                        return Json(new { Status = "Ok" });
+                        if (writtingResponse)
+                        {
+                            return Json(new { Status = "Ok" });
+                        }
+                        else
+                        {
+                            return Json(new { Status = "Fail" });
+                        }
                     }
                     else
                     {
@@ -64,7 +74,5 @@ namespace Arda.Authentication.Controllers
                 return Json(new { Status = "Fail" });
             }
         }
-
-
     }
 }

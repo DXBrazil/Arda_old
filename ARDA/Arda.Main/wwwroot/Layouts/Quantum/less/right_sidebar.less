@@ -1,0 +1,109 @@
+.right-sidebar-wrap {
+    position: absolute;
+    top: 0;
+    right: -@right-sidebar-width;
+    width: @right-sidebar-width;
+    background-color: @right-sidebar-color;
+    color: @right-sidebar-text-color;
+    height: 100%;
+    z-index: 11;
+    box-shadow: -1px 0 1px rgba(0,0,0,0.05);
+    transition: right 0.2s;
+    -webkit-transition: right 0.2s;
+    
+    &.no-transition {
+        transition: none;
+        -webkit-transition: none;
+    }
+        
+    &.sidebar-fixed {
+        position: fixed;    
+    }
+        
+    .chat-friend-list   {
+        > li {
+            border-bottom-color: @right-sidebar-border;
+            
+            &:hover {
+                color: @right-sidebar-hover-color;
+                background-color: @right-sidebar-hover-bg;
+            }
+        }
+        
+        .profile-pic:before {
+            border-color: @right-sidebar-color; 
+        }
+    }
+    
+    .list-group {
+        > .list-group-item  {
+            border-radius: 0 !important;
+            background: transparent;
+            border-color: @side-nav-border;
+            color: @side-nav-text-color;
+            
+            &:hover {
+                color: @side-nav-text-hover-color;    
+            }
+        }
+    }
+    
+    .sidenav-inner  {
+        height: calc(~"100% - @{header-height}") !important;    
+    }
+}
+
+.right-sidebar-second-level {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -@right-sidebar-width;
+    width: @right-sidebar-width;
+    background-color: #fff;
+    color: @right-sidebar-text-color;
+    height: 100%;
+    z-index: 12;
+    opacity: 0;
+    box-shadow: -1px 0 1px rgba(0,0,0,0.05);
+    -webkit-box-shadow: -1px 0 1px rgba(0,0,0,0.05);
+    transition: right 0.2s cubic-bezier(0.5, 0.2, 0.5, 1), opacity 0.2s cubic-bezier(0.5, 0.2, 0.5, 1);
+    -webkit-transition: right 0.2s cubic-bezier(0.5, 0.2, 0.5, 1), opacity 0.2s cubic-bezier(0.5, 0.2, 0.5, 1);
+    
+    &.active    {
+        right: 0;    
+        opacity: 1;
+    }
+    
+    .close  {
+        text-shadow: none;    
+        line-height: @header-height;
+        
+        &:hover {
+            color: #fff;
+        }
+    }
+    
+    .chat-inner {
+        overflow: auto;   
+        -webkit-overflow-scrolling: touch;
+        height: calc(~"100% - 101px");  //101px is the height of chat header + chat footer
+    }
+    
+    .chat-footer    {
+        border-top: 1px solid @border-color;
+        padding: 10px;    
+    }
+    
+    .sidebar-header {
+        padding-left: 10px;
+        padding-right: 10px;
+        height: @header-height;
+        line-height: @header-height;
+    }
+}
+
+&.right-sidebar-opened    {
+    .right-sidebar-wrap {
+        right: 0;   
+    }
+}

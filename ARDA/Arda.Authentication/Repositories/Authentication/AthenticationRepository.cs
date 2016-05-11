@@ -1,9 +1,12 @@
 ﻿using Arda.Authentication.Interfaces;
 using Arda.Authentication.Models;
+using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Arda.Authentication.Repositories.Authentication
@@ -11,10 +14,12 @@ namespace Arda.Authentication.Repositories.Authentication
     public class AthenticationRepository : IAuthentication
     {
         private AuthenticationContext _context;
+        private IDistributedCache _cache;
 
-        public AthenticationRepository(AuthenticationContext context)
+        public AthenticationRepository(AuthenticationContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         public User GetUserByEmailAndPassword(string email, string incomingPassword)
@@ -49,6 +54,31 @@ namespace Arda.Authentication.Repositories.Authentication
                 {
                     return null;
                 }
+            }
+        }
+
+        public bool WriteTokenAndUserPermissions(string token, string  permissions)
+        {
+            try
+            {
+                // Setting data into redis cache.
+                _cache.Set(token, Encoding.UTF8.GetBytes(permissions));
+
+                // Retrieving cache data to test de operation.
+                var response = _cache.Get(token);
+
+                if(response != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }
