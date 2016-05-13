@@ -7,6 +7,10 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Arda.Permissions.Models;
+using Microsoft.Data.Entity;
+using Arda.Permissions.Interfaces;
+using Arda.Permissions.Repositories;
 
 namespace Arda.Permissions
 {
@@ -34,9 +38,21 @@ namespace Arda.Permissions
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            // Add framework services.
+            services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            // Adding database connection by dependency injection.
+            //var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            services.AddEntityFramework().AddSqlServer().AddDbContext<PermissionsContext>(options => options.UseSqlServer(Connection));
+
+            // Injecting repository dependencies to permissions.
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -52,6 +68,8 @@ namespace Arda.Permissions
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            app.UseCors("AllowAll");
 
             app.UseMvc();
         }

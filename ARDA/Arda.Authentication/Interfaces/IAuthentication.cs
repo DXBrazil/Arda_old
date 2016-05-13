@@ -9,5 +9,7 @@ namespace Arda.Authentication.Interfaces
     public interface IAuthentication
     {
         User GetUserByEmailAndPassword(string email, string password);
+
+        bool WriteTokenAndUserPermissions(string token, string permissions);
     }
 }
