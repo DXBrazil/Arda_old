@@ -11,7 +11,6 @@ namespace Arda.Main.Controllers
 {
     public class DashboardController : Controller
     {
-        [LayoutInjecter("_LayoutInterno")]
         public IActionResult Index()
         {
             return View();

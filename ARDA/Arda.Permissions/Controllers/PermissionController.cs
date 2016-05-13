@@ -33,6 +33,27 @@ namespace Arda.Permissions.Controllers
             }
         }
 
-        
+        [HttpGet]
+        [Route("getuserpermissiontoresource")]
+        public bool GetUserPermissionToResource(string token, string module, string resource)
+        {
+            try
+            {
+                var permissionResponse = _permission.VerifyUserAccessToResource(token, module, resource);
+
+                if(permissionResponse)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

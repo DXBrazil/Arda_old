@@ -17,5 +17,8 @@ namespace Arda.Permissions.Interfaces
 
         // Update an existing user permission.
         bool UpdatePermssionsSetByUserIDAndToken(Guid userID, string token);
+
+        // Verify if user (identified by user token) has authorization to specific resource.
+        bool VerifyUserAccessToResource(string token, string module, string resource);
     }
 }

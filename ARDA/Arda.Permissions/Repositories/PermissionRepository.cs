@@ -6,16 +6,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Arda.Common.JSON;
 using Arda.Permissions.ViewModels;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Arda.Permissions.Repositories
 {
     public class PermissionRepository : IPermissionRepository
     {
         private PermissionsContext _context;
+        private IDistributedCache _cache;
 
-        public PermissionRepository(PermissionsContext context)
+        public PermissionRepository(PermissionsContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         // Getting user permissions by UserID and Token.
@@ -56,5 +59,13 @@ namespace Arda.Permissions.Repositories
         {
             return true;
         }
+
+        // Verifying if user (identified by user token) has authorization to specific resource.
+        public bool VerifyUserAccessToResource(string token, string module, string resource)
+        {
+            // Logic here.
+            return true;
+        }
+
     }
 }
