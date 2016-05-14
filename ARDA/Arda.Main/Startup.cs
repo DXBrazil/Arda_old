@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Http;
 
 namespace Arda.Main
 {
@@ -37,7 +38,6 @@ namespace Arda.Main
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-
             services.AddMvc();
         }
 
@@ -90,41 +90,12 @@ namespace Arda.Main
                         var name = claims.FirstOrDefault(claim => claim.Type == "name").Value;
                         var uniqueName = claims.FirstOrDefault(claim => claim.Type == "unique_name").Value;
 
+                        //TODO: Guardar valores acima em um storage para a session.
+
                         return Task.FromResult(0);
                     }
                 };
             });
-
-            //app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
-            //{
-            //    ClientId = Configuration["Authentication:AzureAd:ClientId"],
-            //    Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"],
-            //    PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"],
-            //    SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme,
-            //    Events = new OpenIdConnectEvents()
-            //    {
-            //        OnAuthenticationValidated =(context) =>
-            //        {
-
-            //            return Task.FromResult(0);
-            //        },
-            //        OnUserInformationReceived = (context) =>
-            //        {
-
-            //            return Task.FromResult(0);
-            //        },
-            //        OnAuthorizationCodeReceived = (context) =>
-            //        {
-
-            //            return Task.FromResult(0);
-            //        },
-            //        OnAuthorizationResponseReceived = (context) =>
-            //        {
-
-            //            return Task.FromResult(0);
-            //        }
-            //    }
-            //});
 
             app.UseMvc(routes =>
             {

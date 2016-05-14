@@ -35,7 +35,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getuserpermissiontoresource")]
-        public bool GetUserPermissionToResource(string token, string module, string resource)
+        public bool CheckUserPermissionToResource(string token, string module, string resource)
         {
             try
             {

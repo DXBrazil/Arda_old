@@ -15,7 +15,6 @@ namespace Arda.Main.Controllers
             return View();
         }
 
-        [Authorize]
         public IActionResult About()
         {
             return View();
