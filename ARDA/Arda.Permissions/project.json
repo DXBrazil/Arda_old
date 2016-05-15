@@ -17,7 +17,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
     "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-update1",
-    "EntityFramework.Commands": "7.0.0-rc1-update1"
+    "EntityFramework.Commands": "7.0.0-rc1-update1",
+    "Microsoft.Extensions.Caching.Redis": "1.0.0-rc1-final"
   },
 
   "commands": {

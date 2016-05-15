@@ -1,7 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
 /// <reference path="js/basicoperations.js" />
-/// <reference path="js/site.min.js" />
 /// <reference path="layouts/quantum/bootstrap/bootstrap.js" />
 /// <reference path="layouts/quantum/js/app.js" />
 /// <reference path="layouts/quantum/js/bootstrap-datetimepicker.min.js" />

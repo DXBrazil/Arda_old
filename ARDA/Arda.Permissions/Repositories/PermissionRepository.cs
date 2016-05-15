@@ -48,17 +48,20 @@ namespace Arda.Permissions.Repositories
             }
         }
 
+
         // Add permission for the first time.
         public bool AddFirstPermissionsSet(Guid userID, string token, string permissionsByUser)
         {
             return true;
         }
 
+
         // Update an existing permission to specific user.
         public bool UpdatePermssionsSetByUserIDAndToken(Guid userID, string token)
         {
             return true;
         }
+
 
         // Verifying if user (identified by user token) has authorization to specific resource.
         public bool VerifyUserAccessToResource(string token, string module, string resource)

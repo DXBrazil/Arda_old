@@ -11,6 +11,8 @@ using Arda.Permissions.Models;
 using Microsoft.Data.Entity;
 using Arda.Permissions.Interfaces;
 using Arda.Permissions.Repositories;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
 
 namespace Arda.Permissions
 {
@@ -37,22 +39,28 @@ namespace Arda.Permissions
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
-            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
-
+            // Add application insights in application.
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            // Registering CORS to the application.
+            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
             // Adding database connection by dependency injection.
             //var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             services.AddEntityFramework().AddSqlServer().AddDbContext<PermissionsContext>(options => options.UseSqlServer(Connection));
 
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+            {
+                Configuration = "arda.redis.cache.windows.net:6380,password=66Tw+4fc8tkeHWr1Els4jtGF1pIhCSP0ncIXB4PuyDk=,ssl=True,abortConnect=False",
+                InstanceName = "arda.redis.cache.windows.net"
+            }));
+
             // Injecting repository dependencies to permissions.
-            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddTransient<IPermissionRepository, PermissionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

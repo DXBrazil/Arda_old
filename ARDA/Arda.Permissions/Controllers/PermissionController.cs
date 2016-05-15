@@ -41,7 +41,7 @@ namespace Arda.Permissions.Controllers
             {
                 var permissionResponse = _permission.VerifyUserAccessToResource(token, module, resource);
 
-                if(permissionResponse)
+                if (permissionResponse)
                 {
                     return true;
                 }
