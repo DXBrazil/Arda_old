@@ -22,8 +22,11 @@
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "dnx451": {
+      "dependencies": {
+        "Arda.Common": "1.0.0-*"
+      }
+    }
   },
 
   "exclude": [

@@ -7,6 +7,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Arda.Common.Middlewares;
 
 namespace Arda.Reports
 {
@@ -45,6 +46,8 @@ namespace Arda.Reports
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseMiddleware<SecurityMiddleware>();
+            
             app.UseIISPlatformHandler();
 
             app.UseApplicationInsightsRequestTelemetry();
