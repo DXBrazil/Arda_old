@@ -21,10 +21,11 @@ namespace Arda.Main.Controllers
         public DashboardController()
         {
             client = new HttpClient();
+            //Reports
             client.BaseAddress = new Uri("http://localhost:2891/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //TODO: Trocar para a leitura dos valores da sessão:
+            //TODO: Change for the session values:
             client.DefaultRequestHeaders.Add("ARDACode", "hue123");
             client.DefaultRequestHeaders.Add("ARDAUser", "huehue");
         }

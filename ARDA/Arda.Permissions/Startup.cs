@@ -11,6 +11,8 @@ using Arda.Permissions.Models;
 using Microsoft.Data.Entity;
 using Arda.Permissions.Interfaces;
 using Arda.Permissions.Repositories;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
 
 namespace Arda.Permissions
 {
@@ -38,20 +40,26 @@ namespace Arda.Permissions
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
             services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
 
-            // Adding database connection by dependency injection.
-            //var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            }));
+
+            //// Adding database connection by dependency injection.
+            ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            //var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Permissions;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddEntityFramework().AddSqlServer().AddDbContext<PermissionsContext>(options => options.UseSqlServer(Connection));
 
-            // Injecting repository dependencies to permissions.
+            //// Injecting repository dependencies to permissions.
             services.AddScoped<IPermissionRepository, PermissionRepository>();
         }
 

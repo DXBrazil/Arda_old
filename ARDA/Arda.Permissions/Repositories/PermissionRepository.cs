@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Arda.Common.JSON;
 using Arda.Permissions.ViewModels;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Arda.Permissions.Repositories
 {
@@ -21,51 +23,46 @@ namespace Arda.Permissions.Repositories
             _cache = cache;
         }
 
-        // Getting user permissions by UserID and Token.
-        public TokenPermissionViewModel GetPermissionSetByUserIDAndToken(string token)
+        public bool SetUserProperties(string authCode, string uniqueName)
         {
             try
             {
-                var permissions = _context.Permissions.FirstOrDefault(p => p.Token == token);
-
-                if(permissions != null)
+                var userProperties = _context.UserProperties.SingleOrDefault(u => u.AuthCode == authCode && u.UniqueName == uniqueName);
+                if (userProperties != null)
                 {
-                    return new TokenPermissionViewModel()
-                    {
-                        token = permissions.Token,
-                        permissionsOfUser = permissions.PermissionsByUser
-                    };
+                    userProperties.AuthCode = authCode;
+                    _cache.Set(uniqueName, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userProperties)));
+                }
+
+                var response = JsonConvert.DeserializeObject<UserProperties>(Encoding.UTF8.GetString(_cache.Get(uniqueName)));
+                if (response == userProperties)
+                {
+                    return true;
                 }
                 else
                 {
-                    return null;
+                    return false;
                 }
-
             }
             catch (Exception)
             {
-                return null;
+                return false;
             }
         }
 
-        // Add permission for the first time.
-        public bool AddFirstPermissionsSet(Guid userID, string token, string permissionsByUser)
+        public bool UpdateUserProperties(string uniqueName, UserProperties properties)
         {
-            return true;
+            throw new NotImplementedException();
         }
 
-        // Update an existing permission to specific user.
-        public bool UpdatePermssionsSetByUserIDAndToken(Guid userID, string token)
+        public void DeleteUserProperties(string uniqueName)
         {
-            return true;
+            throw new NotImplementedException();
         }
 
-        // Verifying if user (identified by user token) has authorization to specific resource.
-        public bool VerifyUserAccessToResource(string token, string module, string resource)
+        public bool VerifyUserAccessToResource(string uniqueName, UserProperties resource)
         {
-            // Logic here.
-            return true;
+            throw new NotImplementedException();
         }
-
     }
 }

@@ -7,11 +7,19 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Arda.Main.Controllers
 {
     public class AccountController : Controller
     {
+        private IDistributedCache _cache;
+
+        public AccountController(IDistributedCache cache)
+        {
+            _cache = cache;
+        }
+
         public IActionResult SignIn()
         {
             return new ChallengeResult(
@@ -30,6 +38,11 @@ namespace Arda.Main.Controllers
         public IActionResult SignOutCallback()
         {
             return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
+        public void StoreValues()
+        {
+
         }
     }
 }

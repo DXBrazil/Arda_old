@@ -8,7 +8,7 @@ using Arda.Permissions.ViewModels;
 
 namespace Arda.Permissions.Controllers
 {
-    [Route("api/permissions")]
+    [Route("api/[controller]")]
     public class PermissionController : Controller
     {
         private IPermissionRepository _permission;
@@ -19,41 +19,12 @@ namespace Arda.Permissions.Controllers
         }
 
         [HttpGet]
-        [Route("getpermissionsetbyuseridandtoken")]
-        public IActionResult GetPermissionSetByUserIDAndToken(string token)
+        [Route("setuserproperties")]
+        public bool SetUserProperties(string authCode, string uniqueName)
         {
-            try
-            {
-                var response = _permission.GetPermissionSetByUserIDAndToken(token);
-                return Json(new { permissions = response.permissionsOfUser });
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var response = _permission.SetUserProperties(authCode, uniqueName);
+            return response;
         }
 
-        [HttpGet]
-        [Route("getuserpermissiontoresource")]
-        public bool CheckUserPermissionToResource(string token, string module, string resource)
-        {
-            try
-            {
-                var permissionResponse = _permission.VerifyUserAccessToResource(token, module, resource);
-
-                if(permissionResponse)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
     }
 }

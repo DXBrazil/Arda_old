@@ -32,7 +32,7 @@ namespace Arda.Common.Middlewares
                 context.Response.StatusCode = 400;
                 return;
             }
-            //TODO: Comparar com o Code guardado no Redis e verificar se é válido
+            //TODO: Compare with the code on Redis and verify if is valid
             else if (!CheckUserPermissionToResource(user, code, endpoint, resource))
             {
                 //User doesn't have permission, code is not valid or code is expired:
