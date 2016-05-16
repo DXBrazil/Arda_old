@@ -8,6 +8,6 @@ namespace Arda.Permissions.Models
 {
     public class PermissionsContext : DbContext
     {
-        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<UserProperties> UserProperties { get; set; }
     }
 }

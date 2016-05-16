@@ -7,6 +7,13 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Http;
+using Arda.Main.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
+using Arda.Main.Repositories;
 
 namespace Arda.Main
 {
@@ -17,6 +24,7 @@ namespace Arda.Main
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile("secrets.json")
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
@@ -34,8 +42,16 @@ namespace Arda.Main
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-
             services.AddMvc();
+
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            }));
+
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +78,38 @@ namespace Arda.Main
 
             app.UseStaticFiles();
 
+            app.UseCookieAuthentication(options =>
+            {
+                options.AutomaticAuthenticate = true;
+            });
+
+            app.UseOpenIdConnectAuthentication(options =>
+            {
+                options.AutomaticChallenge = true;
+                options.ClientId = Configuration["Authentication:AzureAd:ClientId"];
+                options.Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
+                options.PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.Events = new OpenIdConnectEvents()
+                {
+                    OnAuthorizationCodeReceived = (context) =>
+                    {
+                        var claims = context.JwtSecurityToken.Claims;
+
+                        var authCode = context.Code;
+                        var validFrom = context.JwtSecurityToken.ValidFrom;
+                        var validTo = context.JwtSecurityToken.ValidTo;
+                        var givenName = claims.FirstOrDefault(claim => claim.Type == "given_name").Value;
+                        var name = claims.FirstOrDefault(claim => claim.Type == "name").Value;
+                        var uniqueName = claims.FirstOrDefault(claim => claim.Type == "unique_name").Value;
+
+                        StoreCodeandPermissions(authCode, uniqueName);
+
+                        return Task.FromResult(0);
+                    }
+                };
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -69,8 +117,23 @@ namespace Arda.Main
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-
+        
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+
+        private void StoreCodeandPermissions(string authCode, string uniqueName)
+        {
+            var cache = new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            });
+
+
+        }
+
     }
+
+
 }

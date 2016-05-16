@@ -36,17 +36,9 @@
                         
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="GetSupport">Get support</a></li>
+                        <li><a asp-controller="Dashboard" asp-action="Index">Go to dashboard</a></li>
                     </ul>
-                    <ul class="nav navbar-nav" style="float: right">
-                        <li>
-                            <p class="navbar-btn">
-                                <a asp-controller="ClientAuthentication" asp-action="Login" class="btn btn-primary btn-sm">
-                                    <span class="glyphicon glyphicon-lock"></span>&nbsp;
-                                    System access
-                                </a>
-                            </p>
-                        </li>
-                    </ul>
+                    @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
         </div>
