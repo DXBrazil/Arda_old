@@ -4,16 +4,16 @@ namespace Arda.Permissions.Interfaces
 {
     public interface IPermissionRepository
     {
-        // Save the first permission at database.
-        bool SetUserProperties(string authCode, string uniqueName);
+        // Save the permissions and code at the cache.
+        bool SetUserPermissionsAndCode(string uniqueName, string code);
 
-        // Update an existing user permission.
-        bool UpdateUserProperties(string uniqueName, UserProperties properties);
+        // Update an existing user permissions.
+        bool UpdateUserPermissions(string uniqueName, string userPermissionsSerialized);
 
-        // Delete an existing user permission.
-        void DeleteUserProperties(string uniqueName);
+        // Delete an existing user permissions from the cache.
+        void DeleteUserPermissions(string uniqueName);
 
-        // Verify if user (identified by user token) has authorization to specific resource.
-        bool VerifyUserAccessToResource(string uniqueName, UserProperties resource);
+        // Verify if user has authorization to specific resource.
+        bool VerifyUserAccessToResource(string uniqueName, string resource);
     }
 }

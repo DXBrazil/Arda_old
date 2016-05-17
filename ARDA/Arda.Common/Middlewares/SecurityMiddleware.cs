@@ -23,6 +23,7 @@ namespace Arda.Common.Middlewares
         {
             var user= context.Request.Headers["ARDAUser"].ToString();
             var code= context.Request.Headers["ARDACode"].ToString();
+
             var endpoint = context.Request.Host.Value;
             var resource = context.Request.Path.ToString();
 
