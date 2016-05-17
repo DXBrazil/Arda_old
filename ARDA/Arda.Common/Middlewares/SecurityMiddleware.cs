@@ -21,8 +21,8 @@ namespace Arda.Common.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            var user= context.Request.Headers["ARDAUser"].ToString();
-            var code= context.Request.Headers["ARDACode"].ToString();
+            var user= context.Request.Headers["unique_name"].ToString();
+            var code= context.Request.Headers["code"].ToString();
 
             var endpoint = context.Request.Host.Value;
             var resource = context.Request.Path.ToString();
@@ -53,10 +53,9 @@ namespace Arda.Common.Middlewares
             client.BaseAddress = new Uri("http://localhost:2884/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("ARDAUser", user);
-            client.DefaultRequestHeaders.Add("ARDACode", code);
+            client.DefaultRequestHeaders.Add("unique_name", user);
 
-            string url = client.BaseAddress + string.Format("values?endpoint={0}&resource={1}",endpoint,resource);
+            string url = client.BaseAddress + string.Format("values?uniquename={0}&resource={1}",endpoint,resource);
             var response = client.GetAsync(url).Result;
             var responseData = response.Content.ReadAsStringAsync().Result; // json raw data
             var permissions = JsonConvert.DeserializeObject(responseData); // json treated data

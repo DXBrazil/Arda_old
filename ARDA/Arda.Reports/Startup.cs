@@ -8,6 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Arda.Common.Middlewares;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
+using Arda.Reports.Models;
+using Microsoft.Data.Entity;
+using Arda.Reports.Interfaces;
+using Arda.Reports.Repositories;
 
 namespace Arda.Reports
 {
@@ -17,7 +23,8 @@ namespace Arda.Reports
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("secrets.json");
 
             if (env.IsEnvironment("Development"))
             {
@@ -35,9 +42,27 @@ namespace Arda.Reports
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            }));
+
+            //// Adding database connection by dependency injection.
+            ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Permissions;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddEntityFramework().AddSqlServer().AddDbContext<ReportsContext>(options => options.UseSqlServer(Connection));
+
+            // Registering additional services.
+            services.AddScoped<IReportsRepository, ReportsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -55,6 +80,8 @@ namespace Arda.Reports
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            app.UseCors("AllowAll");
 
             app.UseMvc();
         }

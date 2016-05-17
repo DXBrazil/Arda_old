@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
 using Arda.Permissions.ViewModels;
+using Arda.Common.Utils;
 
 namespace Arda.Permissions.Repositories
 {
@@ -19,7 +20,6 @@ namespace Arda.Permissions.Repositories
             _cache = cache;
         }
 
-
         public bool SetUserPermissionsAndCode(string uniqueName, string code)
         {
             try
@@ -30,7 +30,7 @@ namespace Arda.Permissions.Repositories
                     var permissions = userProperties.ToPermission();
                     var propertiesToCache = new UserPropertiesCachedViewModel(code, permissions);
 
-                    _cache.Set(uniqueName, GetBytes(propertiesToCache.ToString()));
+                    _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
                     return true;
                 }
                 else
@@ -48,14 +48,14 @@ namespace Arda.Permissions.Repositories
         {
             try
             {
-                var propertiesSerializedCached = GetString(_cache.Get(uniqueName));
+                var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
 
                 if (propertiesSerializedCached != null)
                 {
                     var propertiesToCache = new UserPropertiesCachedViewModel(propertiesSerializedCached);
                     propertiesToCache.Permissions = new Permission(userPermissionsSerialized);
 
-                    _cache.Set(uniqueName, GetBytes(propertiesToCache.ToString()));
+                    _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
                     return true;
                 }
                 else
@@ -86,7 +86,7 @@ namespace Arda.Permissions.Repositories
             try
             {
                 resource = resource.ToLower();
-                var propertiesSerializedCached = GetString(_cache.Get(uniqueName));
+                var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
 
                 if (propertiesSerializedCached != null)
                 {
@@ -122,15 +122,15 @@ namespace Arda.Permissions.Repositories
         }
    
 
-        private byte[] GetBytes(string obj)
-        {
-            return Encoding.UTF8.GetBytes(obj);
-        }
+        //private byte[] GetBytes(string obj)
+        //{
+        //    return Encoding.UTF8.GetBytes(obj);
+        //}
 
-        private string GetString(byte[] obj)
-        {
-            return Encoding.UTF8.GetString(obj);
-        }
+        //private string GetString(byte[] obj)
+        //{
+        //    return Encoding.UTF8.GetString(obj);
+        //}
 
     }
 }

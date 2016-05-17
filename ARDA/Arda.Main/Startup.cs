@@ -15,6 +15,7 @@ using Microsoft.Extensions.Caching.Redis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using Arda.Common.Middlewares;
 
 namespace Arda.Main
 {
@@ -43,6 +44,7 @@ namespace Arda.Main
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+
             services.AddMvc();
 
             // Registering distributed cache approach to the application.
