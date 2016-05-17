@@ -10,10 +10,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Http;
-using Arda.Main.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
-using Arda.Main.Repositories;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net;
 
 namespace Arda.Main
 {
@@ -50,8 +51,6 @@ namespace Arda.Main
                 Configuration = Configuration["Storage:Redis:Configuration"],
                 InstanceName = Configuration["Storage:Redis:InstanceName"]
             }));
-
-            services.AddScoped<IPermissionRepository, PermissionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,20 +91,30 @@ namespace Arda.Main
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.Events = new OpenIdConnectEvents()
                 {
-                    OnAuthorizationCodeReceived = (context) =>
+                    OnAuthorizationCodeReceived = async (context) =>
                     {
                         var claims = context.JwtSecurityToken.Claims;
 
-                        var authCode = context.Code;
+                        var code = context.Code;
                         var validFrom = context.JwtSecurityToken.ValidFrom;
                         var validTo = context.JwtSecurityToken.ValidTo;
                         var givenName = claims.FirstOrDefault(claim => claim.Type == "given_name").Value;
                         var name = claims.FirstOrDefault(claim => claim.Type == "name").Value;
                         var uniqueName = claims.FirstOrDefault(claim => claim.Type == "unique_name").Value;
 
-                        StoreCodeandPermissions(authCode, uniqueName);
+                        var client = new HttpClient(); ;
+                        client.BaseAddress = new Uri("http://localhost:2884/api/");
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        client.DefaultRequestHeaders.Add("unique_name", uniqueName);
+                        client.DefaultRequestHeaders.Add("code", code);
 
-                        return Task.FromResult(0);
+                        string url = client.BaseAddress + "permission/setuserpermissionsandcode";
+                        var response = await client.PostAsync(url, null);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new Exception();
+                        }
                     }
                 };
             });
@@ -120,20 +129,5 @@ namespace Arda.Main
         
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
-
-
-        private void StoreCodeandPermissions(string authCode, string uniqueName)
-        {
-            var cache = new RedisCache(new RedisCacheOptions
-            {
-                Configuration = Configuration["Storage:Redis:Configuration"],
-                InstanceName = Configuration["Storage:Redis:InstanceName"]
-            });
-
-
-        }
-
     }
-
-
 }

@@ -22,7 +22,8 @@ namespace Arda.Permissions
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("secrets.json");
 
             if (env.IsEnvironment("Development"))
             {
@@ -57,7 +58,7 @@ namespace Arda.Permissions
             ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             //var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Permissions;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            services.AddEntityFramework().AddSqlServer().AddDbContext<PermissionsContext>(options => options.UseSqlServer(Connection));
+            services.AddEntityFramework().AddSqlServer().AddDbContext<UserPermissionsContext>(options => options.UseSqlServer(Connection));
 
             //// Injecting repository dependencies to permissions.
             services.AddScoped<IPermissionRepository, PermissionRepository>();
