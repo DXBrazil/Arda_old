@@ -7,8 +7,8 @@ using Arda.Permissions.Models;
 
 namespace Arda.Permissions.Migrations
 {
-    [DbContext(typeof(PermissionsContext))]
-    partial class PermissionsContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(UserPermissionsContext))]
+    partial class UserPermissionsContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -16,24 +16,16 @@ namespace Arda.Permissions.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16386")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Arda.Permissions.Models.UserProperties", b =>
+            modelBuilder.Entity("Arda.Permissions.Models.UsersPermissions", b =>
                 {
                     b.Property<string>("UniqueName");
 
-                    b.Property<string>("AuthCode");
-
-                    b.Property<string>("UserPropertiesUniqueName");
+                    b.Property<string>("PermissionsSerialized")
+                        .IsRequired();
 
                     b.HasKey("UniqueName");
 
-                    b.HasAnnotation("Relational:TableName", "UsersProperties");
-                });
-
-            modelBuilder.Entity("Arda.Permissions.Models.UserProperties", b =>
-                {
-                    b.HasOne("Arda.Permissions.Models.UserProperties")
-                        .WithMany()
-                        .HasForeignKey("UserPropertiesUniqueName");
+                    b.HasAnnotation("Relational:TableName", "UsersPermissions");
                 });
         }
     }

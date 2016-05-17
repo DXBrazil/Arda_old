@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Arda.Permissions.Models
 {
-    public class PermissionsContext : DbContext
+    public class UserPermissionsContext : DbContext
     {
-        public DbSet<UserProperties> UserProperties { get; set; }
+        public DbSet<UsersPermissions> UsersPermissions { get; set; }
     }
 }

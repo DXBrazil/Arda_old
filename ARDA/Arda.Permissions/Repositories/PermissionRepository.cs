@@ -1,42 +1,36 @@
 ﻿using Arda.Permissions.Interfaces;
 using Arda.Permissions.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Arda.Common.JSON;
-using Arda.Permissions.ViewModels;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
-using Newtonsoft.Json;
+using Arda.Permissions.ViewModels;
 
 namespace Arda.Permissions.Repositories
 {
     public class PermissionRepository : IPermissionRepository
     {
-        private PermissionsContext _context;
+        private UserPermissionsContext _context;
         private IDistributedCache _cache;
 
-        public PermissionRepository(PermissionsContext context, IDistributedCache cache)
+        public PermissionRepository(UserPermissionsContext context, IDistributedCache cache)
         {
             _context = context;
             _cache = cache;
         }
 
-        public bool SetUserProperties(string authCode, string uniqueName)
+
+        public bool SetUserPermissionsAndCode(string uniqueName, string code)
         {
             try
             {
-                var userProperties = _context.UserProperties.SingleOrDefault(u => u.AuthCode == authCode && u.UniqueName == uniqueName);
+                var userProperties = _context.UsersPermissions.SingleOrDefault(user => user.UniqueName == uniqueName);
                 if (userProperties != null)
                 {
-                    userProperties.AuthCode = authCode;
-                    _cache.Set(uniqueName, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(userProperties)));
-                }
+                    var permissions = userProperties.ToPermission();
+                    var propertiesToCache = new UserPropertiesCachedViewModel(code, permissions);
 
-                var response = JsonConvert.DeserializeObject<UserProperties>(Encoding.UTF8.GetString(_cache.Get(uniqueName)));
-                if (response == userProperties)
-                {
+                    _cache.Set(uniqueName, GetBytes(propertiesToCache.ToString()));
                     return true;
                 }
                 else
@@ -46,23 +40,119 @@ namespace Arda.Permissions.Repositories
             }
             catch (Exception)
             {
-                return false;
+                throw;
             }
         }
 
-        public bool UpdateUserProperties(string uniqueName, UserProperties properties)
+        public bool UpdateUserPermissions(string uniqueName, string userPermissionsSerialized)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var propertiesSerializedCached = GetString(_cache.Get(uniqueName));
+
+                if (propertiesSerializedCached != null)
+                {
+                    var propertiesToCache = new UserPropertiesCachedViewModel(propertiesSerializedCached);
+                    propertiesToCache.Permissions = new Permission(userPermissionsSerialized);
+
+                    _cache.Set(uniqueName, GetBytes(propertiesToCache.ToString()));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public void DeleteUserProperties(string uniqueName)
+        public void DeleteUserPermissions(string uniqueName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _cache.Remove(uniqueName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public bool VerifyUserAccessToResource(string uniqueName, UserProperties resource)
+        public bool VerifyUserAccessToResource(string uniqueName, string resource)
         {
-            throw new NotImplementedException();
+            try
+            {
+                resource = resource.ToLower();
+                var propertiesSerializedCached = GetString(_cache.Get(uniqueName));
+
+                if (propertiesSerializedCached != null)
+                {
+                    var permissions = new UserPropertiesCachedViewModel(propertiesSerializedCached).Permissions.ToString().Trim().ToLower();
+                    if (permissions.Contains(resource))
+                    {
+                        var search = "\"module\":\"" + resource + "\",\"enabled\":";
+                        var permExtracted = permissions.Substring(permissions.IndexOf(search) + search.Length);
+                        var value = permExtracted.Substring(0, permExtracted.IndexOf(","));
+                        if (bool.Parse(value))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+   
+
+        private byte[] GetBytes(string obj)
+        {
+            return Encoding.UTF8.GetBytes(obj);
+        }
+
+        private string GetString(byte[] obj)
+        {
+            return Encoding.UTF8.GetString(obj);
+        }
+
     }
 }
+
+//public void SetAllan()
+//{
+//    Permission perm = new Permission()
+//    {
+//        Module = "Dashboard",
+//        Enabled = true,
+//        NestedPermissions = new List<Permission>()
+//                {
+//                    new Permission("page1", false),
+//                    new Permission("page2", false),
+//                    new Permission("page3", true)
+//                }
+//    };
+
+//    _context.UsersPermissions.Add(new UsersPermissions()
+//    {
+//        UniqueName = "fabsanc@microsoft.com",
+//        PermissionsSerialized = perm.ToString()
+//    });
+//    _context.SaveChanges();
+//}
