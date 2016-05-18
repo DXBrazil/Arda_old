@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARDA</title>
+    <meta name="description" content="">
+    <link rel="stylesheet" type="text/css" href="~/Layouts/ModernUI/css/core.css" />
+</head>
+<body>
+    <main>
+        <div class="main">
+            <header class="navbar navbar-arda navbar-static-top" role="navigation">
+                <nav class="container-fluid">
+                    <a class="navbar-brand" href="#">ARDA</a>
+                    <div class="navbar-header">
+
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                        </button>
+                        <a class="icon-user" href="#">
+                        </a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#" target="_blank">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Project</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./index-carousel.html">Setting</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            @RenderBody()
+        </div>
+    </main>
+    <footer class="ctn-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-9">
+                    <div class="media">
+                        <div class="media-left">
+                            <!-- ARDA brand -->
+                        </div>
+                        <span class="footer-credits">
+                            &copy; Microsoft 2016.
+                            <a href="#" class="footer-credits-links">Github</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <img src="~/Layouts/ModernUI/img/microsoft-logo.png" class="footer-logo">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+

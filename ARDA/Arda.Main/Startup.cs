@@ -15,6 +15,7 @@ using Microsoft.Extensions.Caching.Redis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using Arda.Common.Middlewares;
 
 namespace Arda.Main
 {
@@ -43,6 +44,7 @@ namespace Arda.Main
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+
             services.AddMvc();
 
             // Registering distributed cache approach to the application.
@@ -85,6 +87,7 @@ namespace Arda.Main
             app.UseOpenIdConnectAuthentication(options =>
             {
                 options.AutomaticChallenge = true;
+                //options.CallbackPath = "https://localhost:44304/";
                 options.ClientId = Configuration["Authentication:AzureAd:ClientId"];
                 options.Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
                 options.PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];
@@ -110,11 +113,7 @@ namespace Arda.Main
                         client.DefaultRequestHeaders.Add("code", code);
 
                         string url = client.BaseAddress + "permission/setuserpermissionsandcode";
-                        var response = await client.PostAsync(url, null);
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            throw new Exception();
-                        }
+                        await client.PostAsync(url, null);
                     }
                 };
             });

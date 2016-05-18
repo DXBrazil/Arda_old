@@ -14,11 +14,11 @@ namespace Arda.Permissions.Models
         [Required]
         public string PermissionsSerialized { get; set; }
 
-        public Permission ToPermission()
+        public PermissionsScope ToPermission()
         {
             try
             {
-                return JsonConvert.DeserializeObject<Permission>(PermissionsSerialized);
+                return JsonConvert.DeserializeObject<PermissionsScope>(PermissionsSerialized);
             }
             catch (Exception)
             {

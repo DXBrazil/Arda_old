@@ -8,6 +8,11 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
+using Arda.Kanban.Models;
+using Arda.Kanban.Interfaces;
+using Arda.Kanban.Repositories;
 
 namespace Arda.Kanban
 {
@@ -17,7 +22,8 @@ namespace Arda.Kanban
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("secrets.json");
 
             if (env.IsEnvironment("Development"))
             {
@@ -35,6 +41,8 @@ namespace Arda.Kanban
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddEntityFramework()
@@ -48,6 +56,21 @@ namespace Arda.Kanban
             services.AddScoped<ITaskRepository, TaskRepositorySQL>();
 
             services.AddMvc();
+
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            }));
+
+            ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Permissions;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(Connection));
+
+            //Registering services.
+            services.AddScoped<IKanbanRepository, KanbanRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -63,6 +86,8 @@ namespace Arda.Kanban
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            app.UseCors("AllowAll");
 
             app.UseMvc();
 

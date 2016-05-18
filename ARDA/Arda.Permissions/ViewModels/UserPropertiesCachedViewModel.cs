@@ -11,7 +11,7 @@ namespace Arda.Permissions.ViewModels
     {
         public string Code { get; set; }
 
-        public Permission Permissions { get; set; }
+        public PermissionsScope Permissions { get; set; }
 
         public UserPropertiesCachedViewModel() { }
 
@@ -22,13 +22,13 @@ namespace Arda.Permissions.ViewModels
             Permissions = prop.Permissions;
         }
 
-        public UserPropertiesCachedViewModel(Permission permissions)
+        public UserPropertiesCachedViewModel(PermissionsScope permissions)
         {
             Code = "";
             Permissions = permissions;
         }
 
-        public UserPropertiesCachedViewModel(string code, Permission permissions)
+        public UserPropertiesCachedViewModel(string code, PermissionsScope permissions)
         {
             Code = code;
             Permissions = permissions;
