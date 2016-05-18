@@ -14,6 +14,8 @@ namespace Arda.Permissions.Interfaces
         void DeleteUserPermissions(string uniqueName);
 
         // Verify if user has authorization to specific resource.
-        bool VerifyUserAccessToResource(string uniqueName, string resource);
+        bool VerifyUserAccessToResource(string uniqueName, string module, string resource);
+
+        //void SetAllan();
     }
 }

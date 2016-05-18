@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,47 +9,18 @@ namespace Arda.Permissions.Models
     {
         public string Module { get; set; }
 
-        public bool Enabled { get; set; }
+        public string Resource { get; set; }
 
-        public List<Permission> NestedPermissions { get; set; }
+        public bool Enabled { get; set; }
 
 
         public Permission() { }
 
-        public Permission(string module, bool enabled)
+        public Permission(string module, string resource, bool enabled)
         {
             Module = module;
+            Resource = resource;
             Enabled = enabled;
-        }
-
-        public Permission(string serializedPermission)
-        {
-            try
-            {
-                var permission = JsonConvert.DeserializeObject<Permission>(serializedPermission);
-
-                Module = permission.Module;
-                Enabled = permission.Enabled;
-                NestedPermissions = permission.NestedPermissions;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-
-        public override string ToString()
-        {
-            try
-            {
-                return JsonConvert.SerializeObject(this);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

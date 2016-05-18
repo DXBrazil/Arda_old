@@ -101,13 +101,13 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("verifyuseraccesstoresource")]
-        public HttpResponseMessage VerifyUserAccessToResource(string uniqueName, string resource)
+        public HttpResponseMessage VerifyUserAccessToResource(string uniqueName, string module, string resource)
         {
             try
             {
-                if (uniqueName != null && resource != null)
+                if (uniqueName != null && module!=null && resource != null)
                 {
-                    if (_permission.VerifyUserAccessToResource(uniqueName, resource))
+                    if (_permission.VerifyUserAccessToResource(uniqueName, module, resource))
                     {
                         return new HttpResponseMessage(HttpStatusCode.OK);
                     }
@@ -126,5 +126,12 @@ namespace Arda.Permissions.Controllers
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
+
+        //[HttpGet]
+        //[Route("setallan")]
+        //public void SetAllan()
+        //{
+        //    _permission.SetAllan();
+        //}
     }
 }

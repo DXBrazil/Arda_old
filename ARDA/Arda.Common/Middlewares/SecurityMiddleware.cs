@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Arda.Common.Models;
 
 namespace Arda.Common.Middlewares
 {
@@ -21,46 +23,62 @@ namespace Arda.Common.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            var user= context.Request.Headers["unique_name"].ToString();
-            var code= context.Request.Headers["code"].ToString();
-
-            var endpoint = context.Request.Host.Value;
-            var resource = context.Request.Path.ToString();
-
-            if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(user))
+            try
             {
-                //Bad Request:
-                context.Response.StatusCode = 400;
-                return;
+                var user = context.Request.Headers["unique_name"].ToString();
+                //var code= context.Request.Headers["code"].ToString();
+
+                var endpoint = context.Request.Host.Value;
+                var path = context.Request.Path.ToString();
+
+                var temp = path.Remove(0, "/api/".Length).Split('/');
+                var module = temp[0];
+                var resource = temp[1];
+
+                if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(module) || string.IsNullOrWhiteSpace(resource))
+                {
+                    //Bad Request:
+                    context.Response.StatusCode = 400;
+                    return;
+                }
+                //TODO: Compare with the code on Redis and verify if is valid
+                else if (!CheckUserPermissionToResource(user, module, resource))
+                {
+                    //User doesn't have permission, code is not valid or code is expired:
+                    context.Response.StatusCode = 401;
+                    return;
+                }
+                else
+                {
+                    await _next(context);
+                }
             }
-            //TODO: Compare with the code on Redis and verify if is valid
-            else if (!CheckUserPermissionToResource(user, code, endpoint, resource))
+            catch (Exception ex)
             {
-                //User doesn't have permission, code is not valid or code is expired:
-                context.Response.StatusCode = 401;
-                return;
+
+            }
+        }
+
+        private bool CheckUserPermissionToResource(string uniqueName, string module, string resource)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:2884/api/");
+
+            string url = client.BaseAddress + string.Format("permission/verifyuseraccesstoresource?uniquename={0}&module={1}&resource={2}", uniqueName, module, resource);
+            var response = client.GetAsync(url).Result;
+
+            var bodySerialized = response.Content.ReadAsStringAsync().Result;
+            var bodyResponse = JsonConvert.DeserializeObject<HTTPBodyResponse>(bodySerialized);
+
+
+            if (bodyResponse.IsSuccessStatusCode)
+            {
+                return true;
             }
             else
             {
-                await _next(context);
+                return false;
             }
-
-        }
-
-        private bool CheckUserPermissionToResource(string user, string code, string endpoint, string resource)
-        {
-            var client = new HttpClient(); ;
-            client.BaseAddress = new Uri("http://localhost:2884/api/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("unique_name", user);
-
-            string url = client.BaseAddress + string.Format("values?uniquename={0}&resource={1}",endpoint,resource);
-            var response = client.GetAsync(url).Result;
-            var responseData = response.Content.ReadAsStringAsync().Result; // json raw data
-            var permissions = JsonConvert.DeserializeObject(responseData); // json treated data
-
-            return true;
         }
     }
 }

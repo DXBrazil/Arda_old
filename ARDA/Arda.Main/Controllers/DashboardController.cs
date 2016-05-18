@@ -20,16 +20,16 @@ namespace Arda.Main.Controllers
 
         public DashboardController()
         {
-            client = new HttpClient();
+            //client = new HttpClient();
 
-            //Reports
-            client.BaseAddress = new Uri("http://localhost:2891/api/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            ////Reports
+            //client.BaseAddress = new Uri("http://localhost:2891/api/");
+            //client.DefaultRequestHeaders.Accept.Clear();
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //TODO: Change for the session values
-            client.DefaultRequestHeaders.Add("unique_name", "hue123");
-            client.DefaultRequestHeaders.Add("ARDAUser", "huehue");
+            ////TODO: Change for the session values
+            //client.DefaultRequestHeaders.Add("unique_name", "hue123");
+            //client.DefaultRequestHeaders.Add("ARDAUser", "huehue");
         }
 
         public IActionResult Index()
