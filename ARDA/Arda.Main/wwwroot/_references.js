@@ -1,27 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/bootstrap/bootstrap.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/bootstrap-datetimepicker.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/bootstrap-slider.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/bootstrap-tagsinput.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/dropzone.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/fullcalendar.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/jquery.colorbox-min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/jquery.flot.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/jquery.noty.packaged.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/jquery.sparkline.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/jquery-1.11.2.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/masonry.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/modernizr.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/moment.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/select2.min.js" />
-/// <reference path="../views/wwwroot/Layouts/Quantum/js/summernote.min.js" />
-/// <reference path="../views/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js" />
-/// <reference path="../views/wwwroot/lib/jquery/dist/jquery.min.js" />
-/// <reference path="../views/wwwroot/lib/jquery-validation/dist/additional-methods.min.js" />
-/// <reference path="../views/wwwroot/lib/jquery-validation/dist/jquery.validate.min.js" />
 /// <reference path="js/basicoperations.js" />
-
 /// <reference path="layouts/modernui/js/app.js" />
 /// <reference path="layouts/modernui/js/bootstrap/alert.js" />
 /// <reference path="layouts/modernui/js/bootstrap/button.js" />
@@ -84,8 +63,9 @@
 /// <reference path="Layouts/Quantum/js/uncompressed/simplecalendar.js" />
 /// <reference path="Layouts/Quantum/js/uncompressed/skycons.js" />
 /// <reference path="Layouts/Quantum/js/uncompressed/summernote.js" />
-
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />
 /// <reference path="lib/jquery-validation/dist/jquery.validate.js" />
 /// <reference path="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" />
+
+

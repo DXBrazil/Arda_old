@@ -23,7 +23,7 @@ namespace Arda.Main.Controllers
         public IActionResult SignIn()
         {
             return new ChallengeResult(
-                OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
+                OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "https://localhost:44304/Dashboard" });
         }
 
         public async Task<IActionResult> SignOut()

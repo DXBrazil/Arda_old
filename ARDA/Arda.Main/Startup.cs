@@ -87,7 +87,7 @@ namespace Arda.Main
             app.UseOpenIdConnectAuthentication(options =>
             {
                 options.AutomaticChallenge = true;
-                //options.CallbackPath = "https://localhost:44304/";
+                //options.CallbackPath = "https://localhost:2168/Dashboard/Index";
                 options.ClientId = Configuration["Authentication:AzureAd:ClientId"];
                 options.Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
                 options.PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];

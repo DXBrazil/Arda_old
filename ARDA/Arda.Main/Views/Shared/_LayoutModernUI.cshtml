@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ARDA</title>
+    <title>Arda Management Tool</title>
     <meta name="description" content="">
     <link rel="stylesheet" type="text/css" href="~/Layouts/ModernUI/css/core.css" />
 </head>
@@ -13,34 +13,22 @@
         <div class="main">
             <header class="navbar navbar-arda navbar-static-top" role="navigation">
                 <nav class="container-fluid">
-                    <a class="navbar-brand" href="#">ARDA</a>
-                    <div class="navbar-header">
 
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                        </button>
-                        <a class="icon-user" href="#">
-                        </a>
-                    </div>
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#" target="_blank">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Project</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="./index-carousel.html">Setting</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand">
+                        <strong>Arda</strong> Management Tool
+                    </a>
+
+                    <!-- Dynamic menu -->
+                    @await Html.PartialAsync("_PartialDynamicMenu")
+
                 </nav>
             </header>
-            @RenderBody()
+            <div class="container">
+                @RenderBody()
+            </div>
         </div>
     </main>
-    <footer class="ctn-footer">
+    <footer class="ctn-footer" style="margin-top:20px;">
         <div class="container">
             <div class="row">
                 <div class="col-xs-9">
@@ -49,8 +37,10 @@
                             <!-- ARDA brand -->
                         </div>
                         <span class="footer-credits">
-                            &copy; Microsoft 2016.
-                            <a href="#" class="footer-credits-links">Github</a>
+                            &copy; Microsoft @DateTime.Now.Year
+                                <a asp-controller="Home" asp-action="About" class="footer-credits-links">About</a>
+                                <a asp-controller="Home" asp-action="Support" class="footer-credits-links">Support</a>
+                                <a href="http://github.com/microsoft/arda" class="footer-credits-links">Github</a>
                         </span>
                     </div>
                 </div>
@@ -63,6 +53,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/BasicOperations.js"></script>
 </body>
 </html>
 

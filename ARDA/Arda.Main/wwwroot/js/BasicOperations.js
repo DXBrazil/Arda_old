@@ -128,6 +128,8 @@ $(function ($) {
         });
     });
 
+    // Set background blue on the menu clicked item.
+    //class="nav-item active"
 });
 
 // General functions
