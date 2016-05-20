@@ -19,11 +19,10 @@ namespace Arda.Permissions.Models
         {
             try
             {
-                var deserializedPermissions = JsonConvert.DeserializeObject<PermissionsScope>(serializedPermissions);
-                //var deserializedPermissions = JsonConvert.DeserializeObject<List<PermissionsScope>>(serializedPermissions);
+                var deserializedPermissions = JsonConvert.DeserializeObject<List<Permission>>(serializedPermissions);
 
                 Permissions = new List<Permission>();
-                foreach (var p in deserializedPermissions.Permissions)
+                foreach (var p in deserializedPermissions)
                 {
                     Permissions.Add(new Permission
                     {
@@ -43,7 +42,7 @@ namespace Arda.Permissions.Models
         {
             try
             {
-                return JsonConvert.SerializeObject(this);
+                return JsonConvert.SerializeObject(Permissions);
             }
             catch (Exception)
             {

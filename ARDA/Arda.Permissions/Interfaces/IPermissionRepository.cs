@@ -23,7 +23,7 @@ namespace Arda.Permissions.Interfaces
         bool SendNotificationOfNewUserByEmail(string uniqueName);
 
         // Set basic permissions to new users.
-        bool SetPermissionsToNewUsers(string uniqueName);
+        PermissionsScope SetPermissionsToNewUsers(string uniqueName);
 
         //void SetAllan();
     }

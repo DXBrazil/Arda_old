@@ -34,6 +34,12 @@ namespace Arda.Permissions.ViewModels
             Permissions = permissions;
         }
 
+        public UserPropertiesCachedViewModel(string code, List<Permission> permissions)
+        {
+            Code = code;
+            Permissions = new PermissionsScope();
+            Permissions.Permissions.AddRange(permissions.ToArray());
+        }
 
         public override string ToString()
         {

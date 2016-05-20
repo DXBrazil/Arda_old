@@ -21,8 +21,6 @@ namespace Arda.Main
 {
     public class Startup
     {
-        HttpResponseMessage responseSetPermissions;
-
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.

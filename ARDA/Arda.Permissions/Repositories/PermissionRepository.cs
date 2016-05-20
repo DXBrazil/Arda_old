@@ -26,6 +26,7 @@ namespace Arda.Permissions.Repositories
             try
             {
                 var userProperties = _context.UsersPermissions.SingleOrDefault(user => user.UniqueName == uniqueName);
+
                 if (userProperties != null)
                 {
                     var permissions = userProperties.ToPermission();
@@ -36,10 +37,13 @@ namespace Arda.Permissions.Repositories
                 }
                 else
                 {
-                    bool setPermissionsResponse = SetPermissionsToNewUsers(uniqueName);
+                    var permissions = SetPermissionsToNewUsers(uniqueName);
 
-                    if (setPermissionsResponse)
+                    if (permissions!=null)
                     {
+
+                        var propertiesToCache = new UserPropertiesCachedViewModel(code, permissions);
+                        _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
                         return true;
                     }
                     else
@@ -194,28 +198,37 @@ namespace Arda.Permissions.Repositories
         }
 
         // Generate initial and basic permissions set to new users.
-        public bool SetPermissionsToNewUsers(string _uniqueName)
+        public PermissionsScope SetPermissionsToNewUsers(string _uniqueName)
         {
-            PermissionsScope perm = new PermissionsScope();
-            perm.Permissions.Add(new Permission() { Module = "Dashboard", Resource = "Details", Enabled = true });
-
-            _context.UsersPermissions.Add(new UsersPermissions()
+            try
             {
-                UniqueName = _uniqueName,
-                PermissionsSerialized = perm.ToString()
-            });
+                PermissionsScope permScope = new PermissionsScope();
+                var perm = new Permission() { Module = "Dashboard", Resource = "Details", Enabled = true };
+                permScope.Permissions.Add(perm);
 
-            var response = _context.SaveChanges();
-            
-            if(response >= 0)
-            {
-                return true;
+                _context.UsersPermissions.Add(new UsersPermissions()
+                {
+                    UniqueName = _uniqueName,
+                    PermissionsSerialized = permScope.ToString()
+                });
+
+                var response = _context.SaveChanges();
+
+                if (response >= 0)
+                {
+                    return permScope;
+                }
+                else
+                {
+                    return null;
+                }
+
             }
-            else
+            catch (Exception)
             {
-                return false;
-            }
 
+                throw;
+            }
         }
     }
 }
