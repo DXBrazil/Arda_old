@@ -10,7 +10,6 @@ namespace Arda.Permissions.Models
     {
         public List<Permission> Permissions { get; set; }
 
-
         public PermissionsScope()
         {
             Permissions = new List<Permission>();
@@ -21,6 +20,7 @@ namespace Arda.Permissions.Models
             try
             {
                 var deserializedPermissions = JsonConvert.DeserializeObject<PermissionsScope>(serializedPermissions);
+                //var deserializedPermissions = JsonConvert.DeserializeObject<List<PermissionsScope>>(serializedPermissions);
 
                 Permissions = new List<Permission>();
                 foreach (var p in deserializedPermissions.Permissions)
@@ -38,7 +38,6 @@ namespace Arda.Permissions.Models
                 throw;
             }
         }
-
 
         public override string ToString()
         {

@@ -11,6 +11,7 @@ namespace Arda.Permissions.Models
     {
         [Key]
         public string UniqueName { get; set; }
+
         [Required]
         public string PermissionsSerialized { get; set; }
 
@@ -20,10 +21,9 @@ namespace Arda.Permissions.Models
             {
                 return JsonConvert.DeserializeObject<PermissionsScope>(PermissionsSerialized);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw new Exception(e.StackTrace);
             }
         }
     }

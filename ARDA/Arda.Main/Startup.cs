@@ -21,6 +21,8 @@ namespace Arda.Main
 {
     public class Startup
     {
+        HttpResponseMessage responseSetPermissions;
+
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
@@ -87,7 +89,7 @@ namespace Arda.Main
             app.UseOpenIdConnectAuthentication(options =>
             {
                 options.AutomaticChallenge = true;
-                //options.CallbackPath = "https://localhost:2168/Dashboard/Index";
+                options.CallbackPath = new PathString("/auth/response");
                 options.ClientId = Configuration["Authentication:AzureAd:ClientId"];
                 options.Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
                 options.PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];
@@ -98,6 +100,7 @@ namespace Arda.Main
                     {
                         var claims = context.JwtSecurityToken.Claims;
 
+                        // Getting informations about AD
                         var code = context.Code;
                         var validFrom = context.JwtSecurityToken.ValidFrom;
                         var validTo = context.JwtSecurityToken.ValidTo;
@@ -117,6 +120,16 @@ namespace Arda.Main
                     }
                 };
             });
+
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Response.Redirect("http://google.com.br");
+
+            //    // 2. Process the request and wait for completion
+            //    await next.Invoke();
+            //});
+
+            //app.UseMiddleware<RedirectMiddleware>(responseSetPermissions);
 
             app.UseMvc(routes =>
             {

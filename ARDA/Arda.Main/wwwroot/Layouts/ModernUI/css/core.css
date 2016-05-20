@@ -3637,6 +3637,8 @@ section,
 summary {
   display: block; }
 
+main { min-height: 80vh; }
+
 audio,
 canvas,
 progress,
@@ -8290,6 +8292,23 @@ body {
   color: #fff;
   border-bottom: none;
   background-color: #2B2E37; }
+  .navbar-arda .open > .dropdown-menu {
+    width: 200px;
+    border-radius: 0;
+    margin-top: -1px;
+    padding: 0; }
+  @media (min-width: 544px) {
+    .navbar-arda .open > .dropdown-menu > li a {
+      padding: 1rem;
+      width: 100%;
+      display: block;
+      color: #2B2E37; }
+      .navbar-arda .open > .dropdown-menu > li a:hover {
+        background-color: #2B2E37;
+        color: #fff; } }
+  @media (max-width: 540px) {
+    .navbar-arda .open > .dropdown-menu > li a {
+      padding-left: 20px; } }
   .navbar-arda .icon-user {
     line-height: 70px;
     display: inline-block;
@@ -8315,11 +8334,14 @@ body {
     padding-top: 25px;
     padding-bottom: 25px;
     text-transform: uppercase;
+    cursor: pointer;
     color: #fff; }
     .navbar-arda .navbar-nav > li a:hover {
       background-color: #2d89ef; }
   .navbar-arda .navbar-nav > li.active a {
     background-color: #2d89ef; }
+  .navbar-arda .navbar-nav .nav-item + .nav-item {
+    margin-left: 0; }
   .navbar-arda .nav {
     margin-bottom: 0;
     padding-left: 0;
@@ -8471,7 +8493,10 @@ body {
   width: 100%;
   padding: 30px 0;
   border-top: #ddd;
-  background-color: #f4f5f7; }
+  background-color: #f4f5f7; 
+  position: absolute;
+  bottom:0px;
+}
 
 .footer-logo {
   float: right;
@@ -8598,3 +8623,4 @@ body {
 /*@include media-breakpoint-up(md) {
   @import 'librarys/animate';
 }*/
+

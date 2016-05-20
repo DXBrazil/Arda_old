@@ -13,6 +13,7 @@
     }
   },
   "dependencies": {
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.Formatters.Json": "6.0.0-rc1-final",
     "Newtonsoft.Json": "7.0.1",
     "System.Net.Http": "4.0.1-beta-23516"

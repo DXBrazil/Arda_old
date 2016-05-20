@@ -11,7 +11,7 @@
             <div style="line-height:70px;">
                 <ul class="nav navbar-nav" style="float: right;">
                     <li class="nav-item">Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong></li>&nbsp;
-                    <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Exit</a>
+                    <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Logout</a>
                 </ul>
             </div>
         }
@@ -28,9 +28,15 @@
         <li class="nav-item">
             <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
         </li>
-        <li class="nav-item active">
-            <a asp-controller="Dashboard" asp-action="Index" class="nav-link">Dashboard</a>
+        <li class="nav-item dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a asp-controller="User" asp-action="SetPermissions" class="nav-link">Set permissions</a>
+                </li>
+            </ul>
         </li>
 
     </ul>
 </div>
+
