@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Arda.Kanban.Models
+{
+    [Table("FiscalYears")]
+    public class FiscalYear
+    {
+        [Key]
+        [Required]
+        public Guid FiscalYearID { get; set; }
+
+        [Required]
+        public int CompleteNumericFiscalYear { get; set; }
+
+        [Required]
+        public string TextualFiscalYear { get; set; }
+    }
+}

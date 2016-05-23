@@ -13,6 +13,7 @@ using Microsoft.Extensions.Caching.Redis;
 using Arda.Kanban.Models;
 using Arda.Kanban.Interfaces;
 using Arda.Kanban.Repositories;
+using Arda.Common.Middlewares;
 
 namespace Arda.Kanban
 {
@@ -51,10 +52,6 @@ namespace Arda.Kanban
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
                 );
 
-            
-            //services.AddSingleton<ITaskRepository, TaskRepository>();
-            services.AddScoped<ITaskRepository, TaskRepositorySQL>();
-
             services.AddMvc();
 
             // Registering distributed cache approach to the application.
@@ -65,12 +62,14 @@ namespace Arda.Kanban
             }));
 
             ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Kanban;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Permissions;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(Connection));
 
             //Registering services.
             services.AddScoped<IKanbanRepository, KanbanRepository>();
+            services.AddScoped<IFiscalYearRepository, FiscalYearRepository>();
+            services.AddScoped<ITaskRepository, TaskRepositorySQL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -78,6 +77,8 @@ namespace Arda.Kanban
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseMiddleware<SecurityMiddleware>();
 
             app.UseIISPlatformHandler();
 

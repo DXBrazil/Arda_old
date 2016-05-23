@@ -8,5 +8,6 @@ namespace Arda.Kanban.Models
 {
     public class KanbanContext : DbContext
     {
+        public DbSet<FiscalYear> FiscalYears { get; set; }
     }
 }

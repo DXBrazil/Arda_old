@@ -1,4 +1,4 @@
-﻿<section class="concontainer-fluid">
+﻿@*<section class="concontainer-fluid">
 
     <div class="col-xs-12">
         <div class="row">
@@ -55,6 +55,211 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>*@
+<section class="concontainer-fluid">
+
+    <div class="col-xs-12">
+
+
+        <div class="row">
+            <header class="ctn-header-dashboard">
+                <div class="col-xs-12 col-lg-3 col-md-6">
+                    <h2>Placeholder title</h2>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-6">
+                    <input type="radio" value="1" name="type" class="dashboard-filter-field" id="dashboard-filter-type-1" />
+
+                    <label class="dashboard-filter" for="dashboard-filter-type-1">
+                        Type 1
+                    </label>
+
+                    <input type="radio" value="2" name="type" class="dashboard-filter-field" id="dashboard-filter-type-2" />
+
+                    <label class="dashboard-filter" for="dashboard-filter-type-2">
+                        Type 2
+                    </label>
+
+                    <input type="radio" value="3" name="type" class="dashboard-filter-field" id="dashboard-filter-type-3" />
+
+                    <label class="dashboard-filter" for="dashboard-filter-type-3">
+                        Type 3
+                    </label>
+
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-6">
+                    <select name="filter-assign" class="form-control dashboard-filter-assign">
+                        <option value="">TE Name 0</option>
+                        <option value="">TE Name 1</option>
+                        <option value="">TE Name 2</option>
+                        <option value="">TE Name 3</option>
+                        <option value="">TE Name 4</option>
+                        <option value="">TE Name 5</option>
+                    </select>
+                </div>
+
+                <div class="col-xs-12 col-lg-3 col-md-6">
+
+                    <input id="txtAdd" type="text" class="form-control">
+                    <button id="btnAdd" class="btn btn-dark btn-sm btn-sm--newtask">Add</button>
+
+                </div>
+
+                <div class="clearfix"></div>
+            </header>
+
+            <template id="templateTask">
+                <div id="templateId" class="task" draggable="true">
+                    <span class="templateText">templateText</span>
+                    <div></div>
+                </div>
+            </template>
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                        <div class="row">
+                            <h3 class="dashboard-panel-title  dashboard-panel-title--todo">todo</h3>
+                        </div>
+                        <div id="divTaskListTodo" class="folder state0" data-state="0"></div>
+                    </div>
+                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                        <div class="row">
+                            <h3 class="dashboard-panel-title  dashboard-panel-title--doing">doing</h3>
+                        </div>
+                        <div id="divTaskListDoing" class="folder state1" data-state="1"></div>
+
+                    </div>
+                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                        <div class="row">
+                            <h3 class="dashboard-panel-title dashboard-panel-title--done">done</h3>
+                        </div>
+                        <div id="divTaskListDone" class="folder state2" data-state="2"></div>
+                    </div>
+                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                        <div class="row">
+                            <h3 class="dashboard-panel-title dashboard-panel-title--approved">approved</h3>
+                        </div>
+                        <div id="divTaskListActive" class="folder state3" data-state="3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+
+        function dragstart(ev) {
+            ev.dataTransfer.setData('text', ev.target.id);
+        }
+
+        function dragover(ev) {
+            ev.preventDefault();
+        }
+
+        function drop(ev) {
+            var target = this;
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData('text');
+            var elem = document.getElementById(data);
+            target.appendChild(elem);
+
+
+            var state = (target.dataset['state']);
+            var numstate = state | 0;
+            var task = { Id: elem.id, State: numstate };
+
+            update(task);
+        }
+
+        var tasks = $('.task');
+        tasks.map(function(i, task) {
+           task.draggable = true;
+           task.addEventListener('dragstart', dragstart);
+        });
+
+        var folders = $('.folder');
+        folders.map(function(i, folder) {
+            folder.addEventListener('dragover', dragover);
+            folder.addEventListener('drop', drop.bind(folder));
+        });
+
+        var btnAdd = $('#btnAdd');
+        var txtAdd = $('#txtAdd');
+
+        btnAdd.click(function () {
+            var taskName = txtAdd.val();
+
+            if (taskName != null && taskName != '') {
+                create(taskName, function (id,name,state) {
+                    createTask(id, name, state);
+                    });
+            }
+        });
+
+        gettasklist(function (tasklist) {
+            tasklist.map(function (task) {
+                createTask(task.Id, task.Name, task.State);
+            });
+        });
+
+        function createTask(id, name, state) {
+            var task_state = '.state' + state;
+            createTaskInFolder(id, name, task_state);
+        }
+
+        function createTaskInFolder(taskId, taskName, folderSelector) {
+            var content = document.querySelector('#templateTask').content;
+            var clone = document.importNode(content, true);
+            var folder = document.querySelector(folderSelector);
+
+            clone.querySelector('.task').id = taskId;
+            clone.querySelector('.task .templateText').textContent = taskName;
+
+            clone.querySelector('.task').addEventListener('dragstart', dragstart);
+
+            folder.appendChild(clone, true);
+        }
+
+        function httpCall(action, url, data, callback, error) {
+
+            $.ajax({
+                type: action, // GET POST PUT
+                url: url,
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: callback,
+                error: error,
+                processData: false
+            });
+
+        }
+
+        function gettasklist(callback) {
+            httpCall('GET', 'api/tasks', null, callback);
+        }
+
+        function create(taskname, callback) {
+            var task = { Id: null, Name: taskname, State: 0 };
+
+            httpCall('POST', 'api/tasks', task, function (data) {
+                data && callback(data.Id, data.Name, data.State);
+            })
+
+
+        }
+
+        function update(task) {
+
+            httpCall('PUT', 'api/tasks', task, function (data) {
+                alert(1)
+            })
+
+        }
+
+            </script>
+
+
         </div>
     </div>
 </section>

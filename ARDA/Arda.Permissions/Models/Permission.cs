@@ -13,7 +13,6 @@ namespace Arda.Permissions.Models
 
         public bool Enabled { get; set; }
 
-
         public Permission() { }
 
         public Permission(string module, string resource, bool enabled)
