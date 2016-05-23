@@ -22,7 +22,25 @@ namespace Arda.Kanban.Repositories
         
         public bool AddNewFiscalYear(FiscalYear fiscalyear)
         {
-            return true;
+            try
+            {
+                _context.FiscalYears.Add(fiscalyear);
+                var response = _context.SaveChanges();
+
+                if (response > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         } 
     }
 }
