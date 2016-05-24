@@ -52,7 +52,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("list")]
-        public IActionResult List(int numberOfOccurencies)
+        public IEnumerable<FiscalYear> List()
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Arda.Kanban.Controllers
 
                 if (fiscalyears != null)
                 {
-                    return Json(fiscalyears);
+                    return fiscalyears;
                 }
                 else
                 {

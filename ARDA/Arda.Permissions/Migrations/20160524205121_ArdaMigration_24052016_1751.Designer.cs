@@ -8,8 +8,8 @@ using Arda.Permissions.Models;
 namespace Arda.Permissions.Migrations
 {
     [DbContext(typeof(PermissionsContext))]
-    [Migration("20160524185922_Initial")]
-    partial class Initial
+    [Migration("20160524205121_ArdaMigration_24052016_1751")]
+    partial class ArdaMigration_24052016_1751
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
