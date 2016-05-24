@@ -1,5 +1,11 @@
 ﻿// Functions with automatic initialization
 $(function ($) {
+    // Loading datatable to fiscal years.
+    $("#table-fiscalyears").DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": "http://localhost:2768/api/fiscalyear/getfiscalyears"
+    });
 
     // Send the new account request to specific controller/action in Arda.Main.
     $("#loginform").submit(function (e) {
@@ -127,9 +133,6 @@ $(function ($) {
             $("#RequestAccountButton").html("<span class='glyphicon glyphicon-ok'></span>&nbsp;Send help request");
         });
     });
-
-    // Set background blue on the menu clicked item.
-    //class="nav-item active"
 });
 
 // General functions

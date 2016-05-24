@@ -4,28 +4,27 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Arda.Kanban.Migrations
 {
-    public partial class initial : Migration
+    public partial class ArdaMigration_23052016_2224 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TaskItem",
+                name: "FiscalYears",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    State = table.Column<int>(nullable: false)
+                    FiscalYearID = table.Column<Guid>(nullable: false),
+                    FullNumericFiscalYear = table.Column<int>(nullable: false),
+                    TextualFiscalYear = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TaskItem", x => x.Id);
+                    table.PrimaryKey("PK_FiscalYear", x => x.FiscalYearID);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("TaskItem");
+            migrationBuilder.DropTable("FiscalYears");
         }
     }
 }

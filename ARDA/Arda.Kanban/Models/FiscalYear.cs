@@ -15,7 +15,7 @@ namespace Arda.Kanban.Models
         public Guid FiscalYearID { get; set; }
 
         [Required]
-        public int CompleteNumericFiscalYear { get; set; }
+        public int FullNumericFiscalYear { get; set; }
 
         [Required]
         public string TextualFiscalYear { get; set; }

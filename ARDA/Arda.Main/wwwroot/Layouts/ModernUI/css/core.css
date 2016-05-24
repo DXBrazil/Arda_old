@@ -8632,3 +8632,11 @@ welcome-picture {
     border: 1px solid red;
 }
 
+.btn {
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -khtml-border-radius: 0px;
+    border-radius: 0px;
+    padding:7px;
+}
+

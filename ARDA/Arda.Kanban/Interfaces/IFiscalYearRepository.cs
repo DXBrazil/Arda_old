@@ -10,5 +10,8 @@ namespace Arda.Kanban.Interfaces
     {
         // Add a new fiscal year to the database.
         bool AddNewFiscalYear(FiscalYear fiscalyear);
+
+        // Return a list of fiscal years.
+        List<FiscalYear> GetFiscalYearsByNumberOfOccurency(int numberOfOccurrencies);
     }
 }

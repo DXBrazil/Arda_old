@@ -18,8 +18,7 @@ namespace Arda.Kanban.Repositories
             _context = context;
         }
 
-        // Call the respective methods to add a new fiscal year to the system.
-        
+        // Adds a new fiscal year to the system.
         public bool AddNewFiscalYear(FiscalYear fiscalyear)
         {
             try
@@ -38,9 +37,30 @@ namespace Arda.Kanban.Repositories
             }
             catch (Exception)
             {
-
-                throw;
+                return false;
             }
         } 
+
+        // Return a 'numberOfOccurencies' to controller.
+        public List<FiscalYear> GetFiscalYearsByNumberOfOccurency(int numberOfOccurencies)
+        {
+            try
+            {
+                var response = _context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).Take(numberOfOccurencies).ToList();
+
+                if (response != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

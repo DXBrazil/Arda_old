@@ -46,11 +46,11 @@ namespace Arda.Kanban
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<TaskDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
-                );
+            //services.AddEntityFramework()
+            //    .AddSqlServer()
+            //    .AddDbContext<TaskDbContext>(options =>
+            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
+            //    );
 
             services.AddMvc();
 
@@ -69,7 +69,7 @@ namespace Arda.Kanban
             //Registering services.
             services.AddScoped<IKanbanRepository, KanbanRepository>();
             services.AddScoped<IFiscalYearRepository, FiscalYearRepository>();
-            services.AddScoped<ITaskRepository, TaskRepositorySQL>();
+            //services.AddScoped<ITaskRepository, TaskRepositorySQL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -92,7 +92,7 @@ namespace Arda.Kanban
 
             app.UseMvc();
 
-            TaskDatabaseSetup.InitSamples(app.ApplicationServices);
+            //TaskDatabaseSetup.InitSamples(app.ApplicationServices);
         }
 
         // Entry point for the application.
