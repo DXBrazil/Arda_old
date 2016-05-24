@@ -8,6 +8,7 @@ using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Arda.Common.Utils;
 
 namespace Arda.Main.Controllers
 {
@@ -28,10 +29,14 @@ namespace Arda.Main.Controllers
 
         public async Task<IActionResult> SignOut()
         {
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+            Util.ConnectToRemoteService("http://localhost:2884/api/permission/deleteuserpermissions", uniqueName, "", "delete");
+
             var callbackUrl = Url.Action("SignOutCallback", "Account", values: null, protocol: Request.Scheme);
             await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.Authentication.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme,
-                new AuthenticationProperties { RedirectUri = callbackUrl });
+                new AuthenticationProperties { RedirectUri = callbackUrl });   
+
             return new EmptyResult();
         }
 

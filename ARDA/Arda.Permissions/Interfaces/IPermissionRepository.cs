@@ -1,4 +1,6 @@
 ﻿using Arda.Permissions.Models;
+using Arda.Permissions.ViewModels;
+using System.Collections.Generic;
 
 namespace Arda.Permissions.Interfaces
 {
@@ -8,7 +10,7 @@ namespace Arda.Permissions.Interfaces
         bool SetUserPermissionsAndCode(string uniqueName, string code);
 
         // Update an existing user permissions.
-        bool UpdateUserPermissions(string uniqueName, string userPermissionsSerialized);
+        bool UpdateUserPermissions(string uniqueName, ICollection<PermissionsToBeCachedViewModel> userPermission);
 
         // Delete an existing user permissions from the cache.
         void DeleteUserPermissions(string uniqueName);
@@ -23,8 +25,8 @@ namespace Arda.Permissions.Interfaces
         bool SendNotificationOfNewUserByEmail(string uniqueName);
 
         // Set basic permissions to new users.
-        PermissionsScope SetPermissionsToNewUsers(string uniqueName);
+        User CreateNewUserAndSetInitialPermissions(string uniqueName);
 
-        //void SetAllan();
+        void Seed();
     }
 }

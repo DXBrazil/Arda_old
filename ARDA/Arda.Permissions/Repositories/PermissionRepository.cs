@@ -7,50 +7,41 @@ using System.Text;
 using Arda.Permissions.ViewModels;
 using Arda.Common.Utils;
 using Arda.Common.Email;
+using System.Collections.Generic;
 
 namespace Arda.Permissions.Repositories
 {
     public class PermissionRepository : IPermissionRepository
     {
-        private UserPermissionsContext _context;
+        private PermissionsContext _context;
         private IDistributedCache _cache;
 
-        public PermissionRepository(UserPermissionsContext context, IDistributedCache cache)
+        public PermissionRepository(PermissionsContext context, IDistributedCache cache)
         {
             _context = context;
             _cache = cache;
         }
 
+
         public bool SetUserPermissionsAndCode(string uniqueName, string code)
         {
             try
             {
-                var userProperties = _context.UsersPermissions.SingleOrDefault(user => user.UniqueName == uniqueName);
+                var userPermissions = (from u in _context.Users
+                                      join up in _context.UsersPermissions on u.UniqueName equals up.UniqueName
+                                      join r in _context.Resources on up.ResourceID equals r.ResourceID
+                                      join m in _context.Modules on r.ModuleID equals m.ModuleID
+                                      where u.UniqueName == uniqueName
+                                      select new PermissionsToBeCachedViewModel
+                                      {
+                                          Module = m.ModuleName,
+                                          Resource = r.ResourceName
+                                      }).ToList();
 
-                if (userProperties != null)
-                {
-                    var permissions = userProperties.ToPermission();
-                    var propertiesToCache = new UserPropertiesCachedViewModel(code, permissions);
+                var propertiesToCache = new CacheViewModel(code, userPermissions);
+                _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
 
-                    _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
-                    return true;
-                }
-                else
-                {
-                    var permissions = SetPermissionsToNewUsers(uniqueName);
-
-                    if (permissions!=null)
-                    {
-
-                        var propertiesToCache = new UserPropertiesCachedViewModel(code, permissions);
-                        _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+                return true;
             }
             catch (Exception)
             {
@@ -58,7 +49,7 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public bool UpdateUserPermissions(string uniqueName, string userPermissionsSerialized)
+        public bool UpdateUserPermissions(string uniqueName, ICollection<PermissionsToBeCachedViewModel> userPermission)
         {
             try
             {
@@ -66,8 +57,8 @@ namespace Arda.Permissions.Repositories
 
                 if (propertiesSerializedCached != null)
                 {
-                    var propertiesToCache = new UserPropertiesCachedViewModel(propertiesSerializedCached);
-                    propertiesToCache.Permissions = new PermissionsScope(userPermissionsSerialized);
+                    var propertiesToCache = new CacheViewModel(propertiesSerializedCached);
+                    propertiesToCache.Permissions = userPermission;
 
                     _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
                     return true;
@@ -99,26 +90,18 @@ namespace Arda.Permissions.Repositories
         {
             try
             {
-                resource = resource.ToLower();
-                module = module.ToLower();
-
                 var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
                 if (propertiesSerializedCached != null)
                 {
-                    var permissions = new UserPropertiesCachedViewModel(propertiesSerializedCached).Permissions.ToString().Trim().ToLower();
-                    if (permissions.Contains(module) && permissions.Contains(resource))
+                    var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
+
+                    var perm = from p in permissions
+                               where p.Resource.Equals(resource) && p.Module.Equals(module)
+                               select p;
+
+                    if (perm != null)
                     {
-                        var search = "module\":\"" + module + "\",\"resource\":\"" + resource + "\",\"enabled\":";
-                        var permExtracted = permissions.Substring(permissions.IndexOf(search) + search.Length);
-                        var value = permExtracted.Substring(0, permExtracted.IndexOf("}"));
-                        if (bool.Parse(value))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        return true;
                     }
                     else
                     {
@@ -140,9 +123,9 @@ namespace Arda.Permissions.Repositories
         {
             try
             {
-                var response = _context.UsersPermissions.SingleOrDefault(u => u.UniqueName == uniqueName);
+                var response = _context.Users.SingleOrDefault(u => u.UniqueName == uniqueName);
 
-                if(response == null)
+                if (response == null)
                 {
                     return false;
                 }
@@ -198,37 +181,61 @@ namespace Arda.Permissions.Repositories
         }
 
         // Generate initial and basic permissions set to new users.
-        public PermissionsScope SetPermissionsToNewUsers(string _uniqueName)
+        public User CreateNewUserAndSetInitialPermissions(string uniqueName)
         {
             try
             {
-                PermissionsScope permScope = new PermissionsScope();
-                var perm = new Permission() { Module = "Dashboard", Resource = "Details", Enabled = true };
-                permScope.Permissions.Add(perm);
-
-                _context.UsersPermissions.Add(new UsersPermissions()
+                var user = new User()
                 {
-                    UniqueName = _uniqueName,
-                    PermissionsSerialized = permScope.ToString()
-                });
+                    UniqueName = uniqueName,
+                    Status = PermissionStatus.Waiting_Review,
+                    UserPermissions = new List<UsersPermission>()
+                    {
+                        new UsersPermission()
+                        {
+                            ResourceID=1
+                        }
+                    }
+                };
 
+                _context.Users.Add(user);
                 var response = _context.SaveChanges();
 
                 if (response >= 0)
                 {
-                    return permScope;
+                    return user;
                 }
                 else
                 {
                     return null;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
+        }
+
+
+        public void Seed()
+        {
+            //_context.Modules.Add(new Module() { ModuleName = "Infos", Endpoint = "http://localhost:2891/" });
+            //_context.Modules.Add(new Module() { ModuleName = "Values", Endpoint = "http://localhost:2891/" });
+            //_context.SaveChanges();
+            //var mod1 = _context.Modules.First(m => m.ModuleName == "Infos");
+            //var mod2 = _context.Modules.First(m => m.ModuleName == "Values");
+            //_context.Resources.Add(new Resource() { ModuleID = mod1.ModuleID, ResourceName = "getinfo" });
+            //_context.Resources.Add(new Resource() { ModuleID = mod2.ModuleID, ResourceName = "getvalues" });
+            //_context.SaveChanges();
+            var res =
+                from r in _context.Resources
+                where r.ResourceName == "index"
+                select r;
+            foreach (Resource r in res)
+            {
+
+            }
+            var obj = _context.Resources.ToList();
         }
     }
 }

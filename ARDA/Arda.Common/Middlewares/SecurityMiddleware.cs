@@ -41,7 +41,6 @@ namespace Arda.Common.Middlewares
                     context.Response.StatusCode = 400;
                     return;
                 }
-                //TODO: Compare with the code on Redis and verify if is valid
                 else if (!CheckUserPermissionToResource(user, module, resource))
                 {
                     //User doesn't have permission, code is not valid or code is expired:
