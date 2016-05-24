@@ -27,25 +27,34 @@ namespace Arda.Permissions.Controllers
             {
                 if (uniqueName != null && code != null)
                 {
-                    if (VerifyIfUserIsInUserPermissionsDatabase(uniqueName))
-                    {
-                        bool response = _permission.SetUserPermissionsAndCode(uniqueName, code);
+                    Models.User responseUser = null;
+                    bool responseEmail = false;
 
-                        if (response)
+                    if (!VerifyIfUserIsInUserPermissionsDatabase(uniqueName))
+                    {
+                        responseUser = _permission.CreateNewUserAndSetInitialPermissions(uniqueName);
+                        responseEmail = _permission.SendNotificationOfNewUserByEmail(uniqueName);
+                        if (responseUser == null || responseEmail == false)
                         {
-                            return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                            return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
                         }
                         else
                         {
-                            return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                            bool response = _permission.SetUserPermissionsAndCode(uniqueName, code);
+                            if (response)
+                            {
+                                return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                            }
+                            else
+                            {
+                                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                            }
                         }
                     }
                     else
                     {
-                        bool responseRedis = _permission.SetUserPermissionsAndCode(uniqueName, code);
-                        bool responseEmail = _permission.SendNotificationOfNewUserByEmail(uniqueName);
-                        
-                        if(responseRedis && responseEmail)
+                        bool response = _permission.SetUserPermissionsAndCode(uniqueName, code);
+                        if (response)
                         {
                             return new HttpStatusCodeResult((int)HttpStatusCode.OK);
                         }
@@ -101,7 +110,7 @@ namespace Arda.Permissions.Controllers
             try
             {
                 var uniqueName = HttpContext.Request.Headers["unique_name"].ToString();
-                
+
                 if (uniqueName != null)
                 {
                     _permission.DeleteUserPermissions(uniqueName);
@@ -125,7 +134,7 @@ namespace Arda.Permissions.Controllers
         {
             try
             {
-                if (uniqueName != null && module!=null && resource != null)
+                if (uniqueName != null && module != null && resource != null)
                 {
                     if (_permission.VerifyUserAccessToResource(uniqueName, module, resource))
                     {
@@ -147,13 +156,14 @@ namespace Arda.Permissions.Controllers
             }
         }
 
+
         private bool VerifyIfUserIsInUserPermissionsDatabase(string uniqueName)
         {
             try
             {
                 bool response = _permission.VerifyIfUserIsInUserPermissionsDatabase(uniqueName);
 
-                if(response)
+                if (response)
                 {
                     return true;
                 }
@@ -168,11 +178,11 @@ namespace Arda.Permissions.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("setallan")]
-        //public void SetAllan()
-        //{
-        //    _permission.SetAllan();
-        //}
+        [HttpGet]
+        [Route("seed")]
+        public void Seed()
+        {
+            _permission.Seed();
+        }
     }
 }
