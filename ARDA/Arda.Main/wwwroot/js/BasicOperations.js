@@ -4,7 +4,7 @@ $(function ($) {
     $("#table-fiscalyears").DataTable({
         "processing": true,
         "serverSide": true,
-        "ajax": "http://localhost:2768/api/fiscalyear/getfiscalyears"
+        "ajax": "http://localhost:2768/api/fiscalyear/list"
     });
 
     // Send the new account request to specific controller/action in Arda.Main.

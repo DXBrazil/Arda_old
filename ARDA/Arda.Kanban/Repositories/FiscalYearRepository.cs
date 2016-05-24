@@ -42,11 +42,11 @@ namespace Arda.Kanban.Repositories
         } 
 
         // Return a 'numberOfOccurencies' to controller.
-        public List<FiscalYear> GetFiscalYearsByNumberOfOccurency(int numberOfOccurencies)
+        public List<FiscalYear> GetAllFiscalYears()
         {
             try
             {
-                var response = _context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).Take(numberOfOccurencies).ToList();
+                var response = _context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).ToList();
 
                 if (response != null)
                 {

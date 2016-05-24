@@ -56,7 +56,7 @@ namespace Arda.Kanban.Controllers
         {
             try
             {
-                var fiscalyears = _repository.GetFiscalYearsByNumberOfOccurency(10);
+                var fiscalyears = _repository.GetAllFiscalYears();
 
                 if (fiscalyears != null)
                 {
