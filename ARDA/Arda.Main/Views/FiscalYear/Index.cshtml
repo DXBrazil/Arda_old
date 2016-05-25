@@ -1,4 +1,5 @@
-﻿<section class="concontainer-fluid">
+﻿@model IEnumerable<Arda.Main.ViewModel.FiscalYearMainViewModel>
+<section class="concontainer-fluid">
 
     <div class="col-xs-12">
         <div class="row">
@@ -30,8 +31,27 @@
                         <thead>
                             <tr>
                                 <th>Fiscal year</th>
-                                <th>Actions</th>
+                                <th>Numerical</th>
+                                <th></th>
                             </tr>
+                         </thead>
+                        <tbody>
+                            @foreach(var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TextualFiscalYearMain)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullNumericFiscalYearMain)
+                                    </td>
+                                    <td>
+                                        text
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
                     </table>
                 </div>
                 <div class="col-xs-6 col-md-4">
@@ -44,18 +64,6 @@
                             <a asp-controller="FiscalYear" asp-action="Add" class="btn btn-success" style="width:100px;">+ Add</a>
                         </div>
                     </p>
-                    <h3>
-                        Additional informations
-                    </h3>
-                    <p>
-                        The left side shows all fiscal years added into the system with possible operations about everyone.
-                        Add new, update or remove (if possible) someone.
-                    </p>
-                     <p>                         
-                         If you need help, please, access the help central follow the link bellow: <br />
-                         <strong><a asp-controller="Home" asp-action="Support" target="_self">Get support</a></strong>
-                         
-                     </p>
                 </div>
             </div>
 

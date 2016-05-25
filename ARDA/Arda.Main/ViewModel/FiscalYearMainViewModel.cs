@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace Arda.Main.ViewModel
 {
-    public class ViewModelFiscalYearMain
+    public class FiscalYearMainViewModel
     {
+        public Guid FiscalYearID { get; set; }
+
         public int FullNumericFiscalYearMain { get; set; }
 
         public string TextualFiscalYearMain { get; set; }
