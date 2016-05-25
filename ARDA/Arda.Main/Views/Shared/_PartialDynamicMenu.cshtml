@@ -1,44 +1,62 @@
 ﻿@using System.Security.Principal
+@using Arda.Common.Utils
+@using Arda.Common.ViewModels
 
 @if (User.Identity.IsAuthenticated)
 {
-<div class="pull-left">
-
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-    </button>
-
-    <!-- Dynamic menu - Left side -->
-    <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-
-            <li class="nav-item">
-                <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a asp-controller="User" asp-action="SetPermissions" class="nav-link">Set permissions</a>
-                    </li>
-                </ul>
-            </li>
-
-        </ul>
-    </div> 
-       
-    <!-- User infos -->
-    <div style="line-height:70px;">
-        <ul class="nav navbar-nav" style="float: right;">
-            <li class="nav-item">Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong></li>&nbsp;
-            <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Logout</a>
-        </ul>
+    <div class="pull-left">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+        </button>
+        <!-- Dynamic menu - Left side -->
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @{
+                    var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                    var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>("http://localhost:2884/api/permission/getusermenu", user, string.Empty, "get");
+                    foreach (var item in menuItems)
+                    {
+                        //break;
+                        if (item.Items.Count == 1)
+                        {
+                            var displayLink = item.Items[0].Item1;
+                            var controller = item.Items[0].Item2;
+                            var action = item.Items[0].Item3;
+                            <li class="nav-item">
+                                <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@item.Category <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    @foreach (var subitem in item.Items)
+                                    {
+                                        var displayLink = subitem.Item1;
+                                        var controller = subitem.Item2;
+                                        var action = subitem.Item3;
+                                        <li>
+                                            <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
+        <!-- User infos -->
+        <div style="line-height:70px;">
+            <ul class="nav navbar-nav" style="float: right;">
+                <li class="nav-item">Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong></li>&nbsp;
+                <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Logout</a>
+            </ul>
+        </div>
     </div>
-
-</div>
-}
-else
-{
-    <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
-}
-
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
+                    }

@@ -21,6 +21,12 @@ namespace Arda.Permissions.Models
         [Required]
         public string ResourceName { get; set; }
 
+        [Required]
+        public string Category { get; set; }
+
+        [Required]
+        public string DisplayName { get; set; }
+
 
         public virtual Module Module { get; set; }
 

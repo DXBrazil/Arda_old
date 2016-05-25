@@ -39,6 +39,8 @@ namespace Arda.Permissions.Migrations
                 {
                     ResourceID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Category = table.Column<string>(nullable: false),
+                    DisplayName = table.Column<string>(nullable: false),
                     ModuleID = table.Column<int>(nullable: false),
                     ResourceName = table.Column<string>(nullable: false)
                 },

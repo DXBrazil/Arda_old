@@ -8,7 +8,7 @@ using Arda.Permissions.Models;
 namespace Arda.Permissions.Migrations
 {
     [DbContext(typeof(PermissionsContext))]
-    [Migration("20160524185922_Initial")]
+    [Migration("20160524233712_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,12 @@ namespace Arda.Permissions.Migrations
                 {
                     b.Property<int>("ResourceID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Category")
+                        .IsRequired();
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired();
 
                     b.Property<int>("ModuleID");
 

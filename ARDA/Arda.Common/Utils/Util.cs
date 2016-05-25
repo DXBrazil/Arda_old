@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,52 @@ namespace Arda.Common.Utils
             return Encoding.UTF8.GetString(obj);
         }
 
+        public static T ConnectToRemoteService<T>(string uri, string uniqueName, string code, string verb)
+        {
+            try
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(uri);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("unique_name", uniqueName);
+                client.DefaultRequestHeaders.Add("code", code);
+
+                if (verb.Equals("get"))
+                {
+                    var responseRaw = client.GetAsync(uri).Result;
+                    var responseJson = responseRaw.Content.ReadAsStringAsync().Result;
+                    var responseConverted = JsonConvert.DeserializeObject<T>(responseJson);
+                    return responseConverted;
+                }
+                else if (verb.Equals("post"))
+                {
+                    var responseRaw = client.PostAsync(uri, null).Result;
+                    var responseJson = responseRaw.Content.ReadAsStringAsync().Result;
+                    var responseConverted = JsonConvert.DeserializeObject<T>(responseJson);
+                    return responseConverted;
+                }
+                else if (verb.Equals("put"))
+                {
+                    var responseRaw = client.PutAsync(uri, null).Result;
+                    var responseJson = responseRaw.Content.ReadAsStringAsync().Result;
+                    var responseConverted = JsonConvert.DeserializeObject<T>(responseJson);
+                    return responseConverted;
+                }
+                else
+                {
+                    var responseRaw = client.DeleteAsync(uri).Result;
+                    var responseJson = responseRaw.Content.ReadAsStringAsync().Result;
+                    var responseConverted = JsonConvert.DeserializeObject<T>(responseJson);
+                    return responseConverted;
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
         public static IActionResult ConnectToRemoteService(string uri, string uniqueName, string code, string verb)
         {
             try
@@ -35,7 +82,8 @@ namespace Arda.Common.Utils
 
                 if (verb.Equals("get"))
                 {
-                    return new JsonResult(client.GetStringAsync(uri));
+                    client.GetAsync(uri);
+                    return new HttpStatusCodeResult((int)HttpStatusCode.OK);
                 }
                 else if (verb.Equals("post"))
                 {

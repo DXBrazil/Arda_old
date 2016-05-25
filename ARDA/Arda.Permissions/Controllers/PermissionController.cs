@@ -3,6 +3,8 @@ using Microsoft.AspNet.Mvc;
 using Arda.Permissions.Interfaces;
 using System.Net.Http;
 using System.Net;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Arda.Permissions.Controllers
 {
@@ -129,7 +131,6 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("verifyuseraccesstoresource")]
-
         public HttpResponseMessage VerifyUserAccessToResource(string uniqueName, string module, string resource)
         {
             try
@@ -156,6 +157,27 @@ namespace Arda.Permissions.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getusermenu")]
+        public string GetUserMenu()
+        {
+            var uniqueName = HttpContext.Request.Headers["unique_name"].ToString();
+
+            try
+            {
+                if (uniqueName != null)
+                {
+                    var menu = _permission.GetUserMenuSerialized(uniqueName);
+                    return menu;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //return null;
+            }
+        }
 
         private bool VerifyIfUserIsInUserPermissionsDatabase(string uniqueName)
         {
@@ -177,6 +199,7 @@ namespace Arda.Permissions.Controllers
                 return false;
             }
         }
+
 
         [HttpGet]
         [Route("seed")]

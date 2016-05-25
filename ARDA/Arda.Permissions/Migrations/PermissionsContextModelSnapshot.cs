@@ -37,6 +37,12 @@ namespace Arda.Permissions.Migrations
                     b.Property<int>("ResourceID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Category")
+                        .IsRequired();
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired();
+
                     b.Property<int>("ModuleID");
 
                     b.Property<string>("ResourceName")
