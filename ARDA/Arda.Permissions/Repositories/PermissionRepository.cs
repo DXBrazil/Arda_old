@@ -8,6 +8,7 @@ using Arda.Permissions.ViewModels;
 using Arda.Common.Utils;
 using Arda.Common.Email;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Arda.Permissions.Repositories
 {
@@ -28,15 +29,18 @@ namespace Arda.Permissions.Repositories
             try
             {
                 var userPermissions = (from u in _context.Users
-                                      join up in _context.UsersPermissions on u.UniqueName equals up.UniqueName
-                                      join r in _context.Resources on up.ResourceID equals r.ResourceID
-                                      join m in _context.Modules on r.ModuleID equals m.ModuleID
-                                      where u.UniqueName == uniqueName
-                                      select new PermissionsToBeCachedViewModel
-                                      {
-                                          Module = m.ModuleName,
-                                          Resource = r.ResourceName
-                                      }).ToList();
+                                       join up in _context.UsersPermissions on u.UniqueName equals up.UniqueName
+                                       join r in _context.Resources on up.ResourceID equals r.ResourceID
+                                       join m in _context.Modules on r.ModuleID equals m.ModuleID
+                                       where u.UniqueName == uniqueName
+                                       select new PermissionsToBeCachedViewModel
+                                       {
+                                           Endpoint = m.Endpoint,
+                                           Module = m.ModuleName,
+                                           Resource = r.ResourceName,
+                                           Category = r.Category,
+                                           DisplayName = r.DisplayName
+                                       }).ToList();
 
                 var propertiesToCache = new CacheViewModel(code, userPermissions);
                 _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
@@ -216,6 +220,39 @@ namespace Arda.Permissions.Repositories
             }
         }
 
+        public string GetUserMenuSerialized(string uniqueName)
+        {
+            var menu = new List<Tuple<string, Tuple<string, string, string>>>();
+
+            var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+
+            var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
+
+            foreach (var p in permissions)
+            {
+                if (!p.Endpoint.Contains("/api"))
+                {
+                    string category = p.Category;
+                    string display = p.DisplayName;
+                    string controller = p.Module;
+                    string action = p.Resource;
+                    //string url = p.Endpoint + "/" + p.Module + "/" + p.Resource;
+
+                    menu.Add(Tuple.Create(category, Tuple.Create(display, controller, action)));
+                }
+            }
+
+            var menuGrouped = (from m in menu
+                               group m.Item2 by m.Item1 into g
+                               select new
+                               {
+                                   Category = g.Key,
+                                   Items = g.ToList()
+                               }).ToList();
+
+
+            return JsonConvert.SerializeObject(menuGrouped);
+        }
 
         public void Seed()
         {

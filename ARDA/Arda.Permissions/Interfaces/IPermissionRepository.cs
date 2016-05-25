@@ -1,5 +1,6 @@
 ﻿using Arda.Permissions.Models;
 using Arda.Permissions.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace Arda.Permissions.Interfaces
@@ -26,6 +27,9 @@ namespace Arda.Permissions.Interfaces
 
         // Set basic permissions to new users.
         User CreateNewUserAndSetInitialPermissions(string uniqueName);
+
+        // Create the user menu based on his/her permissions.
+        string GetUserMenuSerialized(string uniqueName);
 
         void Seed();
     }

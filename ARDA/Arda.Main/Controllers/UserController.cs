@@ -10,7 +10,12 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        public IActionResult SetPermissions()
+        public IActionResult UserAdd()
+        {
+            return View();
+        }
+
+        public IActionResult UserRemove()
         {
             return View();
         }

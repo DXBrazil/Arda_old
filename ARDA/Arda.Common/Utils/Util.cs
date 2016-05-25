@@ -1,5 +1,4 @@
-﻿using Arda.Common.ViewModel;
-using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
