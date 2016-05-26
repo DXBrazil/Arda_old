@@ -23,6 +23,27 @@ namespace Arda.Permissions.Repositories
             _cache = cache;
         }
 
+        public void Seed()
+        {
+            //_context.Modules.Add(new Module() { ModuleName = "Infos", Endpoint = "http://localhost:2891/" });
+            //_context.Modules.Add(new Module() { ModuleName = "Values", Endpoint = "http://localhost:2891/" });
+            //_context.SaveChanges();
+            //var mod1 = _context.Modules.First(m => m.ModuleName == "Infos");
+            //var mod2 = _context.Modules.First(m => m.ModuleName == "Values");
+            //_context.Resources.Add(new Resource() { ModuleID = mod1.ModuleID, ResourceName = "getinfo" });
+            //_context.Resources.Add(new Resource() { ModuleID = mod2.ModuleID, ResourceName = "getvalues" });
+            //_context.SaveChanges();
+            var res =
+                from r in _context.Resources
+                where r.ResourceName == "index"
+                select r;
+            foreach (Resource r in res)
+            {
+
+            }
+            var obj = _context.Resources.ToList();
+        }
+
 
         public bool SetUserPermissionsAndCode(string uniqueName, string code)
         {
@@ -254,25 +275,51 @@ namespace Arda.Permissions.Repositories
             return JsonConvert.SerializeObject(menuGrouped);
         }
 
-        public void Seed()
+        public PermissionStatus GetUserStatus(string uniqueName)
         {
-            //_context.Modules.Add(new Module() { ModuleName = "Infos", Endpoint = "http://localhost:2891/" });
-            //_context.Modules.Add(new Module() { ModuleName = "Values", Endpoint = "http://localhost:2891/" });
-            //_context.SaveChanges();
-            //var mod1 = _context.Modules.First(m => m.ModuleName == "Infos");
-            //var mod2 = _context.Modules.First(m => m.ModuleName == "Values");
-            //_context.Resources.Add(new Resource() { ModuleID = mod1.ModuleID, ResourceName = "getinfo" });
-            //_context.Resources.Add(new Resource() { ModuleID = mod2.ModuleID, ResourceName = "getvalues" });
-            //_context.SaveChanges();
-            var res =
-                from r in _context.Resources
-                where r.ResourceName == "index"
-                select r;
-            foreach (Resource r in res)
+            try
             {
-
+                return _context.Users.First(u => u.UniqueName == uniqueName).Status;
             }
-            var obj = _context.Resources.ToList();
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool GetAdminUserStatus(string uniqueName)
+        {
+            try
+            {
+                var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+                var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
+
+                var permToReview = permissions.First(p => p.Module == "Users" && p.Resource == "ReviewPermissions");
+                if (permToReview != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public int GetNumberOfUsersToApprove()
+        {
+            try
+            {
+                return _context.Users.Where(u => u.Status == PermissionStatus.Waiting_Review).Count();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

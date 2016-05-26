@@ -63,7 +63,7 @@ namespace Arda.Common.Utils
                     return responseConverted;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

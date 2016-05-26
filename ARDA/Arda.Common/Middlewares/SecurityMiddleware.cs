@@ -52,9 +52,9 @@ namespace Arda.Common.Middlewares
                     await _next(context);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
+                throw;
             }
         }
 

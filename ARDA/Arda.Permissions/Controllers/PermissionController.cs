@@ -3,8 +3,6 @@ using Microsoft.AspNet.Mvc;
 using Arda.Permissions.Interfaces;
 using System.Net.Http;
 using System.Net;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Arda.Permissions.Controllers
 {
@@ -17,6 +15,7 @@ namespace Arda.Permissions.Controllers
         {
             _permission = permission;
         }
+
 
         [HttpPost]
         [Route("setuserpermissionsandcode")]
@@ -32,7 +31,8 @@ namespace Arda.Permissions.Controllers
                     Models.User responseUser = null;
                     bool responseEmail = false;
 
-                    if (!VerifyIfUserIsInUserPermissionsDatabase(uniqueName))
+                    bool UserExists = _permission.VerifyIfUserIsInUserPermissionsDatabase(uniqueName);
+                    if (!UserExists)
                     {
                         responseUser = _permission.CreateNewUserAndSetInitialPermissions(uniqueName);
                         responseEmail = _permission.SendNotificationOfNewUserByEmail(uniqueName);
@@ -157,55 +157,12 @@ namespace Arda.Permissions.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("getusermenu")]
-        public string GetUserMenu()
-        {
-            var uniqueName = HttpContext.Request.Headers["unique_name"].ToString();
 
-            try
-            {
-                if (uniqueName != null)
-                {
-                    var menu = _permission.GetUserMenuSerialized(uniqueName);
-                    return menu;
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-                //return null;
-            }
-        }
-
-        private bool VerifyIfUserIsInUserPermissionsDatabase(string uniqueName)
-        {
-            try
-            {
-                bool response = _permission.VerifyIfUserIsInUserPermissionsDatabase(uniqueName);
-
-                if (response)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-
-        [HttpGet]
-        [Route("seed")]
-        public void Seed()
-        {
-            _permission.Seed();
-        }
+        //[HttpGet]
+        //[Route("seed")]
+        //public void Seed()
+        //{
+        //    _permission.Seed();
+        //}
     }
 }

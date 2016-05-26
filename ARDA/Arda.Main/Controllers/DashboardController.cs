@@ -14,7 +14,6 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
-        HttpClient client;
 
         public DashboardController()
         {

@@ -8,16 +8,18 @@ using Microsoft.AspNet.Authorization;
 namespace Arda.Main.Controllers
 {
     [Authorize]
-    public class UserController : Controller
+    public class UsersController : Controller
     {
-        public IActionResult UserAdd()
+        public IActionResult ReviewPermissions()
         {
             return View();
         }
 
-        public IActionResult UserRemove()
+        public IActionResult ListBannedUsers()
         {
             return View();
         }
+
+
     }
 }

@@ -1,265 +1,250 @@
-﻿@*<section class="concontainer-fluid">
+﻿@using System.Security.Principal
+@using Arda.Common.Utils
+@using Arda.Common.ViewModels
 
-    <div class="col-xs-12">
-        <div class="row">
-            <header class="ctn-header-dashboard">
-                <div class="col-xs-12 col-lg-3 col-md-6">
-                    <h2>Placeholder title</h2>
-                </div>
-                <div class="col-xs-12 col-lg-3 col-md-6">
-                    <input type="radio" value="1" name="type" class="dashboard-filter-field" id="dashboard-filter-type-1" />
+@{
+    var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+    var userStatus = Util.ConnectToRemoteService<int>("http://localhost:2884/api/useroperations/getuserstatus", user, string.Empty, "get");
+    if (userStatus == 0)
+    {
+        //Message for Situation 0: Waiting_Review
+        <div class="jumbotron">
+            <h1>Welcome!</h1>
+            <h4><strong>Status: </strong><span style="color:green">Waiting Review</span></h4>
 
-                    <label class="dashboard-filter" for="dashboard-filter-type-1">
-                        Type 1
-                    </label>
-
-                    <input type="radio" value="2" name="type" class="dashboard-filter-field" id="dashboard-filter-type-2" />
-
-                    <label class="dashboard-filter" for="dashboard-filter-type-2">
-                        Type 2
-                    </label>
-
-                    <input type="radio" value="3" name="type" class="dashboard-filter-field" id="dashboard-filter-type-3" />
-
-                    <label class="dashboard-filter" for="dashboard-filter-type-3">
-                        Type 3
-                    </label>
-
-                </div>
-                <div class="col-xs-12 col-lg-3 col-md-6">
-                    <select name="filter-assign" class="form-control dashboard-filter-assign">
-                        <option value="">TE Name 0</option>
-                        <option value="">TE Name 1</option>
-                        <option value="">TE Name 2</option>
-                        <option value="">TE Name 3</option>
-                        <option value="">TE Name 4</option>
-                        <option value="">TE Name 5</option>
-                    </select>
-                </div>
-
-                <div class="clearfix"></div>
-            </header>
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12 col-lg-3 col-md-6">
-                        <h3>todo</h3>
-                    </div>
-                    <div class="col-xs-12 col-lg-3 col-md-6">
-                        <h3>doing</h3>
-                    </div>
-                    <div class="col-xs-12 col-lg-3 col-md-6">
-                        <h3>done</h3>
-                    </div>
-                    <div class="col-xs-12 col-lg-3 col-md-6">
-                        <h3>approved</h3>
-                    </div>
-                </div>
-            </div>
+            <br />
+            <p>You can access this tool but unfortunally you don't have any permissions to other modules yet.</p>
+            <p>An e-mail has been sent to system admin. Watch out your e-mail, as soon you get any aditional permitions you will receive an message.</p>
         </div>
-    </div>
-</section>*@
-<section class="concontainer-fluid">
-
-    <div class="col-xs-12">
-
-
-        <div class="row">
-            <header class="ctn-header-dashboard">
-                <div class="col-xs-12 col-lg-3 col-md-6">
-                    <h2>Placeholder title</h2>
+    }
+    else if (userStatus == 1)
+    {
+        <!--Message for Situation 1: Banned_User-->
+        <div class="jumbotron">
+            <h1>Welcome!</h1>
+            <h4><strong>Status: </strong><span style="color:red">Permissions Denied</span></h4>
+            <br />
+            <p>The system admin has reviewed your permissions solicitation and denied it.</p>
+            <p>Your situation may change, keep your eyes open for any aditional permitions notification on your e-mail.</p>
+        </div>
+    }
+    else if (userStatus == 2)
+    {
+        //Page for Situation 2: Permissions_Granted-->
+        var canApproveUsers = Util.ConnectToRemoteService<bool>("http://localhost:2884/api/useroperations/getadminuserstatus", user, string.Empty, "get");
+        if (canApproveUsers)
+        {
+            int numberUsersToApprove = Util.ConnectToRemoteService<int>("http://localhost:2884/api/useroperations/getnumberofuserstoapprove", user, string.Empty, "get");
+            if (numberUsersToApprove > 0)
+            {
+                <div class="alert alert-warning fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Warning!</strong> You have @numberUsersToApprove users pending to approve. You can review it <a asp-controller="Users" asp-action="ReviewPermissions">here</a>.
                 </div>
-                <div class="col-xs-12 col-lg-3 col-md-6">
-                    <input type="radio" value="1" name="type" class="dashboard-filter-field" id="dashboard-filter-type-1" />
-
-                    <label class="dashboard-filter" for="dashboard-filter-type-1">
-                        Type 1
-                    </label>
-
-                    <input type="radio" value="2" name="type" class="dashboard-filter-field" id="dashboard-filter-type-2" />
-
-                    <label class="dashboard-filter" for="dashboard-filter-type-2">
-                        Type 2
-                    </label>
-
-                    <input type="radio" value="3" name="type" class="dashboard-filter-field" id="dashboard-filter-type-3" />
-
-                    <label class="dashboard-filter" for="dashboard-filter-type-3">
-                        Type 3
-                    </label>
-
-                </div>
-                <div class="col-xs-12 col-lg-3 col-md-6">
-                    <select name="filter-assign" class="form-control dashboard-filter-assign">
-                        <option value="">TE Name 0</option>
-                        <option value="">TE Name 1</option>
-                        <option value="">TE Name 2</option>
-                        <option value="">TE Name 3</option>
-                        <option value="">TE Name 4</option>
-                        <option value="">TE Name 5</option>
-                    </select>
-                </div>
-
-                <div class="col-xs-12 col-lg-3 col-md-6">
-
-                    <input id="txtAdd" type="text" class="form-control">
-                    <button id="btnAdd" class="btn btn-dark btn-sm btn-sm--newtask">Add</button>
-
-                </div>
-
-                <div class="clearfix"></div>
-            </header>
-
-            <template id="templateTask">
-                <div id="templateId" class="task" draggable="true">
-                    <span class="templateText">templateText</span>
-                    <div></div>
-                </div>
-            </template>
-
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
-                        <div class="row">
-                            <h3 class="dashboard-panel-title  dashboard-panel-title--todo">todo</h3>
-                        </div>
-                        <div id="divTaskListTodo" class="folder state0" data-state="0"></div>
-                    </div>
-                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
-                        <div class="row">
-                            <h3 class="dashboard-panel-title  dashboard-panel-title--doing">doing</h3>
-                        </div>
-                        <div id="divTaskListDoing" class="folder state1" data-state="1"></div>
-
-                    </div>
-                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
-                        <div class="row">
-                            <h3 class="dashboard-panel-title dashboard-panel-title--done">done</h3>
-                        </div>
-                        <div id="divTaskListDone" class="folder state2" data-state="2"></div>
-                    </div>
-                    <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
-                        <div class="row">
-                            <h3 class="dashboard-panel-title dashboard-panel-title--approved">approved</h3>
-                        </div>
-                        <div id="divTaskListActive" class="folder state3" data-state="3"></div>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-
-        function dragstart(ev) {
-            ev.dataTransfer.setData('text', ev.target.id);
-        }
-
-        function dragover(ev) {
-            ev.preventDefault();
-        }
-
-        function drop(ev) {
-            var target = this;
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData('text');
-            var elem = document.getElementById(data);
-            target.appendChild(elem);
-
-
-            var state = (target.dataset['state']);
-            var numstate = state | 0;
-            var task = { Id: elem.id, State: numstate };
-
-            update(task);
-        }
-
-        var tasks = $('.task');
-        tasks.map(function(i, task) {
-           task.draggable = true;
-           task.addEventListener('dragstart', dragstart);
-        });
-
-        var folders = $('.folder');
-        folders.map(function(i, folder) {
-            folder.addEventListener('dragover', dragover);
-            folder.addEventListener('drop', drop.bind(folder));
-        });
-
-        var btnAdd = $('#btnAdd');
-        var txtAdd = $('#txtAdd');
-
-        btnAdd.click(function () {
-            var taskName = txtAdd.val();
-
-            if (taskName != null && taskName != '') {
-                create(taskName, function (id,name,state) {
-                    createTask(id, name, state);
-                    });
             }
+        }
+
+        <section class="concontainer-fluid">
+
+            <div class="col-xs-12">
+                <div class="row">
+                    <header class="ctn-header-dashboard">
+                        <div class="col-xs-12 col-lg-3 col-md-6">
+                            <h2>Placeholder title</h2>
+                        </div>
+                        <div class="col-xs-12 col-lg-3 col-md-6">
+                            <input type="radio" value="1" name="type" class="dashboard-filter-field" id="dashboard-filter-type-1" />
+
+                            <label class="dashboard-filter" for="dashboard-filter-type-1">
+                                Type 1
+                            </label>
+
+                            <input type="radio" value="2" name="type" class="dashboard-filter-field" id="dashboard-filter-type-2" />
+
+                            <label class="dashboard-filter" for="dashboard-filter-type-2">
+                                Type 2
+                            </label>
+
+                            <input type="radio" value="3" name="type" class="dashboard-filter-field" id="dashboard-filter-type-3" />
+
+                            <label class="dashboard-filter" for="dashboard-filter-type-3">
+                                Type 3
+                            </label>
+
+                        </div>
+                        <div class="col-xs-12 col-lg-3 col-md-6">
+                            <select name="filter-assign" class="form-control dashboard-filter-assign">
+                                <option value="">TE Name 0</option>
+                                <option value="">TE Name 1</option>
+                                <option value="">TE Name 2</option>
+                                <option value="">TE Name 3</option>
+                                <option value="">TE Name 4</option>
+                                <option value="">TE Name 5</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-3 col-md-6">
+
+                            <input id="txtAdd" type="text" class="form-control">
+                            <button id="btnAdd" class="btn btn-dark btn-sm btn-sm--newtask">Add</button>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </header>
+
+                    <template id="templateTask">
+                        <div id="templateId" class="task" draggable="true">
+                            <span class="templateText">templateText</span>
+                            <div></div>
+                        </div>
+                    </template>
+
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                                <div class="row">
+                                    <h3 class="dashboard-panel-title  dashboard-panel-title--todo">todo</h3>
+                                </div>
+                                <div id="divTaskListTodo" class="folder state0" data-state="0"></div>
+                            </div>
+                            <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                                <div class="row">
+                                    <h3 class="dashboard-panel-title  dashboard-panel-title--doing">doing</h3>
+                                </div>
+                                <div id="divTaskListDoing" class="folder state1" data-state="1"></div>
+
+                            </div>
+                            <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                                <div class="row">
+                                    <h3 class="dashboard-panel-title dashboard-panel-title--done">done</h3>
+                                </div>
+                                <div id="divTaskListDone" class="folder state2" data-state="2"></div>
+                            </div>
+                            <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
+                                <div class="row">
+                                    <h3 class="dashboard-panel-title dashboard-panel-title--approved">approved</h3>
+                                </div>
+                                <div id="divTaskListActive" class="folder state3" data-state="3"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    }
+}
+
+<script>
+
+    function dragstart(ev) {
+        ev.dataTransfer.setData('text', ev.target.id);
+    }
+
+    function dragover(ev) {
+        ev.preventDefault();
+    }
+
+    function drop(ev) {
+        var target = this;
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData('text');
+        var elem = document.getElementById(data);
+        target.appendChild(elem);
+
+
+        var state = (target.dataset['state']);
+        var numstate = state | 0;
+        var task = { Id: elem.id, State: numstate };
+
+        update(task);
+    }
+
+    var tasks = $('.task');
+    tasks.map(function (i, task) {
+        task.draggable = true;
+        task.addEventListener('dragstart', dragstart);
+    });
+
+    var folders = $('.folder');
+    folders.map(function (i, folder) {
+        folder.addEventListener('dragover', dragover);
+        folder.addEventListener('drop', drop.bind(folder));
+    });
+
+    var btnAdd = $('#btnAdd');
+    var txtAdd = $('#txtAdd');
+
+    btnAdd.click(function () {
+        var taskName = txtAdd.val();
+
+        if (taskName != null && taskName != '') {
+            create(taskName, function (id, name, state) {
+                createTask(id, name, state);
+            });
+        }
+    });
+
+    gettasklist(function (tasklist) {
+        tasklist.map(function (task) {
+            createTask(task.Id, task.Name, task.State);
+        });
+    });
+
+    function createTask(id, name, state) {
+        var task_state = '.state' + state;
+        createTaskInFolder(id, name, task_state);
+    }
+
+    function createTaskInFolder(taskId, taskName, folderSelector) {
+        var content = document.querySelector('#templateTask').content;
+        var clone = document.importNode(content, true);
+        var folder = document.querySelector(folderSelector);
+
+        clone.querySelector('.task').id = taskId;
+        clone.querySelector('.task .templateText').textContent = taskName;
+
+        clone.querySelector('.task').addEventListener('dragstart', dragstart);
+
+        folder.appendChild(clone, true);
+    }
+
+    function httpCall(action, url, data, callback, error) {
+
+        $.ajax({
+            type: action, // GET POST PUT
+            url: url,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: callback,
+            error: error,
+            processData: false
         });
 
-        gettasklist(function (tasklist) {
-            tasklist.map(function (task) {
-                createTask(task.Id, task.Name, task.State);
-            });
-        });
+    }
 
-        function createTask(id, name, state) {
-            var task_state = '.state' + state;
-            createTaskInFolder(id, name, task_state);
-        }
+    function gettasklist(callback) {
+        httpCall('GET', 'api/tasks', null, callback);
+    }
 
-        function createTaskInFolder(taskId, taskName, folderSelector) {
-            var content = document.querySelector('#templateTask').content;
-            var clone = document.importNode(content, true);
-            var folder = document.querySelector(folderSelector);
+    function create(taskname, callback) {
+        var task = { Id: null, Name: taskname, State: 0 };
 
-            clone.querySelector('.task').id = taskId;
-            clone.querySelector('.task .templateText').textContent = taskName;
-
-            clone.querySelector('.task').addEventListener('dragstart', dragstart);
-
-            folder.appendChild(clone, true);
-        }
-
-        function httpCall(action, url, data, callback, error) {
-
-            $.ajax({
-                type: action, // GET POST PUT
-                url: url,
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                dataType: 'json',
-                success: callback,
-                error: error,
-                processData: false
-            });
-
-        }
-
-        function gettasklist(callback) {
-            httpCall('GET', 'api/tasks', null, callback);
-        }
-
-        function create(taskname, callback) {
-            var task = { Id: null, Name: taskname, State: 0 };
-
-            httpCall('POST', 'api/tasks', task, function (data) {
-                data && callback(data.Id, data.Name, data.State);
-            })
+        httpCall('POST', 'api/tasks', task, function (data) {
+            data && callback(data.Id, data.Name, data.State);
+        })
 
 
-        }
+    }
 
-        function update(task) {
+    function update(task) {
 
-            httpCall('PUT', 'api/tasks', task, function (data) {
-                alert(1)
-            })
+        httpCall('PUT', 'api/tasks', task, function (data) {
+            alert(1)
+        })
 
-        }
+    }
 
-            </script>
-
-
-        </div>
-    </div>
-</section>
+</script>
