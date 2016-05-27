@@ -19,7 +19,7 @@ using Arda.Common.Middlewares;
 
 namespace Arda.Main
 {
-    public class Startup
+    public partial class Startup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -44,15 +44,14 @@ namespace Arda.Main
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+            
+            //Add Session Middleware
+            services.AddCaching();
+            services.AddSession();
 
             services.AddMvc();
 
-            // Registering distributed cache approach to the application.
-            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
-            {
-                Configuration = Configuration["Storage:Redis:Configuration"],
-                InstanceName = Configuration["Storage:Redis:InstanceName"]
-            }));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,55 +78,10 @@ namespace Arda.Main
 
             app.UseStaticFiles();
 
-            app.UseCookieAuthentication(options =>
-            {
-                options.AutomaticAuthenticate = true;
-            });
+            app.UseSession();
 
-            app.UseOpenIdConnectAuthentication(options =>
-            {
-                options.AutomaticChallenge = true;
-                options.CallbackPath = new PathString("/auth/response");
-                options.ClientId = Configuration["Authentication:AzureAd:ClientId"];
-                options.Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
-                options.PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.Events = new OpenIdConnectEvents()
-                {
-                    OnAuthorizationCodeReceived = async (context) =>
-                    {
-                        var claims = context.JwtSecurityToken.Claims;
-
-                        // Getting informations about AD
-                        var code = context.Code;
-                        var validFrom = context.JwtSecurityToken.ValidFrom;
-                        var validTo = context.JwtSecurityToken.ValidTo;
-                        var givenName = claims.FirstOrDefault(claim => claim.Type == "given_name").Value;
-                        var name = claims.FirstOrDefault(claim => claim.Type == "name").Value;
-                        var uniqueName = claims.FirstOrDefault(claim => claim.Type == "unique_name").Value;
-
-                        var client = new HttpClient(); ;
-                        client.BaseAddress = new Uri("http://localhost:2884/api/");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        client.DefaultRequestHeaders.Add("unique_name", uniqueName);
-                        client.DefaultRequestHeaders.Add("code", code);
-
-                        string url = client.BaseAddress + "permission/setuserpermissionsandcode";
-                        await client.PostAsync(url, null);
-                    }
-                };
-            });
-
-            //app.Use(async (context, next) =>
-            //{
-            //    context.Response.Redirect("http://google.com.br");
-
-            //    // 2. Process the request and wait for completion
-            //    await next.Invoke();
-            //});
-
-            //app.UseMiddleware<RedirectMiddleware>(responseSetPermissions);
+            // Configure the OpenIdConnect Auth Pipeline and required services.
+            ConfigureAuth(app);
 
             app.UseMvc(routes =>
             {
@@ -135,8 +89,10 @@ namespace Arda.Main
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
         }
-        
+
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
