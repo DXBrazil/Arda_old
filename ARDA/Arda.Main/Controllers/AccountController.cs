@@ -9,6 +9,7 @@ using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Arda.Common.Utils;
+using System.Net.Http;
 
 namespace Arda.Main.Controllers
 {
@@ -21,16 +22,17 @@ namespace Arda.Main.Controllers
             _cache = cache;
         }
 
+
         public IActionResult SignIn()
         {
             return new ChallengeResult(
-                OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "https://localhost:44304/Dashboard" });
+                OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = Util.MainURL + "Dashboard" });
         }
 
         public async Task<IActionResult> SignOut()
         {
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-            Util.ConnectToRemoteService("http://localhost:2884/api/permission/deleteuserpermissions", uniqueName, "", "delete");
+            await Util.ConnectToRemoteService(HttpMethod.Delete, Util.PermissionsURL + "api/permission/deleteuserpermissions", uniqueName, "");
 
             var callbackUrl = Url.Action("SignOutCallback", "Account", values: null, protocol: Request.Scheme);
             await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -45,9 +47,5 @@ namespace Arda.Main.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        public void StoreValues()
-        {
-
-        }
     }
 }

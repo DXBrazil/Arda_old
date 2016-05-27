@@ -1,4 +1,5 @@
 ﻿@using System.Security.Principal
+@using System.Net.Http;
 @using Arda.Common.Utils
 @using Arda.Common.ViewModels
 
@@ -13,7 +14,7 @@
             <ul class="nav navbar-nav">
                 @{
                     var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                    var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>("http://localhost:2884/api/useroperations/getusermenu", user, string.Empty, "get");
+                    var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusermenu", user, string.Empty).Result;
                     foreach (var item in menuItems)
                     {
                         //break;
@@ -55,8 +56,8 @@
             </ul>
         </div>
     </div>
-}
-else
-{
-    <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
-}
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
+                    }

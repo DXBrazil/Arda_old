@@ -1,10 +1,11 @@
 ﻿@using System.Security.Principal
+@using System.Net.Http;
 @using Arda.Common.Utils
 @using Arda.Common.ViewModels
 
 @{
     var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-    var userStatus = Util.ConnectToRemoteService<int>("http://localhost:2884/api/useroperations/getuserstatus", user, string.Empty, "get");
+    var userStatus = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuserstatus", user, string.Empty).Result;
     if (userStatus == 0)
     {
         //Message for Situation 0: Waiting_Review
@@ -31,10 +32,10 @@
     else if (userStatus == 2)
     {
         //Page for Situation 2: Permissions_Granted-->
-        var canApproveUsers = Util.ConnectToRemoteService<bool>("http://localhost:2884/api/useroperations/getadminuserstatus", user, string.Empty, "get");
+        var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getadminuserstatus", user, string.Empty).Result;
         if (canApproveUsers)
         {
-            int numberUsersToApprove = Util.ConnectToRemoteService<int>("http://localhost:2884/api/useroperations/getnumberofuserstoapprove", user, string.Empty, "get");
+            int numberUsersToApprove = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getnumberofuserstoapprove", user, string.Empty).Result;
             if (numberUsersToApprove > 0)
             {
                 <div class="alert alert-warning fade in">

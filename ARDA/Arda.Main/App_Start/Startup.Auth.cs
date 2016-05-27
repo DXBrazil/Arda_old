@@ -9,6 +9,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Arda.Common.Utils;
 using Arda.Main.Utils;
+using System.Net.Http;
 
 namespace Arda.Main
 {
@@ -53,6 +54,7 @@ namespace Arda.Main
             });
         }
 
+
         public Task OnAuthenticationFailed(AuthenticationFailedContext context)
         {
             Debugger.Break();
@@ -64,11 +66,12 @@ namespace Arda.Main
 
         public async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
         {
-            CacheUserAndCodeOnRedis(context);
+            await CacheUserAndCodeOnRedis(context);
             await AcquireTokenForMicrosoftGraph(context);
         }
 
-        private void CacheUserAndCodeOnRedis(AuthorizationCodeReceivedContext context)
+
+        private async Task CacheUserAndCodeOnRedis(AuthorizationCodeReceivedContext context)
         {
             var claims = context.JwtSecurityToken.Claims;
 
@@ -80,7 +83,7 @@ namespace Arda.Main
             var name = claims.FirstOrDefault(claim => claim.Type == "name").Value;
             var uniqueName = claims.FirstOrDefault(claim => claim.Type == "unique_name").Value;
 
-            Util.ConnectToRemoteService("http://localhost:2884/api/permission/setuserpermissionsandcode", uniqueName, code, "post");
+            await Util.ConnectToRemoteService(HttpMethod.Get, Util.PermissionsURL + "api/permission/setuserpermissionsandcode", uniqueName, code);
         }
 
         private async Task AcquireTokenForMicrosoftGraph(AuthorizationCodeReceivedContext context)

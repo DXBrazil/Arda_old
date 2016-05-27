@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Arda.Common.Models;
+using Arda.Common.Utils;
 
 namespace Arda.Common.Middlewares
 {
@@ -26,7 +27,8 @@ namespace Arda.Common.Middlewares
             try
             {
                 var user = context.Request.Headers["unique_name"].ToString();
-                //var code= context.Request.Headers["code"].ToString();
+                var code = context.Request.Headers["code"].ToString();
+                //TODO: Compare with Cache.
 
                 var endpoint = context.Request.Host.Value;
                 var path = context.Request.Path.ToString();
@@ -61,14 +63,13 @@ namespace Arda.Common.Middlewares
         private bool CheckUserPermissionToResource(string uniqueName, string module, string resource)
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:2884/api/");
+            client.BaseAddress = new Uri(Util.PermissionsURL + "api/");
 
             string url = client.BaseAddress + string.Format("permission/verifyuseraccesstoresource?uniquename={0}&module={1}&resource={2}", uniqueName, module, resource);
             var response = client.GetAsync(url).Result;
 
             var bodySerialized = response.Content.ReadAsStringAsync().Result;
             var bodyResponse = JsonConvert.DeserializeObject<HTTPBodyResponse>(bodySerialized);
-
 
             if (bodyResponse.IsSuccessStatusCode)
             {
