@@ -18,7 +18,17 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        public async Task<IActionResult> ReviewPermissions()
+        public IActionResult ReviewPermissions()
+        {
+            return View();
+        }
+
+        public IActionResult ListBannedUsers()
+        {
+            return View();
+        }
+
+        private async Task<IActionResult> callMicrosoftGraph()
         {
             AuthenticationResult result = null;
 
@@ -27,57 +37,45 @@ namespace Arda.Main.Controllers
                 string userObjectID = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
                 AuthenticationContext authContext = new AuthenticationContext(Startup.Authority, new SessionCache(userObjectID, HttpContext));
                 ClientCredential credential = new ClientCredential(Startup.ClientId, Startup.ClientSecret);
-                //result = await authContext.AcquireTokenAsync(Startup.GraphResourceId, new ClientCredential(Startup.ClientId, Startup.ClientSecret));
-
                 result = await authContext.AcquireTokenSilentAsync(Startup.GraphResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
 
                 ViewBag.Token = result.AccessToken;
-                return View();
+                
+                HttpClient client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me/messages");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                HttpResponseMessage response = await client.SendAsync(request);
 
+                if (response.IsSuccessStatusCode)
+                {
+                    var source = await response.Content.ReadAsByteArrayAsync();
+                    return View();
+                }
+                else
+                {
+                    //
+                    // If the call failed with access denied, then drop the current access token from the cache, 
+                    //     and show the user an error indicating they might need to sign-in again.
+                    //
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
 
-                //HttpClient client = new HttpClient();
-                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me/photo/$value");
-                //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                //HttpResponseMessage response = await client.SendAsync(request);
+                        //var todoTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == Startup.TodoListResourceId);
+                        //foreach (TokenCacheItem tci in todoTokens)
+                        //    authContext.TokenCache.DeleteItem(tci);
 
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var source = await response.Content.ReadAsByteArrayAsync();
-                //    return View();
-                //}
-                //else
-                //{
-                //    //
-                //    // If the call failed with access denied, then drop the current access token from the cache, 
-                //    //     and show the user an error indicating they might need to sign-in again.
-                //    //
-                //    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                //    {
-
-                //        //var todoTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == Startup.TodoListResourceId);
-                //        //foreach (TokenCacheItem tci in todoTokens)
-                //        //    authContext.TokenCache.DeleteItem(tci);
-
-                //        //ViewBag.ErrorMessage = "UnexpectedError";
-                //    }
-                //}
+                        //ViewBag.ErrorMessage = "UnexpectedError";
+                    }
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //If get silent token fails:
                 return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
 
 
-            //
-            // If the call failed for any other reason, show the user an error.
-            //
             return View("Error");
-        }
-
-        public IActionResult ListBannedUsers()
-        {
-            return View();
         }
     }
 }
