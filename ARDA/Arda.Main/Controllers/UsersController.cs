@@ -32,32 +32,34 @@ namespace Arda.Main.Controllers
 
                 ViewBag.Token = result.AccessToken;
                 return View();
-                //HttpClient client = new HttpClient();
-                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/users/maluz@microsoft.com/photo/$value");
-                //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                //HttpResponseMessage response = await client.SendAsync(request);
+                HttpClient client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me/messages");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+                HttpResponseMessage response = await client.SendAsync(request);
 
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var source = await response.Content.ReadAsByteArrayAsync();
-                //    return View();
-                //}
-                //else
-                //{
-                //    //
-                //    // If the call failed with access denied, then drop the current access token from the cache, 
-                //    //     and show the user an error indicating they might need to sign-in again.
-                //    //
-                //    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                //    {
+                if (response.IsSuccessStatusCode)
+                {
+                    var source = await response.Content.ReadAsByteArrayAsync();
+                    return View();
+                }
+                else
+                {
+                    return View();
 
-                //        //var todoTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == Startup.TodoListResourceId);
-                //        //foreach (TokenCacheItem tci in todoTokens)
-                //        //    authContext.TokenCache.DeleteItem(tci);
+                    //
+                    // If the call failed with access denied, then drop the current access token from the cache, 
+                    //     and show the user an error indicating they might need to sign-in again.
+                    //
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
 
-                //        //ViewBag.ErrorMessage = "UnexpectedError";
-                //    }
-                //}
+                        //var todoTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == Startup.TodoListResourceId);
+                        //foreach (TokenCacheItem tci in todoTokens)
+                        //    authContext.TokenCache.DeleteItem(tci);
+
+                        //ViewBag.ErrorMessage = "UnexpectedError";
+                    }
+                }
             }
             catch (Exception)
             {

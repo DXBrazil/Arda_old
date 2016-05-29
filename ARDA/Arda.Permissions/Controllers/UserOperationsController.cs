@@ -37,6 +37,8 @@ namespace Arda.Permissions.Controllers
             }
             catch (Exception ex)
             {
+                //Cache doesn't exists
+                //TODO: Returns a message requiring to login again
                 throw ex;
             }
         }
