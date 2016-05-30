@@ -31,6 +31,12 @@ namespace Arda.Permissions.Interfaces
         // Create the user menu based on his/her permissions.
         string GetUserMenuSerialized(string uniqueName);
 
+        PermissionStatus GetUserStatus(string uniqueName);
+
+        bool GetAdminUserStatus(string uniqueName);
+
+        int GetNumberOfUsersToApprove();
+
         void Seed();
     }
 }

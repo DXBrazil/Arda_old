@@ -1,4 +1,5 @@
-﻿using Arda.Kanban.Models;
+﻿using Arda.Common.ViewModels;
+using Arda.Kanban.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace Arda.Kanban.Interfaces
         bool AddNewFiscalYear(FiscalYear fiscalyear);
 
         // Return a list of fiscal years.
-        List<FiscalYear> GetAllFiscalYears();
+        List<FiscalYearMainViewModel> GetAllFiscalYears();
+
+        // Return a specific fiscal year by ID.
+        FiscalYear GetFiscalYearByID(Guid id);
     }
 }

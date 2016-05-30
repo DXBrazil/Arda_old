@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Arda.Common.ViewModels;
 
 namespace Arda.Kanban.Repositories
 {
@@ -42,11 +43,40 @@ namespace Arda.Kanban.Repositories
         } 
 
         // Return a 'numberOfOccurencies' to controller.
-        public List<FiscalYear> GetAllFiscalYears()
+        public List<FiscalYearMainViewModel> GetAllFiscalYears()
         {
             try
             {
-                var response = _context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).ToList();
+                //_context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).ToList();
+                var response = (from f in _context.FiscalYears
+                               orderby f.FullNumericFiscalYear
+                               select new FiscalYearMainViewModel
+                               {
+                                   FiscalYearID = f.FiscalYearID,
+                                   FullNumericFiscalYearMain = f.FullNumericFiscalYear,
+                                   TextualFiscalYearMain = f.TextualFiscalYear
+                               }).ToList();
+
+                if (response != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public FiscalYear GetFiscalYearByID(Guid id)
+        {
+            try
+            {
+                var response = _context.FiscalYears.Where(fy => fy.FiscalYearID.Equals(id)).SingleOrDefault();
 
                 if (response != null)
                 {

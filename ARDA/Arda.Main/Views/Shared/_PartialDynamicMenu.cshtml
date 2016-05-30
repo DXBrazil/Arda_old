@@ -1,19 +1,22 @@
 ﻿@using System.Security.Principal
+@using System.Net.Http;
 @using Arda.Common.Utils
 @using Arda.Common.ViewModels
 
 @if (User.Identity.IsAuthenticated)
 {
     <div class="pull-left">
+
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
         </button>
+
         <!-- Dynamic menu - Left side -->
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 @{
                     var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                    var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>("http://localhost:2884/api/permission/getusermenu", user, string.Empty, "get");
+                    var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusermenu", user, string.Empty).Result;
                     foreach (var item in menuItems)
                     {
                         //break;
@@ -47,13 +50,7 @@
                 }
             </ul>
         </div>
-        <!-- User infos -->
-        <div style="line-height:70px;">
-            <ul class="nav navbar-nav" style="float: right;">
-                <li class="nav-item">Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong></li>&nbsp;
-                <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Logout</a>
-            </ul>
-        </div>
+
     </div>
                     }
                     else

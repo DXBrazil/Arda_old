@@ -1,0 +1,59 @@
+﻿@model Arda.Common.ViewModels.FiscalYearMainViewModel
+<section class="concontainer-fluid">
+
+    <div class="col-xs-12">
+        <div class="row">
+            <header class="ctn-header-dashboard">
+
+                <!-- Title -->
+                <div class="col-xs-12 col-lg-3 col-md-4">
+                    <h2>
+                        Fiscal Years
+                    </h2>
+                    <p>Details</p>
+                </div>
+
+                <!-- Some information -->
+                <div class="col-xs-12 col-lg-3 col-md-4">
+
+                </div>
+
+                <!-- Clear some garbage -->
+                <div class="clearfix"></div>
+
+
+            </header>
+
+            <div style="margin-top:20px;">
+
+                <div class="col-xs-12 col-md-8" style="border-right:1px solid #efefef;">
+
+                    <ul>
+                        <li>
+                            Fiscal Year ID: @Model.FiscalYearID
+                        </li>
+                        <li>
+                            Fiscal Year (textual mode): @Model.TextualFiscalYearMain
+                        </li>
+                        <li>
+                            Fiscal Year (numeric mode): @Model.FullNumericFiscalYearMain
+                        </li>
+                    </ul>
+                    
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <h3>
+                        New fiscal year
+                    </h3>
+                    <p>
+                        To add a new Fiscal Year, please click on button bellow. <br />
+                        <div style="margin-bottom:50px;">
+                            <a asp-controller="FiscalYear" asp-action="Add" class="btn btn-success" style="width:100px;">+ Add</a>
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

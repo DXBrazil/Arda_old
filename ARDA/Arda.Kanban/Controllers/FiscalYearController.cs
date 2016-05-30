@@ -6,6 +6,7 @@ using Microsoft.AspNet.Mvc;
 using System.Net;
 using Arda.Kanban.Models;
 using Arda.Kanban.Interfaces;
+using Arda.Common.ViewModels;
 
 namespace Arda.Kanban.Controllers
 {
@@ -52,7 +53,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("list")]
-        public IEnumerable<FiscalYear> List()
+        public IEnumerable<FiscalYearMainViewModel> List()
         {
             try
             {
@@ -61,6 +62,33 @@ namespace Arda.Kanban.Controllers
                 if (fiscalyears != null)
                 {
                     return fiscalyears;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [Route("getfiscalyearbyid")]
+        public FiscalYearMainViewModel GetFiscalYearByID(Guid id)
+        {
+            try
+            {
+                var fiscalYear = _repository.GetFiscalYearByID(id);
+
+                if(fiscalYear != null)
+                {
+                    return new FiscalYearMainViewModel() {
+                         FiscalYearID = fiscalYear.FiscalYearID,
+                         TextualFiscalYearMain = fiscalYear.TextualFiscalYear,
+                         FullNumericFiscalYearMain = fiscalYear.FullNumericFiscalYear
+                    };
                 }
                 else
                 {

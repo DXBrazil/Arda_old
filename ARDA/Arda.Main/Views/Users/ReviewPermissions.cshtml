@@ -1,0 +1,69 @@
+﻿<h1>Review Permissions</h1>
+
+<h4>User:</h4>
+<br />
+<img id="imgBox" />
+<p>Name: <span id="displayName"></span></p>
+<p>E-mail: <span id="mail"></span></p>
+
+
+
+<script>
+    $(function () {
+        console.log("ready!");
+        PopulateUserInformations("fabsanc@microsoft.com");
+
+    });
+
+    function PopulateUserInformations(user) {
+        var token = "Bearer @ViewBag.Token";
+        GetImage(user, token);
+        GetProfile(user, token);
+    }
+
+    function GetProfile(user, token) {
+        var url = "https://graph.microsoft.com/v1.0/users/" + user;
+        headerParams = { 'Authorization': token };
+        obj = {
+            type: 'get',
+            url: url,
+            headers: headerParams,
+            data: [],
+            dataType: 'json',
+            success: function (data) {
+                console.log('success');
+                $('#mail').text(data['mail']);
+                $('#displayName').text(data['displayName'])
+                console.log(data);
+            }
+        };
+        $.ajax(obj);
+    }
+
+    function GetImage(user, token) {
+        var url = "https://graph.microsoft.com/v1.0/users/" + user + "/photo/$value";
+        //var url = "https://graph.microsoft.com/v1.0/me/photo/$value";
+        var elem = "imgBox";
+        GetImageBase64FromGraph(url, token, elem);
+    }
+    function GetImageBase64FromGraph(url, token, element) {
+        console.log(token);
+        var request = new XMLHttpRequest;
+        request.open("GET", url);
+        request.setRequestHeader("Authorization", token);
+        request.responseType = "blob";
+        request.onload = function() {
+            if (request.readyState === 4 && request.status === 200)
+            {
+                var image = document.getElementById(element);
+                var reader = new FileReader();
+                reader.onload = function() {
+                    image.src = reader.result;
+                }
+                reader.readAsDataURL(request.response);
+            }
+        };
+        request.send(null);
+    }
+
+</script>

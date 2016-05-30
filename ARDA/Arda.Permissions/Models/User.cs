@@ -23,7 +23,7 @@ namespace Arda.Permissions.Models
     public enum PermissionStatus
     {
         Waiting_Review,
-        Permissions_Granted,
-        Banned_User
+        Permissions_Denied,
+        Permissions_Granted        
     }
 }
