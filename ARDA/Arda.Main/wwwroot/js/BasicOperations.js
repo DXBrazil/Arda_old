@@ -1,7 +1,12 @@
 ﻿// Functions with automatic initialization
 $(function ($) {
     // Loading datatable to fiscal years.
-    $("#table-fiscalyears").DataTable();
+    $("#table-fiscalyears").DataTable({
+        "sAjaxSource": "/FiscalYear/ListAllFiscalYears",
+        "columnDefs": [
+            { "width": "20%", "targets": 2 }
+        ]
+    });
 
     // Send the new account request to specific controller/action in Arda.Main.
     $("#loginform").submit(function (e) {

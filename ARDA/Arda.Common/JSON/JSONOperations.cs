@@ -15,4 +15,10 @@ namespace Arda.Common.JSON
             return JsonConvert.SerializeObject(objectToBeConverted).ToString();
         }
     }
+
+    // Generate object compatible with datatable
+    public class SourceDataTablesFormat
+    {
+        public IList<IList<string>> aaData = new List<IList<string>>();
+    }
 }

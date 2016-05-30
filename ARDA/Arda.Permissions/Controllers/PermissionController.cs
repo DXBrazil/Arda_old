@@ -200,7 +200,6 @@ namespace Arda.Permissions.Controllers
             }
         }
 
-
         [HttpGet]
         [Route("seed")]
         public void Seed()

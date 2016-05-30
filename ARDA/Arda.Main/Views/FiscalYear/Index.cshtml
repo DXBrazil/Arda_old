@@ -1,5 +1,4 @@
-﻿@model IEnumerable<Arda.Main.ViewModel.FiscalYearMainViewModel>
-<section class="concontainer-fluid">
+﻿<section class="concontainer-fluid">
 
     <div class="col-xs-12">
         <div class="row">
@@ -36,21 +35,7 @@
                             </tr>
                          </thead>
                         <tbody>
-                            @foreach(var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.TextualFiscalYearMain)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FullNumericFiscalYearMain)
-                                    </td>
-                                    <td>
-                                        text
-                                    </td>
-                                </tr>
-
-                            }
+                            
                         </tbody>
                     </table>
                 </div>
