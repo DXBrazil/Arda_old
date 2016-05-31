@@ -116,14 +116,7 @@ namespace Arda.Kanban.Repositories
 
                     var response = _context.SaveChanges();
 
-                    if (response > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return true;
                 }
                 else
                 {
