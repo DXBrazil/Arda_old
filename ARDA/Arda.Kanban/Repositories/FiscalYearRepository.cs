@@ -20,11 +20,18 @@ namespace Arda.Kanban.Repositories
         }
 
         // Adds a new fiscal year to the system.
-        public bool AddNewFiscalYear(FiscalYear fiscalyear)
+        public bool AddNewFiscalYear(FiscalYearMainViewModel fiscalyear)
         {
             try
             {
-                _context.FiscalYears.Add(fiscalyear);
+                var fiscalYearToBeSaved = new FiscalYear()
+                {
+                    FiscalYearID = fiscalyear.FiscalYearID,
+                    FullNumericFiscalYear = fiscalyear.FullNumericFiscalYearMain,
+                    TextualFiscalYear = fiscalyear.TextualFiscalYearMain
+                };
+
+                _context.FiscalYears.Add(fiscalYearToBeSaved);
                 var response = _context.SaveChanges();
 
                 if (response > 0)
@@ -117,6 +124,31 @@ namespace Arda.Kanban.Repositories
                     {
                         return false;
                     }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // Delete fiscal year based on ID
+        public bool DeleteFiscalYearByID(Guid id)
+        {
+            try
+            {
+                var fiscalYearToBeDeleted = _context.FiscalYears.SingleOrDefault(fy => fy.FiscalYearID.Equals(id));
+
+                if (fiscalYearToBeDeleted != null)
+                {
+                    var response = _context.Remove(fiscalYearToBeDeleted);
+                    _context.SaveChanges();
+
+                    return true;
                 }
                 else
                 {

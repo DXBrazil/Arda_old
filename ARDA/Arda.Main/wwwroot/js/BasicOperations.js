@@ -135,41 +135,124 @@ $(function ($) {
         });
     });
 
-    $("#form-edit-fiscal-year").submit(function (e) {
-        e.preventDefault();
-        DisableFiscalYearFields();
-        $("#btnUpdate").text("Updating fiscal year data...");
-        var form = $("#form-edit-fiscal-year");
-
-        $.ajax({
-            url: "/FiscalYear/EditFiscalYear",
-            type: "POST",
-            data: form.serialize()
-        }).done(function (data) {
-            if (data.Status == "Ok") {
-                ClearModalForm();
-                $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The fiscal year was updated succefully.</div>");
-                $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
-                EnableFiscalYearFields();
-                RedirectIn(3000, "/FiscalYear/Index");
+    $("#form-edit-fiscal-year").validate({
+        rules: {
+            FiscalYearID: "required",
+            TextualFiscalYearMain: "required",
+            FullNumericFiscalYearMain: "required"
+        },
+        messages: {
+            FiscalYearID: "Please, inform the fiscal year code.",
+            TextualFiscalYearMain: "Please, type the textual form of fiscal year.",
+            FullNumericFiscalYearMain: "Please, inform the numeric form of fiscal year."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
             }
-            else {
+        },
+        submitHandler: function (form) {
+            DisableFiscalYearFields();
+            $("#btnUpdate").text("Updating fiscal year data...");
+
+            $.ajax({
+                url: "/FiscalYear/EditFiscalYear",
+                type: "POST",
+                data: $(form).serialize()
+            }).done(function (data) {
+                if (data.Status == "Ok") {
+                    ClearModalForm();
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The fiscal year was updated succefully.</div>");
+                    $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableFiscalYearFields();
+                    RedirectIn(3000, "/FiscalYear/Index");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableFiscalYearFields();
+                }
+            }).fail(function (e, f) {
                 $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
                 $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
                 EnableFiscalYearFields();
-            }
-        }).fail(function (e, f) {
-            $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
-            $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
-            EnableFiscalYearFields();
-        });
+            });
+        }
 
+    });
+
+    $("#form-add-fiscal-year").validate({
+        rules: {
+            FiscalYearID: "required",
+            TextualFiscalYearMain: "required",
+            FullNumericFiscalYearMain: "required"
+        },
+        messages: {
+            FiscalYearID: "Please, inform the fiscal year code.",
+            TextualFiscalYearMain: "Please, type the textual form of fiscal year.",
+            FullNumericFiscalYearMain: "Please, inform the numeric form of fiscal year."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            DisableFiscalYearFields();
+            $("#btnAdd").text("Saving the new fiscal year...");
+
+            $.ajax({
+                url: "/FiscalYear/AddFiscalYear",
+                type: "POST",
+                data: $(form).serialize()
+            }).done(function (data) {
+                if (data.Status == "Ok") {
+                    ClearModalForm();
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Fiscal year has been added into Arda.</div>");
+                    $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableFiscalYearFields();
+
+                    RedirectIn(3000, "/FiscalYear/Index");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableFiscalYearFields();
+                }
+            }).fail(function (e, f) {
+                $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                EnableFiscalYearFields();
+            });
+        }
     });
 });
 
 // General functions
 
-// Modal Login
+
+// Modais
 
 function MountNeedHelpModal() {
     //Defining values
@@ -229,6 +312,23 @@ function MountRequestNewAccountModal() {
     $("#GenericModal .modal-footer").html("<button type='submit' class='btn btn-success' id='RequestAccountButton'><span class='glyphicon glyphicon-ok'></span>&nbsp;Request account</button>");
 }
 
+function ModalDelete_FiscalYear(FiscalYearID, TextualFiscalYear) {
+    //Defining values
+    var ModalTitle = "Deleting '" + TextualFiscalYear + "' record";
+    var ModalBody = "<p style='margin-bottom:20px; font-weight: 400;' class='p-modal-body'>This operation will be permanent. Are you sure?</p>";
+    ModalBody += "<p><ul>";
+    ModalBody += "<li>Fiscal year ID: " + FiscalYearID + "</li>";
+    ModalBody += "<li>Fiscal year (textual mode): " + TextualFiscalYear + "</li>";
+    ModalBody += "</ul></p>";
+    ModalBody += "<div id='message-panel' style='margin-top: 10px;'></div>"
+    
+    //Injecting contents
+    $("#generic-modal .modal-title").html("<strong>" + ModalTitle + "</strong>");
+    $("#generic-modal .modal-body").html(ModalBody);
+    $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteFiscalYear('" + FiscalYearID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
+}
+
+
 // Another functions
 
 function ClearModalForm() {
@@ -262,17 +362,17 @@ function RedirectTo(url)
 
 function DisableFiscalYearFields()
 {
-    $("#FiscalYearID").attr("disabled", "disabled");
-    $("#TextualFiscalYearMain").attr("disabled", "disabled");
-    $("#FullNumericFiscalYearMain").attr("disabled", "disabled");
+    $("#fyid").attr("disabled", "disabled");
+    $("#fytext").attr("disabled", "disabled");
+    $("#fynumber").attr("disabled", "disabled");
     $("#btnUpdate").attr("disabled", "disabled");
 }
 
 function EnableFiscalYearFields()
 {
-    $("#FiscalYearID").removeAttr("disabled");
-    $("#TextualFiscalYearMain").removeAttr("disabled");
-    $("#FullNumericFiscalYearMain").removeAttr("disabled");
+    $("#fyid").removeAttr("disabled");
+    $("#fytext").removeAttr("disabled");
+    $("#fynumber").removeAttr("disabled");
     $("#btnUpdate").removeAttr("disabled", "disabled");
 }
 
@@ -281,4 +381,22 @@ function RedirectIn(delay, url)
     setTimeout(function () {
         window.location = url;
     }, delay);
+}
+
+function DeleteFiscalYear(fiscalYearID) {
+    $("#btnDelete").attr("disabled", "disabled");
+
+    $.ajax({
+        url: "/FiscalYear/Delete",
+        type: "POST",
+        data: { id: fiscalYearID },
+        success: function (data) {
+            if (data.Status) {
+                $("#message-panel").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Fiscal year successful deleted.</div>");
+                RedirectIn(4000, "/FiscalYear/Index");
+            } else {
+                $("#message-panel").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> We found an error in this request. Try again in a few minutes.</div>");
+            }
+        }
+    });
 }

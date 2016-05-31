@@ -1,5 +1,4 @@
-﻿@model Arda.Common.ViewModels.FiscalYearMainViewModel
-<section class="concontainer-fluid">
+﻿<section class="concontainer-fluid">
 
     <div class="col-xs-12">
         <div class="row">
@@ -10,7 +9,7 @@
                     <h2>
                         Fiscal Years
                     </h2>
-                    <p>Editing "@Model.TextualFiscalYearMain" data</p>
+                    <p>Adding a new fiscal year into system</p>
                 </div>
 
                 <!-- Some information -->
@@ -28,29 +27,29 @@
 
                 <div class="col-xs-12 col-md-8" style="border-right:1px solid #efefef;">
 
-                    <form id="form-edit-fiscal-year" role="form" data-toggle="validation">
-                        
+                    <form id="form-add-fiscal-year" role="form" data-toggle="validation">
+
                         <div class="form-group">
                             <label for="FiscalYearID">Code:</label>
-                            <input type="text" class="form-control" id="FiscalYearID" name="FiscalYearID" value="@Model.FiscalYearID" readonly required>
+                            <input type="text" class="form-control" id="FiscalYearID" name="FiscalYearID" value="@ViewBag.Guid" readonly>
                         </div>
 
                         <div class="form-group">
                             <label for="FiscalYearText">Fiscal Year (textual form):</label>
-                            <input type="text" class="form-control" id="TextualFiscalYearMain" name="TextualFiscalYearMain" value="@Model.TextualFiscalYearMain">
+                            <input type="text" class="form-control" id="TextualFiscalYearMain" name="TextualFiscalYearMain">
                         </div>
 
                         <div class="form-group">
                             <label for="FiscalYearNumber">Fiscal Year (numeric form):</label>
-                            <input type="text" class="form-control" id="FullNumericFiscalYearMain" name="FullNumericFiscalYearMain" value="@Model.FullNumericFiscalYearMain">
+                            <input type="text" class="form-control" id="FullNumericFiscalYearMain" name="FullNumericFiscalYearMain">
                         </div>
 
-                        <button type="submit" class="btn btn-info" id="btnUpdate">
+                        <button type="submit" class="btn btn-info" id="btnAdd">
                             <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
                         </button>
 
                     </form>
-                    
+
                     <div style="margin-top:20px;" id="message">
                         <!-- Message dynamically inputed here -->
                     </div>

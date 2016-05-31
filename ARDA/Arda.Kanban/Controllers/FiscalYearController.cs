@@ -8,6 +8,7 @@ using Arda.Kanban.Models;
 using Arda.Kanban.Interfaces;
 using Arda.Common.ViewModels;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace Arda.Kanban.Controllers
 {
@@ -22,34 +23,31 @@ namespace Arda.Kanban.Controllers
         }
          
         [HttpPost]
-        [Route("add")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Add([Bind("FullNumericFiscalYear, TextualFiscalYear")] FiscalYear fiscalYear)
+        [Route("addfiscalyear")]
+        public HttpResponseMessage Add()
         {
             try
             {
-                if(fiscalYear != null)
-                {
-                    var response = _repository.AddNewFiscalYear(fiscalYear);
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearMainViewModel>(requestFromPost);
 
-                    if(response)
-                    {
-                        return new HttpStatusCodeResult((int)HttpStatusCode.OK);
-                    }
-                    else
-                    {
-                        return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
-                    }
+                // Calling update
+                var fiscalyear = _repository.AddNewFiscalYear(fiscalYear);
+
+                if (fiscalyear)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 }
             }
             catch (Exception)
             {
-                return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
-            }            
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet]
@@ -127,6 +125,29 @@ namespace Arda.Kanban.Controllers
             catch (Exception)
             {
                 return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("deletefiscalyearbyid")]
+        public HttpResponseMessage DeleteFiscalYearByID(Guid id)
+        {
+            try
+            {
+                var response = _repository.DeleteFiscalYearByID(id);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
     }

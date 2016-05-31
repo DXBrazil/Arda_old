@@ -16,7 +16,7 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class FiscalYearController : Controller
     {
-        
+
         public IActionResult Index()
         {
             return View();
@@ -41,12 +41,12 @@ namespace Arda.Main.Controllers
 
                 // Transforming raw data to FiscalYearMainViewModel format 
                 existentFiscalYears = (from u in remoteServiceResponse
-                                   select new FiscalYearMainViewModel
-                                   {
-                                       FiscalYearID = u.FiscalYearID,
-                                       FullNumericFiscalYearMain = u.FullNumericFiscalYearMain,
-                                       TextualFiscalYearMain = u.TextualFiscalYearMain
-                                   }).ToList();
+                                       select new FiscalYearMainViewModel
+                                       {
+                                           FiscalYearID = u.FiscalYearID,
+                                           FullNumericFiscalYearMain = u.FullNumericFiscalYearMain,
+                                           TextualFiscalYearMain = u.TextualFiscalYearMain
+                                       }).ToList();
 
                 // Mouting rows data
                 foreach (FiscalYearMainViewModel fy in existentFiscalYears)
@@ -54,7 +54,7 @@ namespace Arda.Main.Controllers
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(fy.TextualFiscalYearMain.ToString());
                     dataRow.Add(fy.FullNumericFiscalYearMain.ToString());
-                    dataRow.Add("<a href='/fiscalyear/details/" + fy.FiscalYearID + "' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/fiscalyear/edit/" + fy.FiscalYearID + "' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a href='/fiscalyear/delete/" + fy.FiscalYearID + "' class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<a href='/fiscalyear/details/{fy.FiscalYearID}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/fiscalyear/edit/{fy.FiscalYearID}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a href='javascript:void()' data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_FiscalYear('{fy.FiscalYearID}','{fy.TextualFiscalYearMain}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -77,7 +77,7 @@ namespace Arda.Main.Controllers
                 // Getting the selected fiscal year
                 var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
 
-                if(fiscalYearToBeViewed != null)
+                if (fiscalYearToBeViewed != null)
                 {
                     var finalFiscalYear = new FiscalYearMainViewModel()
                     {
@@ -132,6 +132,7 @@ namespace Arda.Main.Controllers
             }
         }
 
+        // Update the fiscal year in database
         [HttpPost]
         public JsonResult EditFiscalYear(FiscalYearMainViewModel fiscalyear)
         {
@@ -146,7 +147,64 @@ namespace Arda.Main.Controllers
             // Getting the selected fiscal year
             var responseAboutUpdate = Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/fiscalyear/editfiscalyearbyid", uniqueName, "", fiscalyear).Result;
 
-            if(responseAboutUpdate.IsSuccessStatusCode)
+            if (responseAboutUpdate.IsSuccessStatusCode)
+            {
+                return Json(new { Status = "Ok" });
+            }
+            else
+            {
+                return Json(new { Status = "Fail" });
+            }
+        }
+
+        // Deleting fiscal year from system
+        [HttpPost]
+        public JsonResult Delete(Guid id)
+        {
+            try
+            {
+                // Getting uniqueName
+                var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+                // Getting the selected fiscal year
+                var fiscalYearToBeDeleted = Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/fiscalyear/deletefiscalyearbyid?id=" + id, uniqueName, "", id).Result;
+
+                if (fiscalYearToBeDeleted.IsSuccessStatusCode)
+                {
+                    return Json(new { Status = "Ok" });
+                }
+                else
+                {
+                    return Json(new { Status = "Fail" });
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new { Status = "Fail" });
+            }
+        }
+
+        // Mounting fiscal year screen
+        public IActionResult Add()
+        {
+            ViewBag.Guid = Util.GenerateNewGuid().Result.ToString();
+            return View();
+        }
+
+        public JsonResult AddFiscalYear(FiscalYearMainViewModel fiscalYear)
+        {
+            if (fiscalYear == null)
+            {
+                return Json(new { Status = "Fail" });
+            }
+
+            // Getting uniqueName
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            // Getting the selected fiscal year
+            var responseAboutUpdate = Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/fiscalyear/addfiscalyear", uniqueName, "", fiscalYear).Result;
+
+            if (responseAboutUpdate.IsSuccessStatusCode)
             {
                 return Json(new { Status = "Ok" });
             }

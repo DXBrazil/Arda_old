@@ -10,7 +10,7 @@ namespace Arda.Kanban.Interfaces
     public interface IFiscalYearRepository
     {
         // Add a new fiscal year to the database.
-        bool AddNewFiscalYear(FiscalYear fiscalyear);
+        bool AddNewFiscalYear(FiscalYearMainViewModel fiscalyear);
 
         // Update some fiscal year data based on id.
         bool EditFiscalYearByID(FiscalYearMainViewModel fiscalyear);
@@ -20,5 +20,8 @@ namespace Arda.Kanban.Interfaces
 
         // Return a specific fiscal year by ID.
         FiscalYear GetFiscalYearByID(Guid id);
+
+        // Delete a fiscal year based on ID
+        bool DeleteFiscalYearByID(Guid id);
     }
 }
