@@ -58,7 +58,7 @@ namespace Arda.Main.Controllers
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

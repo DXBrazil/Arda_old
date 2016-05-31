@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Arda.Kanban.Migrations
 {
-    public partial class ArdaMigration_23052016_2224 : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

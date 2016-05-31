@@ -93,25 +93,15 @@ namespace Arda.Common.Utils
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
-<<<<<<< HEAD
-                    //return new HttpStatusCodeResult((int)HttpStatusCode.OK);
-=======
->>>>>>> 86a01b8f0496bf79e46f9a00a1c391fcb33c27d2
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
                 {
-<<<<<<< HEAD
-                    //return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
-=======
->>>>>>> 86a01b8f0496bf79e46f9a00a1c391fcb33c27d2
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception)
             {
-<<<<<<< HEAD
-                //return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
