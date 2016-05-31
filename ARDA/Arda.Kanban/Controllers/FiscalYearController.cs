@@ -7,6 +7,7 @@ using System.Net;
 using Arda.Kanban.Models;
 using Arda.Kanban.Interfaces;
 using Arda.Common.ViewModels;
+using Newtonsoft.Json;
 
 namespace Arda.Kanban.Controllers
 {
@@ -98,6 +99,34 @@ namespace Arda.Kanban.Controllers
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        [HttpPut]
+        [Route("editfiscalyearbyid")]
+        public IActionResult EditFiscalYearByID()
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearMainViewModel>(requestFromPost);
+
+                // Calling update
+                var fiscalyear = _repository.EditFiscalYearByID(fiscalYear);
+
+                if(fiscalyear)
+                {
+                    return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
     }

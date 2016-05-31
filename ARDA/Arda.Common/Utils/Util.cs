@@ -18,7 +18,6 @@ namespace Arda.Common.Utils
         public static readonly string ReportsURL = "http://localhost:2891/";
         public static readonly string PermissionsURL = "http://localhost:2884/";
 
-
         public static byte[] GetBytes(string obj)
         {
             return Encoding.UTF8.GetBytes(obj);
@@ -28,7 +27,6 @@ namespace Arda.Common.Utils
         {
             return Encoding.UTF8.GetString(obj);
         }
-
 
         public static async Task<T> ConnectToRemoteService<T>(HttpMethod method, string url, string uniqueName, string code)
         {
@@ -75,6 +73,38 @@ namespace Arda.Common.Utils
             catch (Exception)
             {
                 return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static async Task<HttpResponseMessage> ConnectToRemoteService<T>(HttpMethod method, string url, string uniqueName, string code, T body)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(method, url);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Add("unique_name", uniqueName);
+                request.Headers.Add("code", code);
+
+                var serialized = JsonConvert.SerializeObject(body);
+                request.Content = new ByteArrayContent(GetBytes(serialized));
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    //return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    //return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                //return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
     }

@@ -10,7 +10,7 @@
                     <h2>
                         Fiscal Years
                     </h2>
-                    <p>Details about "@Model.TextualFiscalYearMain"</p>
+                    <p>Editing "@Model.TextualFiscalYearMain" data</p>
                 </div>
 
                 <!-- Some information -->
@@ -28,24 +28,33 @@
 
                 <div class="col-xs-12 col-md-8" style="border-right:1px solid #efefef;">
 
-                    <form id="form-edit-fiscal-year" role="form">
+                    <form id="form-edit-fiscal-year" role="form" data-toggle="validation">
+                        
                         <div class="form-group">
                             <label for="FiscalYearID">Code:</label>
-                            <input type="text" class="form-control" id="FiscalYearID" value="@Model.FiscalYearID" disabled>
+                            <input type="text" class="form-control" id="fyid" name="FiscalYearID" value="@Model.FiscalYearID" readonly>
                         </div>
+
                         <div class="form-group">
                             <label for="FiscalYearText">Fiscal Year (textual form):</label>
-                            <input type="text" class="form-control" id="FiscalYearText" value="@Model.TextualFiscalYearMain" disabled>
+                            <input type="text" class="form-control" id="fytext" name="TextualFiscalYearMain" value="@Model.TextualFiscalYearMain">
                         </div>
+
                         <div class="form-group">
                             <label for="FiscalYearNumber">Fiscal Year (numeric form):</label>
-                            <input type="text" class="form-control" id="FiscalYearNumber" value="@Model.FullNumericFiscalYearMain" disabled> 
+                            <input type="text" class="form-control" id="fynumber" name="FullNumericFiscalYearMain" value="@Model.FullNumericFiscalYearMain">
                         </div>
-                        <a href="/FiscalYear/Edit/@Model.FiscalYearID" class="btn btn-info">
-                            <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this Fiscal Year?
-                        </a>
+
+                        <button type="submit" class="btn btn-info" id="btnUpdate">
+                            <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
+                        </button>
+
                     </form>
                     
+                    <div style="margin-top:20px;" id="message">
+                        <!-- Message dynamically inputed here -->
+                    </div>
+
                 </div>
                 <div class="col-xs-6 col-md-4">
                     <h3>
@@ -63,3 +72,4 @@
         </div>
     </div>
 </section>
+

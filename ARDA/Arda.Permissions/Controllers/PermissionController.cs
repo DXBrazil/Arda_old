@@ -16,7 +16,6 @@ namespace Arda.Permissions.Controllers
             _permission = permission;
         }
 
-
         [HttpPost]
         [Route("setuserpermissionsandcode")]
         public IActionResult SetUserPermissionsAndCode()

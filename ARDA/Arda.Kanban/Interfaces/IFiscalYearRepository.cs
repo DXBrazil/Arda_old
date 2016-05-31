@@ -12,6 +12,9 @@ namespace Arda.Kanban.Interfaces
         // Add a new fiscal year to the database.
         bool AddNewFiscalYear(FiscalYear fiscalyear);
 
+        // Update some fiscal year data based on id.
+        bool EditFiscalYearByID(FiscalYearMainViewModel fiscalyear);
+
         // Return a list of fiscal years.
         List<FiscalYearMainViewModel> GetAllFiscalYears();
 

@@ -9,6 +9,7 @@ using Arda.Common.Utils;
 using Arda.Common.ViewModels;
 using Newtonsoft.Json;
 using Arda.Common.JSON;
+using System.Net;
 
 namespace Arda.Main.Controllers
 {
@@ -65,6 +66,7 @@ namespace Arda.Main.Controllers
             return Json(dataTablesSource);
         }
 
+        // Mount details page based in fiscal year ID
         public IActionResult Details(Guid id)
         {
             try
@@ -94,6 +96,63 @@ namespace Arda.Main.Controllers
             catch (Exception)
             {
                 return View();
+            }
+        }
+
+        // Mount edit fiscal year page based on ID
+        public IActionResult Edit(Guid id)
+        {
+            try
+            {
+                // Getting uniqueName
+                var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+                // Getting the selected fiscal year
+                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
+
+                if (fiscalYearToBeViewed != null)
+                {
+                    var finalFiscalYear = new FiscalYearMainViewModel()
+                    {
+                        FiscalYearID = fiscalYearToBeViewed.FiscalYearID,
+                        FullNumericFiscalYearMain = fiscalYearToBeViewed.FullNumericFiscalYearMain,
+                        TextualFiscalYearMain = fiscalYearToBeViewed.TextualFiscalYearMain
+                    };
+
+                    return View(finalFiscalYear);
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult EditFiscalYear(FiscalYearMainViewModel fiscalyear)
+        {
+            if (fiscalyear == null)
+            {
+                return Json(new { Status = "Fail" });
+            }
+
+            // Getting uniqueName
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            // Getting the selected fiscal year
+            var responseAboutUpdate = Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/fiscalyear/editfiscalyearbyid", uniqueName, "", fiscalyear).Result;
+
+            if(responseAboutUpdate.IsSuccessStatusCode)
+            {
+                return Json(new { Status = "Ok" });
+            }
+            else
+            {
+                return Json(new { Status = "Fail" });
             }
         }
     }

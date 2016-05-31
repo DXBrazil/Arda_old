@@ -72,6 +72,7 @@ namespace Arda.Kanban.Repositories
             }
         }
 
+        // Return fiscal year based on ID
         public FiscalYear GetFiscalYearByID(Guid id)
         {
             try
@@ -90,6 +91,41 @@ namespace Arda.Kanban.Repositories
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        // Update fiscal year data based on ID
+        public bool EditFiscalYearByID(FiscalYearMainViewModel fiscalyear)
+        {
+            try
+            {
+                var fiscalYearToBeUpdated = _context.FiscalYears.SingleOrDefault(fy => fy.FiscalYearID.Equals(fiscalyear.FiscalYearID));
+
+                if(fiscalYearToBeUpdated != null)
+                {
+                    // Update informations of object
+                    fiscalYearToBeUpdated.FullNumericFiscalYear = fiscalyear.FullNumericFiscalYearMain;
+                    fiscalYearToBeUpdated.TextualFiscalYear = fiscalyear.TextualFiscalYearMain;
+
+                    var response = _context.SaveChanges();
+
+                    if (response > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

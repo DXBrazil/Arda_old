@@ -1,6 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
 /// <reference path="js/basicoperations.js" />
+/// <reference path="js/fiscalyears/fiscalyears.operations.js" />
 /// <reference path="js/jquery.datatables.min.js" />
 /// <reference path="layouts/modernui/js/app.js" />
 /// <reference path="layouts/modernui/js/bootstrap/alert.js" />
