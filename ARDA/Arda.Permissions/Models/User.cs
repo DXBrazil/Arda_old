@@ -14,6 +14,9 @@ namespace Arda.Permissions.Models
         public string UniqueName { get; set; }
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
         public PermissionStatus Status { get; set; }
 
 

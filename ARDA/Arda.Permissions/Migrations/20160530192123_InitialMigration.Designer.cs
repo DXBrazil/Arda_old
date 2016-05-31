@@ -8,8 +8,8 @@ using Arda.Permissions.Models;
 namespace Arda.Permissions.Migrations
 {
     [DbContext(typeof(PermissionsContext))]
-    [Migration("20160524233712_Initial")]
-    partial class Initial
+    [Migration("20160530192123_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,8 @@ namespace Arda.Permissions.Migrations
                     b.Property<string>("Category")
                         .IsRequired();
 
+                    b.Property<int>("CategorySequence");
+
                     b.Property<string>("DisplayName")
                         .IsRequired();
 
@@ -48,6 +50,8 @@ namespace Arda.Permissions.Migrations
 
                     b.Property<string>("ResourceName")
                         .IsRequired();
+
+                    b.Property<int>("ResourceSequence");
 
                     b.HasKey("ResourceID");
 
@@ -57,6 +61,9 @@ namespace Arda.Permissions.Migrations
             modelBuilder.Entity("Arda.Permissions.Models.User", b =>
                 {
                     b.Property<string>("UniqueName");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<int>("Status");
 

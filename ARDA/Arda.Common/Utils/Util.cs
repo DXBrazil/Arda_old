@@ -29,7 +29,6 @@ namespace Arda.Common.Utils
             return Encoding.UTF8.GetString(obj);
         }
 
-
         public static async Task<T> ConnectToRemoteService<T>(HttpMethod method, string url, string uniqueName, string code)
         {
             try
@@ -37,6 +36,7 @@ namespace Arda.Common.Utils
                 var client = new HttpClient();
                 var request = new HttpRequestMessage(method, url);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
                 request.Headers.Add("unique_name", uniqueName);
                 request.Headers.Add("code", code);
 
@@ -75,6 +75,35 @@ namespace Arda.Common.Utils
             catch (Exception)
             {
                 return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public static async Task<HttpResponseMessage> ConnectToRemoteService<T>(HttpMethod method, string url, string uniqueName, string code, T body)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(method, url);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Add("unique_name", uniqueName);
+                request.Headers.Add("code", code);
+
+                var serialized = JsonConvert.SerializeObject(body);
+                request.Content = new ByteArrayContent(GetBytes(serialized));
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
     }

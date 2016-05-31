@@ -9,6 +9,7 @@ using Arda.Common.Utils;
 using Arda.Common.Email;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Arda.Common.ViewModels;
 
 namespace Arda.Permissions.Repositories
 {
@@ -54,6 +55,7 @@ namespace Arda.Permissions.Repositories
                                        join r in _context.Resources on up.ResourceID equals r.ResourceID
                                        join m in _context.Modules on r.ModuleID equals m.ModuleID
                                        where u.UniqueName == uniqueName
+                                       orderby r.CategorySequence, r.ResourceSequence
                                        select new PermissionsToBeCachedViewModel
                                        {
                                            Endpoint = m.Endpoint,
@@ -74,17 +76,65 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public bool UpdateUserPermissions(string uniqueName, ICollection<PermissionsToBeCachedViewModel> userPermission)
+        //Updates permissiosn on database and cache
+        public bool UpdateUserPermissions(string uniqueName, PermissionsViewModel newUserPermissions)
         {
             try
             {
-                var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+                //Delete old permissions from the database:
+                var oldPermissions = _context.UsersPermissions.Where(up => up.UniqueName == uniqueName);
+                _context.UsersPermissions.RemoveRange(oldPermissions);
+                //_context.SaveChanges();
 
-                if (propertiesSerializedCached != null)
+                //Update the database
+                //Permissions:
+                foreach (var permissionToQuery in newUserPermissions.permissions)
                 {
-                    var propertiesToCache = new CacheViewModel(propertiesSerializedCached);
-                    propertiesToCache.Permissions = userPermission;
+                    var resourceReturned = _context.Resources.First(r => r.Category == permissionToQuery.category && r.DisplayName == permissionToQuery.resource);
 
+                    _context.UsersPermissions.Add(new UsersPermission()
+                    {
+                        UniqueName = uniqueName,
+                        ResourceID = resourceReturned.ResourceID
+                    });
+                }
+                //User:
+                var user = _context.Users.First(u => u.UniqueName == uniqueName);
+                user.Status = PermissionStatus.Permissions_Granted;
+
+                _context.SaveChanges();
+
+                //Update the cache
+                CacheViewModel propertiesToCache;
+                try
+                {
+                    //User is on cache:
+                    var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+                    propertiesToCache = new CacheViewModel(propertiesSerializedCached);
+                }
+                catch
+                {
+                    //User is not on cache:
+                    propertiesToCache = new CacheViewModel();
+                }
+
+                var userPermissions = (from up in _context.UsersPermissions
+                                       join r in _context.Resources on up.ResourceID equals r.ResourceID
+                                       join m in _context.Modules on r.ModuleID equals m.ModuleID
+                                       where up.UniqueName == uniqueName
+                                       orderby r.CategorySequence, r.ResourceSequence
+                                       select new PermissionsToBeCachedViewModel
+                                       {
+                                           Endpoint = m.Endpoint,
+                                           Module = m.ModuleName,
+                                           Resource = r.ResourceName,
+                                           Category = r.Category,
+                                           DisplayName = r.DisplayName
+                                       }).ToList();
+
+                if (userPermissions != null)
+                {
+                    propertiesToCache.Permissions = userPermissions;
                     _cache.Set(uniqueName, Util.GetBytes(propertiesToCache.ToString()));
                     return true;
                 }
@@ -206,13 +256,14 @@ namespace Arda.Permissions.Repositories
         }
 
         // Generate initial and basic permissions set to new users.
-        public User CreateNewUserAndSetInitialPermissions(string uniqueName)
+        public User CreateNewUserAndSetInitialPermissions(string uniqueName, string name)
         {
             try
             {
                 var user = new User()
                 {
                     UniqueName = uniqueName,
+                    Name = name,
                     Status = PermissionStatus.Waiting_Review,
                     UserPermissions = new List<UsersPermission>()
                     {
@@ -287,7 +338,7 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public bool GetAdminUserStatus(string uniqueName)
+        public bool VerifyIfUserAdmin(string uniqueName)
         {
             try
             {
@@ -315,6 +366,74 @@ namespace Arda.Permissions.Repositories
             try
             {
                 return _context.Users.Where(u => u.Status == PermissionStatus.Waiting_Review).Count();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<PendingUsersViewModel> GetPendingUsers()
+        {
+            try
+            {
+                var data = from users in _context.Users
+                           where users.Status == PermissionStatus.Waiting_Review
+                           select new PendingUsersViewModel
+                           {
+                               name = users.Name,
+                               email = users.UniqueName
+                           };
+
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<ResourcesViewModel> GetAllPermissions()
+        {
+            try
+            {
+                var data = (from r in _context.Resources
+                            orderby r.CategorySequence, r.ResourceSequence
+                            group r.DisplayName by r.Category into g
+                            select new ResourcesViewModel
+                            {
+                                Category = g.Key,
+                                Resources = g.ToList()
+                            }).ToList();
+
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public PermissionsViewModel GetUserPermissions(string uniqueName)
+        {
+            try
+            {
+                var data = (from up in _context.UsersPermissions
+                            join r in _context.Resources on up.ResourceID equals r.ResourceID
+                            where up.UniqueName == uniqueName
+                            orderby r.CategorySequence, r.ResourceSequence
+                            select new Permission
+                            {
+                                category = r.Category,
+                                resource = r.DisplayName
+                            }).ToList();
+
+                var permissions = new PermissionsViewModel()
+                {
+                    permissions = data
+                };
+
+                return permissions;
             }
             catch (Exception)
             {

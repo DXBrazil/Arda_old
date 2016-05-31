@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace Arda.Permissions.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +27,7 @@ namespace Arda.Permissions.Migrations
                 columns: table => new
                 {
                     UniqueName = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -40,9 +41,11 @@ namespace Arda.Permissions.Migrations
                     ResourceID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Category = table.Column<string>(nullable: false),
+                    CategorySequence = table.Column<int>(nullable: false),
                     DisplayName = table.Column<string>(nullable: false),
                     ModuleID = table.Column<int>(nullable: false),
-                    ResourceName = table.Column<string>(nullable: false)
+                    ResourceName = table.Column<string>(nullable: false),
+                    ResourceSequence = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

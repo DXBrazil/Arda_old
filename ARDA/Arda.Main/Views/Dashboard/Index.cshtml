@@ -32,7 +32,7 @@
     else if (userStatus == 2)
     {
         //Page for Situation 2: Permissions_Granted-->
-        var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getadminuserstatus", user, string.Empty).Result;
+        var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/verifyifuseradmin", user, string.Empty).Result;
         if (canApproveUsers)
         {
             int numberUsersToApprove = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getnumberofuserstoapprove", user, string.Empty).Result;

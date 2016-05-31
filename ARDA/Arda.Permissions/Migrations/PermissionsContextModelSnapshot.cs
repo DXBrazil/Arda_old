@@ -40,6 +40,8 @@ namespace Arda.Permissions.Migrations
                     b.Property<string>("Category")
                         .IsRequired();
 
+                    b.Property<int>("CategorySequence");
+
                     b.Property<string>("DisplayName")
                         .IsRequired();
 
@@ -47,6 +49,8 @@ namespace Arda.Permissions.Migrations
 
                     b.Property<string>("ResourceName")
                         .IsRequired();
+
+                    b.Property<int>("ResourceSequence");
 
                     b.HasKey("ResourceID");
 
@@ -56,6 +60,9 @@ namespace Arda.Permissions.Migrations
             modelBuilder.Entity("Arda.Permissions.Models.User", b =>
                 {
                     b.Property<string>("UniqueName");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<int>("Status");
 

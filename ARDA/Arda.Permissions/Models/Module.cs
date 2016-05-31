@@ -20,7 +20,7 @@ namespace Arda.Permissions.Models
 
         [Required]
         public string ModuleName { get; set; }
-
+        
 
         public virtual ICollection<Resource> Resources { get; set; }
     }
