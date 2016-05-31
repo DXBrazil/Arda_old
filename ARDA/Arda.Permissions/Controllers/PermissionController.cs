@@ -3,6 +3,9 @@ using Microsoft.AspNet.Mvc;
 using Arda.Permissions.Interfaces;
 using System.Net.Http;
 using System.Net;
+using Arda.Common.ViewModels;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Arda.Permissions.Controllers
 {
@@ -18,14 +21,14 @@ namespace Arda.Permissions.Controllers
 
         [HttpPost]
         [Route("setuserpermissionsandcode")]
-        public IActionResult SetUserPermissionsAndCode()
+        public IActionResult SetUserPermissionsAndCode(string name)
         {
             var uniqueName = HttpContext.Request.Headers["unique_name"].ToString();
             var code = HttpContext.Request.Headers["code"].ToString();
 
             try
             {
-                if (uniqueName != null && code != null)
+                if (uniqueName != null && name != null && code != null)
                 {
                     Models.User responseUser = null;
                     bool responseEmail = false;
@@ -33,7 +36,7 @@ namespace Arda.Permissions.Controllers
                     bool UserExists = _permission.VerifyIfUserIsInUserPermissionsDatabase(uniqueName);
                     if (!UserExists)
                     {
-                        responseUser = _permission.CreateNewUserAndSetInitialPermissions(uniqueName);
+                        responseUser = _permission.CreateNewUserAndSetInitialPermissions(uniqueName, name);
                         responseEmail = _permission.SendNotificationOfNewUserByEmail(uniqueName);
                         if (responseUser == null || responseEmail == false)
                         {
@@ -78,13 +81,17 @@ namespace Arda.Permissions.Controllers
 
         [HttpPut]
         [Route("updateuserpermissions")]
-        public HttpResponseMessage UpdateUserPermissions(string uniqueName, string userPermissionsSerialized)
+        public HttpResponseMessage UpdateUserPermissions(string uniqueName)
         {
             try
             {
-                if (uniqueName != null && userPermissionsSerialized != null)
+                var reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                var userPermissionsSerialized = reader.ReadToEnd();
+                var userPermissions = JsonConvert.DeserializeObject<PermissionsViewModel>(userPermissionsSerialized);
+
+                if (uniqueName != null && userPermissions != null)
                 {
-                    if (_permission.SetUserPermissionsAndCode(uniqueName, userPermissionsSerialized))
+                    if (_permission.UpdateUserPermissions(uniqueName, userPermissions))
                     {
                         return new HttpResponseMessage(HttpStatusCode.OK);
                     }
@@ -153,6 +160,20 @@ namespace Arda.Permissions.Controllers
             catch (Exception)
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("getallpermissions")]
+        public IEnumerable<ResourcesViewModel> GetAllPermissions()
+        {
+            try
+            {
+                return _permission.GetAllPermissions();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

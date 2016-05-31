@@ -35,6 +35,7 @@ namespace Arda.Common.Utils
                 var client = new HttpClient();
                 var request = new HttpRequestMessage(method, url);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
                 request.Headers.Add("unique_name", uniqueName);
                 request.Headers.Add("code", code);
 
@@ -92,17 +93,24 @@ namespace Arda.Common.Utils
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
+<<<<<<< HEAD
                     //return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+=======
+>>>>>>> 86a01b8f0496bf79e46f9a00a1c391fcb33c27d2
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
                 {
+<<<<<<< HEAD
                     //return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
+=======
+>>>>>>> 86a01b8f0496bf79e46f9a00a1c391fcb33c27d2
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception)
             {
+<<<<<<< HEAD
                 //return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }

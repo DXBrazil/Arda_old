@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Arda.Permissions.Interfaces;
+using Arda.Common.ViewModels;
 
 namespace Arda.Permissions.Controllers
 {
@@ -37,6 +38,8 @@ namespace Arda.Permissions.Controllers
             }
             catch (Exception ex)
             {
+                //Cache doesn't exists
+                //TODO: Returns a message requiring to login again
                 throw ex;
             }
         }
@@ -62,8 +65,8 @@ namespace Arda.Permissions.Controllers
         }
 
         [HttpGet]
-        [Route("getadminuserstatus")]
-        public bool GetAdminUserStatus()
+        [Route("verifyifuseradmin")]
+        public bool VerifyIfUserAdmin()
         {
             var uniqueName = HttpContext.Request.Headers["unique_name"].ToString();
 
@@ -71,7 +74,7 @@ namespace Arda.Permissions.Controllers
             {
                 if (uniqueName != null)
                 {
-                    return _permission.GetAdminUserStatus(uniqueName);
+                    return _permission.VerifyIfUserAdmin(uniqueName);
                 }
                 return false;
             }
@@ -94,5 +97,34 @@ namespace Arda.Permissions.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        [Route("getpendingusers")]
+        public IEnumerable<PendingUsersViewModel> GetPendingUsers()
+        {
+            try
+            {
+                return _permission.GetPendingUsers();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("getuserpermissions")]
+        public PermissionsViewModel GetUserPermissions(string uniqueName)
+        {
+            try
+            {
+                return _permission.GetUserPermissions(uniqueName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

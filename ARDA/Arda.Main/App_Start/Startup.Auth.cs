@@ -83,7 +83,7 @@ namespace Arda.Main
             var name = claims.FirstOrDefault(claim => claim.Type == "name").Value;
             var uniqueName = claims.FirstOrDefault(claim => claim.Type == "unique_name").Value;
 
-            await Util.ConnectToRemoteService(HttpMethod.Post, Util.PermissionsURL + "api/permission/setuserpermissionsandcode", uniqueName, code);
+            await Util.ConnectToRemoteService(HttpMethod.Post, Util.PermissionsURL + "api/permission/setuserpermissionsandcode?name=" + name, uniqueName, code);
         }
 
         private async Task AcquireTokenForMicrosoftGraph(AuthorizationCodeReceivedContext context)

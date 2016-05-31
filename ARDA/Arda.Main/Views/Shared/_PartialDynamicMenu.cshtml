@@ -19,7 +19,7 @@
                     var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusermenu", user, string.Empty).Result;
                     foreach (var item in menuItems)
                     {
-                        //break;
+                        @*//break;
                         if (item.Items.Count == 1)
                         {
                             var displayLink = item.Items[0].Item1;
@@ -30,7 +30,7 @@
                             </li>
                         }
                         else
-                        {
+                        {*@
                             <li class="nav-item dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@item.Category <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
@@ -45,7 +45,7 @@
                                     }
                                 </ul>
                             </li>
-                        }
+                        //}
                     }
                 }
             </ul>
