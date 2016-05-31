@@ -22,7 +22,17 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        public async Task<IActionResult> ReviewPermissions()
+
+        #region Views
+
+        //All Users
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        //Review:
+        public async Task<IActionResult> Review()
         {
 
             AuthenticationResult result = null;
@@ -44,12 +54,11 @@ namespace Arda.Main.Controllers
             }
         }
 
-        public IActionResult ListBannedUsers()
-        {
-            return View();
-        }
+        #endregion
 
+        #region MyRegion
 
+        #endregion
 
         public async Task<List<PendingUsersViewModel>> PendingUsers()
         {
@@ -63,31 +72,6 @@ namespace Arda.Main.Controllers
             var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
             var items = await Util.ConnectToRemoteService<List<ResourcesViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/permission/getallpermissions", uniqueName, "");
             return items;
-        }
-
-        public async Task<HttpResponseMessage> UpdatePermissions(string user)
-        {
-
-            var reader = new StreamReader(HttpContext.Request.Body,System.Text.Encoding.UTF8);
-            var requestFromAJAX = reader.ReadToEnd();
-            //Check object integrity:
-            var obj = JsonConvert.DeserializeObject<PermissionsViewModel>(requestFromAJAX);
-
-            if (user != null && obj!=null)
-            {
-                var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                var response = await Util.ConnectToRemoteService<PermissionsViewModel>(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserpermissions?uniqueName=" + user, uniqueName, "", obj);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                }
-            }
-            return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
 
         //public async Task<HttpResponseMessage> GetUserPermissions(string user)
@@ -108,6 +92,31 @@ namespace Arda.Main.Controllers
         //    }
         //    return new HttpResponseMessage(HttpStatusCode.BadRequest);
         //}
+
+        public async Task<HttpResponseMessage> UpdatePermissions(string user)
+        {
+
+            var reader = new StreamReader(HttpContext.Request.Body, System.Text.Encoding.UTF8);
+            var requestFromAJAX = reader.ReadToEnd();
+            //Check object integrity:
+            var obj = JsonConvert.DeserializeObject<PermissionsViewModel>(requestFromAJAX);
+
+            if (user != null && obj != null)
+            {
+                var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                var response = await Util.ConnectToRemoteService<PermissionsViewModel>(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserpermissions?uniqueName=" + user, uniqueName, "", obj);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
 
 
 
