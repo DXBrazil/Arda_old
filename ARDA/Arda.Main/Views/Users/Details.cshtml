@@ -147,6 +147,7 @@
 
     function callbackGetUserPermissions(data) {
         data = data.permissions;
+        console.log(data);
         var items = $('.permissions-item');
         for (var i = 0; i < data.length; i++) {
             var cat = data[i].category;
