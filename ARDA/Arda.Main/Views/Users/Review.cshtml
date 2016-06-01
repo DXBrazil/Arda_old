@@ -44,10 +44,12 @@
 
                <div id="PermissionsList"></div>
 
-               <div class="row">
-                   <button id="btnClean" type="button" class="btn">Clean</button>
-                   <button id="btnUpdate" type="button" class="btn">Update Permissions</button>
-               </div>
+               <footer class="col-lg-12 col-md-12 col-xs-12 panel-footer-permissions">
+                   <button id="btnUpdate" type="button" class="btn btn-default">Update Permissions</button>
+                    <button id="btnClean" type="button" class="btn btn-primary">Clean</button>
+                  
+                   <div class="clearfix"></div>
+               </footer>
 
            </div>
 
@@ -204,7 +206,7 @@
                             var category = data[i].Category;
                             var resources = data[i].Resources;
 
-                            var item = $('<div class="col-lg-4 col-md-4 cold-xs-12">');
+                            var item = $('<div class="col-lg-4 col-md-4 cold-xs-12 panel-permissions-item">');
                             var title = $('<h2 class="title-permission-list">').text(category);
                             item.append(title);
 
@@ -212,10 +214,8 @@
                             for (var j = 0; j < resources.length; j++) {
                                 var res = resources[j];
                                 var divControl = '<div class="input-group permission-group">' +
-                                                    '<span class="input-group-addon">' +
-                                                        '<input type="checkbox" disabled class="permissions-item" category="' + category + '" resource="' + res + '">' +
-                                                    '</span>' +
-                                                    '<input type="text" class="form-control" readonly value="' + res + '">' +
+                                                    '<input type="checkbox" class="permissions-item" id="permission_' + j + category + '" category="' + category + '" resource="' + res + '">' +
+                                                    '<label for="permission_' + j + category +'">' + res + '</label>' +
                                                  '</div>';
                                 divControls.append(divControl);
                             }
