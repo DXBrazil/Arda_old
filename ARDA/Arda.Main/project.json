@@ -6,7 +6,6 @@
 
   "dependencies": {
     "EntityFramework.Core": "7.0.0-rc1-update1",
-    "ImageProcessor": "2.3.3",
     "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.OpenIdConnect": "1.0.0-rc1-final",

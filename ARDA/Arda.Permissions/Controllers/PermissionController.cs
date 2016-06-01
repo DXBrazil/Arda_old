@@ -135,6 +135,28 @@ namespace Arda.Permissions.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("deleteuser")]
+        public HttpResponseMessage DeleteUser(string uniqueName)
+        {
+            try
+            {
+                if (uniqueName != null)
+                {
+                    _permission.DeleteUser(uniqueName);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpGet]
         [Route("verifyuseraccesstoresource")]
         public HttpResponseMessage VerifyUserAccessToResource(string uniqueName, string module, string resource)

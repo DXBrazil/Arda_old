@@ -17,6 +17,8 @@ namespace Arda.Permissions.Interfaces
         // Delete an existing user permissions from the cache.
         void DeleteUserPermissions(string uniqueName);
 
+        void DeleteUser(string uniqueName);
+
         // Verify if user has authorization to specific resource.
         bool VerifyUserAccessToResource(string uniqueName, string module, string resource);
 
@@ -38,11 +40,14 @@ namespace Arda.Permissions.Interfaces
 
         int GetNumberOfUsersToApprove();
 
-        IEnumerable<PendingUsersViewModel> GetPendingUsers();
+        IEnumerable<UsersMainViewModel> GetPendingUsers();
 
         IEnumerable<ResourcesViewModel> GetAllPermissions();
 
         PermissionsViewModel GetUserPermissions(string uniqueName);
+
+        IEnumerable<UsersMainViewModel> GetUsers();
+
 
         void Seed();
     }

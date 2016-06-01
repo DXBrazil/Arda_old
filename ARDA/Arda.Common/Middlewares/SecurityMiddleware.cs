@@ -62,6 +62,7 @@ namespace Arda.Common.Middlewares
 
         private bool CheckUserPermissionToResource(string uniqueName, string module, string resource)
         {
+            //TODO: Refactor security:
             return true;
 
             //var client = new HttpClient();

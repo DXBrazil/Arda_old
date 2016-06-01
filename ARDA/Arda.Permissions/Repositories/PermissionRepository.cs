@@ -100,7 +100,14 @@ namespace Arda.Permissions.Repositories
                 }
                 //User:
                 var user = _context.Users.First(u => u.UniqueName == uniqueName);
-                user.Status = PermissionStatus.Permissions_Granted;
+                if (newUserPermissions.permissions.Count > 0)
+                {
+                    user.Status = PermissionStatus.Permissions_Granted;
+                }
+                else
+                {
+                    user.Status = PermissionStatus.Permissions_Denied;
+                }
 
                 _context.SaveChanges();
 
@@ -154,6 +161,32 @@ namespace Arda.Permissions.Repositories
             try
             {
                 _cache.Remove(uniqueName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void DeleteUser(string uniqueName)
+        {
+            try
+            {
+                //From Cache:
+                _cache.Remove(uniqueName);
+
+                //From Context:
+                var userPermissions = (from up in _context.UsersPermissions
+                                       where up.UniqueName == uniqueName
+                                       select up).ToList();
+
+                var user = (from u in _context.Users
+                            where u.UniqueName == uniqueName
+                            select u).First();
+
+                _context.UsersPermissions.RemoveRange(userPermissions);
+                _context.Users.Remove(user);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -374,16 +407,17 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<PendingUsersViewModel> GetPendingUsers()
+        public IEnumerable<UsersMainViewModel> GetPendingUsers()
         {
             try
             {
                 var data = from users in _context.Users
                            where users.Status == PermissionStatus.Waiting_Review
-                           select new PendingUsersViewModel
+                           select new UsersMainViewModel
                            {
-                               name = users.Name,
-                               email = users.UniqueName
+                               Name = users.Name,
+                               Email = users.UniqueName,
+                               Status = (int)users.Status
                            };
 
                 return data;
@@ -441,5 +475,27 @@ namespace Arda.Permissions.Repositories
                 throw;
             }
         }
+
+        public IEnumerable<UsersMainViewModel> GetUsers()
+        {
+            try
+            {
+                var data = from users in _context.Users
+                           select new UsersMainViewModel
+                           {
+                               Name = users.Name,
+                               Email = users.UniqueName,
+                               Status = (int)users.Status
+                           };
+
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

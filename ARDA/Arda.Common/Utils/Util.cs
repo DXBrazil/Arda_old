@@ -51,7 +51,7 @@ namespace Arda.Common.Utils
             }
         }
 
-        public static async Task<IActionResult> ConnectToRemoteService(HttpMethod method, string url, string uniqueName, string code)
+        public static async Task<HttpResponseMessage> ConnectToRemoteService(HttpMethod method, string url, string uniqueName, string code)
         {
             try
             {
@@ -64,16 +64,16 @@ namespace Arda.Common.Utils
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception)
             {
-                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
 

@@ -31,22 +31,10 @@ namespace Arda.Main.Controllers
             // Creating the final expected object to datatable
             SourceDataTablesFormat dataTablesSource = new SourceDataTablesFormat();
 
-            // Object to host raw data about fiscal years
-            List<FiscalYearMainViewModel> existentFiscalYears;
-
             try
             {
                 // Getting the response of remote service
-                var remoteServiceResponse = Util.ConnectToRemoteService<List<FiscalYearMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/list", uniqueName, "").Result;
-
-                // Transforming raw data to FiscalYearMainViewModel format 
-                existentFiscalYears = (from u in remoteServiceResponse
-                                       select new FiscalYearMainViewModel
-                                       {
-                                           FiscalYearID = u.FiscalYearID,
-                                           FullNumericFiscalYearMain = u.FullNumericFiscalYearMain,
-                                           TextualFiscalYearMain = u.TextualFiscalYearMain
-                                       }).ToList();
+                var existentFiscalYears = Util.ConnectToRemoteService<List<FiscalYearMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/list", uniqueName, "").Result;
 
                 // Mouting rows data
                 foreach (FiscalYearMainViewModel fy in existentFiscalYears)
