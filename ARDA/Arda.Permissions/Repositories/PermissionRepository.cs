@@ -170,9 +170,9 @@ namespace Arda.Permissions.Repositories
                 {
                     var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
 
-                    var perm = from p in permissions
-                               where p.Resource.Equals(resource) && p.Module.Equals(module)
-                               select p;
+                    var perm = (from p in permissions
+                                where p.Resource.ToLower().Equals(resource) && p.Module.ToLower().Equals(module)
+                                select p).First();
 
                     if (perm != null)
                     {
@@ -188,9 +188,16 @@ namespace Arda.Permissions.Repositories
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                if (ex.Message == "Sequence contains no elements")
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 
@@ -266,12 +273,6 @@ namespace Arda.Permissions.Repositories
                     Name = name,
                     Status = PermissionStatus.Waiting_Review,
                     UserPermissions = new List<UsersPermission>()
-                    {
-                        new UsersPermission()
-                        {
-                            ResourceID=1
-                        }
-                    }
                 };
 
                 _context.Users.Add(user);
@@ -345,7 +346,7 @@ namespace Arda.Permissions.Repositories
                 var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
                 var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
 
-                var permToReview = permissions.First(p => p.Module == "Users" && p.Resource == "ReviewPermissions");
+                var permToReview = permissions.First(p => p.Module == "Users" && p.Resource == "Review");
                 if (permToReview != null)
                 {
                     return true;

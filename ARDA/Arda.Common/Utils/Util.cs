@@ -132,7 +132,7 @@ namespace Arda.Common.Utils
             }
         }
 
-        public static async Task<Guid> GenerateNewGuid()
+        public static Guid GenerateNewGuid()
         {
             return Guid.NewGuid();
         }

@@ -62,23 +62,25 @@ namespace Arda.Common.Middlewares
 
         private bool CheckUserPermissionToResource(string uniqueName, string module, string resource)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(Util.PermissionsURL + "api/");
+            return true;
 
-            string url = client.BaseAddress + string.Format("permission/verifyuseraccesstoresource?uniquename={0}&module={1}&resource={2}", uniqueName, module, resource);
-            var response = client.GetAsync(url).Result;
+            //var client = new HttpClient();
+            //client.BaseAddress = new Uri(Util.PermissionsURL + "api/");
 
-            var bodySerialized = response.Content.ReadAsStringAsync().Result;
-            var bodyResponse = JsonConvert.DeserializeObject<HTTPBodyResponse>(bodySerialized);
+            //string url = client.BaseAddress + string.Format("permission/verifyuseraccesstoresource?uniquename={0}&module={1}&resource={2}", uniqueName, module, resource);
+            //var response = client.GetAsync(url).Result;
 
-            if (bodyResponse.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            //var bodySerialized = response.Content.ReadAsStringAsync().Result;
+            //var bodyResponse = JsonConvert.DeserializeObject<HTTPBodyResponse>(bodySerialized);
+
+            //if (bodyResponse.IsSuccessStatusCode)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
     }
 }

@@ -187,7 +187,7 @@ namespace Arda.Main.Controllers
         // Mounting fiscal year screen
         public IActionResult Add()
         {
-            ViewBag.Guid = Util.GenerateNewGuid().Result.ToString();
+            ViewBag.Guid = Util.GenerateNewGuid().ToString();
             return View();
         }
 
