@@ -8573,6 +8573,7 @@ body {
     font-size: 14px;
     color: #fff;
     line-height: 70px;
+    padding-left: 15px;
   }
     .navbar.navbar-arda .nav-item--signout a {
      margin-left: 15px;
