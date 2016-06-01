@@ -8569,14 +8569,16 @@ body {
     background-color: #2d89ef; }
   .navbar.navbar-arda .navbar-nav .nav-item + .nav-item {
     margin-left: 0; }
-  .navbar.navbar-arda .navbar-nav .nav-item--signout {
+  .navbar.navbar-arda .nav-item--signout {
     font-size: 14px;
     color: #fff;
     line-height: 70px;
   }
-    .navbar.navbar-arda .navbar-nav .nav-item--signout a {
-        float: right;
-    margin-left: 15px;
+    .navbar.navbar-arda .nav-item--signout a {
+     margin-left: 15px;
+     font-weight: bold;
+     font-size: 16px;
+     margin-left: 0;
     }
   .navbar.navbar-arda .nav {
     margin-bottom: 0;
@@ -8742,7 +8744,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 1rem;
+  padding: 2rem 0;
   background-color: #f4f5f7;
   text-align: center;
 }
