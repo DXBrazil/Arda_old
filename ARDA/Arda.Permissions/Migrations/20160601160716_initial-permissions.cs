@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace Arda.Permissions.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initialpermissions : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
