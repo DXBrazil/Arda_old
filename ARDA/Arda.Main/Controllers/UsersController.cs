@@ -58,14 +58,16 @@ namespace Arda.Main.Controllers
         }
 
         //User Details:
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(string userID)
         {
             try
             {
                 var result = await getAccessToken();
                 ViewBag.Token = result.AccessToken;
 
-                return View();
+                var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
+                return View(user);
             }
             catch (Exception)
             {
@@ -82,7 +84,9 @@ namespace Arda.Main.Controllers
                 var result = await getAccessToken();
                 ViewBag.Token = result.AccessToken;
 
-                return View();
+                var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
+                return View(user);
             }
             catch (Exception)
             {
@@ -106,16 +110,16 @@ namespace Arda.Main.Controllers
             try
             {
                 // Getting the response of remote service
-                var existentUsers = await Util.ConnectToRemoteService<List<UsersMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusers", uniqueName, "");
+                var existentUsers = await Util.ConnectToRemoteService<List<UserMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusers", uniqueName, "");
 
                 // Mouting rows data
-                foreach (UsersMainViewModel user in existentUsers)
+                foreach (UserMainViewModel user in existentUsers)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(user.Name.ToString());
                     dataRow.Add(user.Email.ToString());
                     dataRow.Add(getUserSituation(user.Status));
-                    dataRow.Add($"<a href='/user/details/{user.Email}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/user/edit/{user.Email}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a data-toggle='modal' data-target='#DeleteUserModal' onclick=\"ModalDeleteUser('{user.Email}','{user.Name}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<a href='/users/details?userID={user.Email}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/users/edit?userID={user.Email}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a data-toggle='modal' data-target='#DeleteUserModal' onclick=\"ModalDeleteUser('{user.Email}','{user.Name}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -135,10 +139,10 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var users = await Util.ConnectToRemoteService<List<UsersMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getpendingusers", uniqueName, "");
+                var users = await Util.ConnectToRemoteService<List<UserMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getpendingusers", uniqueName, "");
 
                 // Mouting rows data
-                foreach (UsersMainViewModel user in users)
+                foreach (UserMainViewModel user in users)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(user.Name.ToString());
@@ -175,34 +179,8 @@ namespace Arda.Main.Controllers
             return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
 
-
-        public async Task<List<ResourcesViewModel>> ResourceItems()
-        {
-            var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-            var items = await Util.ConnectToRemoteService<List<ResourcesViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/permission/getallpermissions", uniqueName, "");
-            return items;
-        }
-
-        //public async Task<HttpResponseMessage> GetUserPermissions(string user)
-        //{
-        //    if (user != null)
-        //    {
-        //        var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-        //        var response = await Util.ConnectToRemoteService<PermissionsViewModel>(HttpMethod.Get, Util.PermissionsURL + "/api/UserOperations/GetUserPermissions?uniqueName=" + user, uniqueName, "");
-
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            return new HttpResponseMessage(HttpStatusCode.OK);
-        //        }
-        //        else
-        //        {
-        //            return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        //        }
-        //    }
-        //    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-        //}
-
-        public async Task<HttpResponseMessage> UpdatePermissions(string user)
+        [HttpPut]
+        public async Task<HttpResponseMessage> Update(string user)
         {
 
             var reader = new StreamReader(HttpContext.Request.Body, System.Text.Encoding.UTF8);
@@ -225,6 +203,40 @@ namespace Arda.Main.Controllers
                 }
             }
             return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
+
+        public async Task<JsonResult> GetAllResources()
+        {
+            try
+            {
+                var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                var items = await Util.ConnectToRemoteService<List<ResourcesViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/permission/getallpermissions", uniqueName, "");
+                return Json(items);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<JsonResult> GetUserPermissions(string user)
+        {
+            if (user != null)
+            {
+                try
+                {
+                    var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                    var permissions = await Util.ConnectToRemoteService<PermissionsViewModel>(HttpMethod.Get, Util.PermissionsURL + "/api/UserOperations/GetUserPermissions?uniqueName=" + user, uniqueName, "");
+                    return Json(permissions);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }else
+            {
+                return null;
+            }
         }
 
         #endregion

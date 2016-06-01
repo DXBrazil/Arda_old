@@ -158,7 +158,7 @@
 
     function deleteUser() {
         //Delete user:
-        var userID = $('#userEmail').text();
+        var userID = $('#userEmail').val();
         var url = '/users/delete?user=' + userID;
         $.ajax({
             url: url,

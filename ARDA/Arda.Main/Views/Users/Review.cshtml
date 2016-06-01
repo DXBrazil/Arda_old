@@ -157,7 +157,7 @@
         //Get All Pending Users:
         getPendingUsers()
         //Get All Permissions:
-        $.getJSON('/users/ResourceItems', '', callbackGetResourceItems);
+        $.getJSON('/users/GetAllResources', '', callbackGetResourceItems);
     });
 
     function Initialize() {
@@ -349,12 +349,12 @@
         permissions += ']}';
 
         var user = $('#mail').text();
-        var url = '/users/UpdatePermissions?user=' + user;
+        var url = '/users/Update?user=' + user;
 
 
         $.ajax({
             url: url,
-            type: "POST",
+            type: "PUT",
             data: permissions,
             success: function (data, textStatus, jqXHR) {
                 if (data.IsSuccessStatusCode) {

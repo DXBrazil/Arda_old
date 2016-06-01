@@ -407,13 +407,13 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<UsersMainViewModel> GetPendingUsers()
+        public IEnumerable<UserMainViewModel> GetPendingUsers()
         {
             try
             {
                 var data = from users in _context.Users
                            where users.Status == PermissionStatus.Waiting_Review
-                           select new UsersMainViewModel
+                           select new UserMainViewModel
                            {
                                Name = users.Name,
                                Email = users.UniqueName,
@@ -476,12 +476,12 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<UsersMainViewModel> GetUsers()
+        public IEnumerable<UserMainViewModel> GetUsers()
         {
             try
             {
                 var data = from users in _context.Users
-                           select new UsersMainViewModel
+                           select new UserMainViewModel
                            {
                                Name = users.Name,
                                Email = users.UniqueName,
@@ -496,6 +496,25 @@ namespace Arda.Permissions.Repositories
             }
         }
 
+        public UserMainViewModel GetUser(string uniqueName)
+        {
+            try
+            {
+                var data = (from user in _context.Users
+                           where user.UniqueName==uniqueName
+                           select new UserMainViewModel
+                           {
+                               Name = user.Name,
+                               Email = user.UniqueName,
+                               Status = (int)user.Status
+                           }).First();
 
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
