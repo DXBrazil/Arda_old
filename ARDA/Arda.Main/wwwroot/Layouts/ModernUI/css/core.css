@@ -8569,6 +8569,15 @@ body {
     background-color: #2d89ef; }
   .navbar.navbar-arda .navbar-nav .nav-item + .nav-item {
     margin-left: 0; }
+  .navbar.navbar-arda .navbar-nav .nav-item--signout {
+    font-size: 14px;
+    color: #fff;
+    line-height: 70px;
+  }
+    .navbar.navbar-arda .navbar-nav .nav-item--signout a {
+        float: right;
+    margin-left: 15px;
+    }
   .navbar.navbar-arda .nav {
     margin-bottom: 0;
     padding-left: 0;
@@ -16471,7 +16480,9 @@ button.close {
 
 .ctn-header-dashboard {
   padding: 50px 0 45px;
-  background-color: #f4f5f7; }
+  background-color: #f4f5f7;
+  margin-bottom: 30px;
+}
   .ctn-header-dashboard h2 {
     margin-top: 0;
     line-height: 50px; }
@@ -16723,4 +16734,8 @@ welcome-picture {
 
                 .panel-permissions-item {
                     margin-bottom: 20px;
+                }
+
+                .panel-fiscal-yers {
+                    border-right:1px solid #efefef;
                 }

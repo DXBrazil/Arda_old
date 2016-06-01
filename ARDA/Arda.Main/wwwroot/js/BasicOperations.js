@@ -4,7 +4,10 @@ $(function ($) {
     $("#table-fiscalyears").DataTable({
         "sAjaxSource": "/FiscalYear/ListAllFiscalYears",
         "columnDefs": [
-            { "width": "10%", "targets": 2 }
+            {
+                "width": "10%", "targets": 2,
+                "orderable": false
+            }
         ]
     });
 

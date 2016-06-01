@@ -52,8 +52,19 @@
         </div>
 
     </div>
+    <div class="pull-right">
+        <ul class="nav navbar-nav">
+            <li class="nav-item nav-item--signout">
+                Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong>
+                <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Logout</a>
+            </li>
+        </ul>
+    </div>
+
                     }
                     else
                     {
-                        <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
+                        <div class="pull-right">
+                            <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
+                        </div>
                     }
