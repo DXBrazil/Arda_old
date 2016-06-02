@@ -19,7 +19,7 @@ namespace Arda.Kanban.Interfaces
         List<MetricMainViewModel> GetAllMetrics();
 
         // Return a specific metric by ID.
-        Metric GetMetricByID(Guid id);
+        MetricMainViewModel GetMetricByID(Guid id);
 
         // Delete a metric based on ID
         bool DeleteMetricByID(Guid id);

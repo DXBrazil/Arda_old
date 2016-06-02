@@ -82,16 +82,7 @@ namespace Arda.Kanban.Controllers
 
                 if (metric != null)
                 {
-                    return new MetricMainViewModel()
-                    {
-                        MetricID = metric.MetricID,
-                        MetricCategory = metric.MetricCategory,
-                        MetricName = metric.MetricName,
-                        Description = metric.Description,
-                        FiscalYearID = metric.FiscalYear.FiscalYearID,
-                        FullNumericFiscalYear = metric.FiscalYear.FullNumericFiscalYear,
-                        TextualFiscalYear = metric.FiscalYear.TextualFiscalYear
-                    };
+                    return metric;
                 }
                 else
                 {

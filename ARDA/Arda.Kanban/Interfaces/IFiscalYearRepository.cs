@@ -19,7 +19,7 @@ namespace Arda.Kanban.Interfaces
         List<FiscalYearMainViewModel> GetAllFiscalYears();
 
         // Return a specific fiscal year by ID.
-        FiscalYear GetFiscalYearByID(Guid id);
+        FiscalYearMainViewModel GetFiscalYearByID(Guid id);
 
         // Delete a fiscal year based on ID
         bool DeleteFiscalYearByID(Guid id);

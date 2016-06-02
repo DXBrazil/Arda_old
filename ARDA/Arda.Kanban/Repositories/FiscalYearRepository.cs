@@ -47,7 +47,7 @@ namespace Arda.Kanban.Repositories
             {
                 return false;
             }
-        } 
+        }
 
         // Return a 'numberOfOccurencies' to controller.
         public List<FiscalYearMainViewModel> GetAllFiscalYears()
@@ -56,13 +56,13 @@ namespace Arda.Kanban.Repositories
             {
                 //_context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).ToList();
                 var response = (from f in _context.FiscalYears
-                               orderby f.FullNumericFiscalYear
-                               select new FiscalYearMainViewModel
-                               {
-                                   FiscalYearID = f.FiscalYearID,
-                                   FullNumericFiscalYearMain = f.FullNumericFiscalYear,
-                                   TextualFiscalYearMain = f.TextualFiscalYear
-                               }).ToList();
+                                orderby f.FullNumericFiscalYear
+                                select new FiscalYearMainViewModel
+                                {
+                                    FiscalYearID = f.FiscalYearID,
+                                    FullNumericFiscalYearMain = f.FullNumericFiscalYear,
+                                    TextualFiscalYearMain = f.TextualFiscalYear
+                                }).ToList();
 
                 if (response != null)
                 {
@@ -80,15 +80,22 @@ namespace Arda.Kanban.Repositories
         }
 
         // Return fiscal year based on ID
-        public FiscalYear GetFiscalYearByID(Guid id)
+        public FiscalYearMainViewModel GetFiscalYearByID(Guid id)
         {
             try
             {
                 var response = _context.FiscalYears.Where(fy => fy.FiscalYearID.Equals(id)).SingleOrDefault();
 
-                if (response != null)
+                var fiscalYear = new FiscalYearMainViewModel()
                 {
-                    return response;
+                    FiscalYearID = response.FiscalYearID,
+                    TextualFiscalYearMain = response.TextualFiscalYear,
+                    FullNumericFiscalYearMain = response.FullNumericFiscalYear
+                };
+
+                if (fiscalYear != null)
+                {
+                    return fiscalYear;
                 }
                 else
                 {
@@ -108,7 +115,7 @@ namespace Arda.Kanban.Repositories
             {
                 var fiscalYearToBeUpdated = _context.FiscalYears.SingleOrDefault(fy => fy.FiscalYearID.Equals(fiscalyear.FiscalYearID));
 
-                if(fiscalYearToBeUpdated != null)
+                if (fiscalYearToBeUpdated != null)
                 {
                     // Update informations of object
                     fiscalYearToBeUpdated.FullNumericFiscalYear = fiscalyear.FullNumericFiscalYearMain;

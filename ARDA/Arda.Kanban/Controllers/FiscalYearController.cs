@@ -21,7 +21,7 @@ namespace Arda.Kanban.Controllers
         {
             _repository = repository;
         }
-         
+
         [HttpPost]
         [Route("addfiscalyear")]
         public HttpResponseMessage Add()
@@ -81,13 +81,9 @@ namespace Arda.Kanban.Controllers
             {
                 var fiscalYear = _repository.GetFiscalYearByID(id);
 
-                if(fiscalYear != null)
+                if (fiscalYear != null)
                 {
-                    return new FiscalYearMainViewModel() {
-                         FiscalYearID = fiscalYear.FiscalYearID,
-                         TextualFiscalYearMain = fiscalYear.TextualFiscalYear,
-                         FullNumericFiscalYearMain = fiscalYear.FullNumericFiscalYear
-                    };
+                    return fiscalYear;
                 }
                 else
                 {
@@ -113,7 +109,7 @@ namespace Arda.Kanban.Controllers
                 // Calling update
                 var fiscalyear = _repository.EditFiscalYearByID(fiscalYear);
 
-                if(fiscalyear)
+                if (fiscalyear)
                 {
                     return new HttpStatusCodeResult((int)HttpStatusCode.OK);
                 }
