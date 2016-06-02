@@ -16453,8 +16453,41 @@ button.close {
 .cover {
   height: 60vh;
   margin-bottom: 30px;
+  padding: 10% 0;
   display: table;
-  width: 100%; }
+  width: 100%; 
+  background: url(../img/cover.jpg) center no-repeat;
+  background-size: cover;
+  position: relative;
+}
+    .cover figure {
+        position: relative;
+        z-index: 2;
+    }
+
+.cover:before{
+        width: 100%;
+    height: 62.6vh;
+    background: rgba(0,0,0,.6);
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0;
+}
+
+.cover-brand {
+    width: 60%;
+    display: block;
+    margin: 0 auto;
+}
+
+.cover-legend {
+    text-align:center;
+    font-style: italic;
+    font-size: 2rem;
+    color: #fff;
+    margin: 35px 0;
+}
 
 .ctn-external-content {
   position: relative; }
@@ -16526,42 +16559,41 @@ button.close {
 .heading-title,
 .heading-subtitle {
   margin: 30px 0;
-  font-weight: 600; }
+  font-weight: 400; }
+
+.heading-title {
+    font-size: 3rem;
+}
 
 .aside-outof {
   margin-top: 10px; }
 
 .ctn-static-description p {
-  font-size: 1rem;
-  color: #1d1d1d;
-  line-height: 1.2rem; }
+  
+  color: #2f2f2f;
+      font-size: 1rem;
+    
+    line-height: 2rem;}
 
 .list-features {
   margin: 0;
   padding: 0;
   list-style: none; }
   .list-features li {
-    margin: 15px 0;
+    margin: 25px 0;
     position: relative;
-    padding-left: 25px; }
-    .list-features li:before {
-      content: "\e603";
-      font-family: 'icomoon';
-      speak: none;
-      font-style: normal;
-      font-weight: normal;
-      font-variant: normal;
-      text-transform: none;
-      line-height: 1;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      display: block;
-      transform: rotate(90deg);
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      left: 0;
-      top: 3px; }
+  }
+
+    .list-features li .fa {
+        margin-right: 25px;
+    }
+
+    .landing-section {
+        padding: 70px 0;
+    } 
+    .landing-section--color {
+        background-color: #F2F2F2;
+    }
 
 .dashboard-panel {
   border-right: 2px solid #f4f5f7;
@@ -16741,4 +16773,23 @@ welcome-picture {
 
                 .panel-fiscal-yers {
                     border-right:1px solid #efefef;
+                }
+
+                .navbar.navbar-landing li a {
+                    text-align: center;
+                    font-family: 'Open Sans', sans-serif;
+                    color: #fff;
+                    font-size: 1.5rem;
+                }
+
+                .navbar-landing-scrolled {
+                    background-color: #fff;
+                }
+
+                .navbar.navbar-landing.navbar-landing-scrolled li a {
+                    color: #2d89ef;
+                }
+
+                .navbar.navbar-landing{
+                    padding: 10px 0;
                 }

@@ -403,3 +403,32 @@ function DeleteFiscalYear(fiscalYearID) {
         }
     });
 }
+
+
+$(function () {
+    $('a[href*="#"]:not([href="#"])').click(function () {
+        alert("entrou aqui");
+        if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
+            var e = $(this.hash);
+            if (e = e.length ? e : $("[name=" + this.hash.slice(1) + "]"), e.length) return $("html, body").animate({
+                scrollTop: e.offset().top
+            }, 1e3), !1
+        }
+    })
+});
+
+$(window).scroll(function () {
+    var height = $(window).scrollTop();
+    var some_number = 70;
+    header = $(".navbar-landing");
+
+    if (header.hasClass("navbar-landing-scrolled")) {
+        if (height < some_number) {
+            header.removeClass("navbar-landing-scrolled")
+        }
+    } else {
+        if (height > some_number) {
+            header.addClass("navbar-landing-scrolled")
+        }
+    }
+});

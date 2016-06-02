@@ -16,25 +16,48 @@
 <body>
 
     <main class="main">
-        <header class="navbar navbar-arda navbar-default">
-            <nav class="container-fluid">
-                @if (User.Identity.IsAuthenticated)
-                {
+        @if (User.Identity.IsAuthenticated) {
+            <header class="navbar navbar-arda navbar-default">
+                <nav class="container-fluid">
                     <a asp-controller="Dashboard" asp-action="Index" class="navbar-brand">
                         <strong>Arda</strong> Management Tool
                     </a>
-                }
-                else
-                {
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand">
-                        <strong>Arda</strong> Management Tool
-                    </a>
-                }
 
-                @await Html.PartialAsync("_PartialDynamicMenu")
+                    @await Html.PartialAsync("_PartialDynamicMenu")
 
-            </nav>
-        </header>
+                </nav>
+            </header>
+        }
+        else
+        {
+            
+            <header class="navbar navbar-landing navbar-fixed-top">
+                <nav class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav" style="width: 100%;text-align: center;">
+                            <li style="display: inline-block !important;float: none !important;"><a href="#">Home</a></li>
+                            <li style="display: inline-block !important;float: none !important;"><a href="#about">About</a></li>
+                            <li style="display: inline-block !important;float: none !important;"><a href="#getsupport">Get Support</a></li>
+                            <li style="display: inline-block !important;float: none !important;"><a href="#howto">How to</a></li>
+                            <li style="display: inline-block !important;float: none !important;"><a href="#overview">Overview</a></li>
+                            <li style="display: inline-block !important;float: none !important;"><a href="#collaboration">Collaboration</a></li>
+                            <li style="display: inline-block !important;float: none !important;"><a asp-controller="Account" asp-action="SignIn"><i class="icon-user"></i></a></li>
+                        </ul>
+                        
+                    </div>
+                </nav>
+            </header>
+
+        }
+
         @RenderBody()
     </main>
 
@@ -50,8 +73,8 @@
                             &copy; Microsoft @DateTime.Now.Year
                         </span>
                         <a asp-controller="Home" asp-action="About" class="footer-credits-links">About</a>
-                        <a asp-controller="Home" asp-action="Support" class="footer-credits-links">Support</a>
-                        <a href="http://github.com/microsoft/arda" class="footer-credits-links">Github</a>
+                        <a asp-controller="Home" asp-action="GetSupport" class="footer-credits-links"><i class="fa fa-life-ring" aria-hidden="true"></i> Get Support</a>
+                        <a href="http://github.com/microsoft/arda" target="_blank" class="footer-credits-links"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
 
                     </div>
                 </div>
