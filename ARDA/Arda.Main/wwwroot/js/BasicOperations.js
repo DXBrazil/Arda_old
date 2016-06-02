@@ -250,6 +250,68 @@ $(function ($) {
             });
         }
     });
+
+
+
+    $("#form-add-metric").validate({
+        rules: {
+            MetricID: "required",
+            FiscalYearID: "required",
+            MetricCategory: "required",
+            MetricName: "required",
+            Description: "required"
+        },
+        messages: {
+            MetricID: "Please, inform the Metric code.",
+            FiscalYearID: "Please, select a fiscal year.",
+            MetricCategory: "Please, type or choose a category.",
+            MetricName: "Please, type a name.",
+            Description: "Please, type a description."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            DisableMetricFields();
+            $("#btnAdd").text("Saving the new metric...");
+
+            $.ajax({
+                url: "/Metric/AddMetric",
+                type: "POST",
+                data: $(form).serialize()
+            }).done(function (data) {
+                if (data.IsSuccessStatusCode) {
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The metric has been added into Arda.</div>");
+                    $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    //EnableFiscalYearFields();
+
+                    RedirectIn(3000, "/Metric/Index");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableFiscalYearFields();
+                }
+            }).fail(function (e, f) {
+                $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                EnableMetricFields();
+            });
+        }
+    });
 });
 
 // General functions
@@ -378,6 +440,27 @@ function EnableFiscalYearFields()
     $("#fynumber").removeAttr("disabled");
     $("#btnUpdate").removeAttr("disabled", "disabled");
 }
+
+function DisableMetricFields() {
+    $(".MetricID").attr("disabled", "disabled");
+    $(".FiscalYearID").attr("disabled", "disabled");
+    $(".MetricCategory").attr("disabled", "disabled");
+    $(".MetricName").attr("disabled", "disabled");
+    $(".Description").attr("disabled", "disabled");
+    $("#btnAdd").attr("disabled", "disabled");
+    $("#btnUpdate").attr("disabled", "disabled");
+}
+
+function EnableMetricFields() {
+    $(".MetricID").removeAttr("disabled");
+    $(".FiscalYearID").removeAttr("disabled");
+    $(".MetricCategory").removeAttr("disabled");
+    $(".MetricName").removeAttr("disabled");
+    $(".Description").removeAttr("disabled");
+    $("#btnAdd").removeAttr("disabled", "disabled");
+    $("#btnUpdate").removeAttr("disabled", "disabled");
+}
+
 
 function RedirectIn(delay, url)
 {
