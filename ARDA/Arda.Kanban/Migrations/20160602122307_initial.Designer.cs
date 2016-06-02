@@ -8,8 +8,8 @@ using Arda.Kanban.Models;
 namespace Arda.Kanban.Migrations
 {
     [DbContext(typeof(KanbanContext))]
-    [Migration("20160601160827_initial-kanban")]
-    partial class initialkanban
+    [Migration("20160602122307_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,34 @@ namespace Arda.Kanban.Migrations
                     b.HasKey("FiscalYearID");
 
                     b.HasAnnotation("Relational:TableName", "FiscalYears");
+                });
+
+            modelBuilder.Entity("Arda.Kanban.Models.Metric", b =>
+                {
+                    b.Property<Guid>("MetricID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<Guid?>("FiscalYearFiscalYearID");
+
+                    b.Property<string>("MetricCategory")
+                        .IsRequired();
+
+                    b.Property<string>("MetricName")
+                        .IsRequired();
+
+                    b.HasKey("MetricID");
+
+                    b.HasAnnotation("Relational:TableName", "Metrics");
+                });
+
+            modelBuilder.Entity("Arda.Kanban.Models.Metric", b =>
+                {
+                    b.HasOne("Arda.Kanban.Models.FiscalYear")
+                        .WithMany()
+                        .HasForeignKey("FiscalYearFiscalYearID");
                 });
         }
     }

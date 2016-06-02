@@ -30,6 +30,34 @@ namespace Arda.Kanban.Migrations
 
                     b.HasAnnotation("Relational:TableName", "FiscalYears");
                 });
+
+            modelBuilder.Entity("Arda.Kanban.Models.Metric", b =>
+                {
+                    b.Property<Guid>("MetricID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<Guid?>("FiscalYearFiscalYearID");
+
+                    b.Property<string>("MetricCategory")
+                        .IsRequired();
+
+                    b.Property<string>("MetricName")
+                        .IsRequired();
+
+                    b.HasKey("MetricID");
+
+                    b.HasAnnotation("Relational:TableName", "Metrics");
+                });
+
+            modelBuilder.Entity("Arda.Kanban.Models.Metric", b =>
+                {
+                    b.HasOne("Arda.Kanban.Models.FiscalYear")
+                        .WithMany()
+                        .HasForeignKey("FiscalYearFiscalYearID");
+                });
         }
     }
 }

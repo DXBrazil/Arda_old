@@ -7,20 +7,23 @@ using System.Threading.Tasks;
 
 namespace Arda.Kanban.Models
 {
-    [Table("FiscalYears")]
-    public class FiscalYear
+    [Table("Metrics")]
+    public class Metric
     {
         [Key]
         [Required]
-        public Guid FiscalYearID { get; set; }
+        public Guid MetricID { get; set; }
 
         [Required]
-        public int FullNumericFiscalYear { get; set; }
+        public string MetricCategory { get; set; }
 
         [Required]
-        public string TextualFiscalYear { get; set; }
+        public string MetricName { get; set; }
+
+        [Required]
+        public string Description { get; set; }
 
 
-        public virtual ICollection<Metric> Metrics { get; set; }
+        public virtual FiscalYear FiscalYear { get; set; }
     }
 }
