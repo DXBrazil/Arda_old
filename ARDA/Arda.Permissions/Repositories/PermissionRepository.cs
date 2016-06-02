@@ -54,7 +54,7 @@ namespace Arda.Permissions.Repositories
                                        join up in _context.UsersPermissions on u.UniqueName equals up.UniqueName
                                        join r in _context.Resources on up.ResourceID equals r.ResourceID
                                        join m in _context.Modules on r.ModuleID equals m.ModuleID
-                                       where u.UniqueName == uniqueName
+                                       where up.UniqueName == uniqueName && r.ResourceSequence > 0
                                        orderby r.CategorySequence, r.ResourceSequence
                                        select new PermissionsToBeCachedViewModel
                                        {
@@ -128,7 +128,7 @@ namespace Arda.Permissions.Repositories
                 var userPermissions = (from up in _context.UsersPermissions
                                        join r in _context.Resources on up.ResourceID equals r.ResourceID
                                        join m in _context.Modules on r.ModuleID equals m.ModuleID
-                                       where up.UniqueName == uniqueName
+                                       where up.UniqueName == uniqueName && r.ResourceSequence > 0
                                        orderby r.CategorySequence, r.ResourceSequence
                                        select new PermissionsToBeCachedViewModel
                                        {

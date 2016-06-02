@@ -28,7 +28,7 @@ namespace Arda.Common.Middlewares
             {
                 var user = context.Request.Headers["unique_name"].ToString();
                 var code = context.Request.Headers["code"].ToString();
-                //TODO: Compare with Cache.
+                //TODO: Compare with Cache
 
                 var endpoint = context.Request.Host.Value;
                 var path = context.Request.Path.ToString();
@@ -62,7 +62,7 @@ namespace Arda.Common.Middlewares
 
         private bool CheckUserPermissionToResource(string uniqueName, string module, string resource)
         {
-            //TODO: Refactor security:
+            //TODO: Refactor security
             return true;
 
             //var client = new HttpClient();

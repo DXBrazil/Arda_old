@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System.Net;
 using Arda.Common.JSON;
 
+//TODO: Refactor name Users to User
 namespace Arda.Main.Controllers
 {
     [Authorize]
@@ -39,7 +40,6 @@ namespace Arda.Main.Controllers
             }
         }
 
-        //TODO: Create ban user button
         //Review Permissions:
         public async Task<IActionResult> Review()
         {
