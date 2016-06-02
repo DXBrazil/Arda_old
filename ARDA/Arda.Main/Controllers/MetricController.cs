@@ -160,7 +160,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage AddMetric(MetricMainViewModel metric)
+        public async Task<HttpResponseMessage> AddMetric(MetricMainViewModel metric)
         {
             if (metric == null)
             {
@@ -169,7 +169,7 @@ namespace Arda.Main.Controllers
 
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-            var responseAboutUpdate = Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/metric/add", uniqueName, "", metric).Result;
+            var responseAboutUpdate = await Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/metric/add", uniqueName, "", metric);
 
             if (responseAboutUpdate.IsSuccessStatusCode)
             {

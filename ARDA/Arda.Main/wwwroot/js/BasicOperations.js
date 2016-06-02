@@ -442,23 +442,21 @@ function EnableFiscalYearFields()
 }
 
 function DisableMetricFields() {
-    $(".MetricID").attr("disabled", "disabled");
-    $(".FiscalYearID").attr("disabled", "disabled");
-    $(".MetricCategory").attr("disabled", "disabled");
-    $(".MetricName").attr("disabled", "disabled");
-    $(".Description").attr("disabled", "disabled");
+    $("#FiscalYearID").attr("readonly", "readonly");
+    $("#MetricCategory").attr("readonly", "readonly");
+    $("#MetricName").attr("readonly", "readonly");
+    $("#Description").attr("readonly", "readonly");
     $("#btnAdd").attr("disabled", "disabled");
     $("#btnUpdate").attr("disabled", "disabled");
 }
 
 function EnableMetricFields() {
-    $(".MetricID").removeAttr("disabled");
-    $(".FiscalYearID").removeAttr("disabled");
-    $(".MetricCategory").removeAttr("disabled");
-    $(".MetricName").removeAttr("disabled");
-    $(".Description").removeAttr("disabled");
-    $("#btnAdd").removeAttr("disabled", "disabled");
-    $("#btnUpdate").removeAttr("disabled", "disabled");
+    $(".FiscalYearID").removeAttr("readonly");
+    $(".MetricCategory").removeAttr("readonly");
+    $(".MetricName").removeAttr("readonly");
+    $(".Description").removeAttr("readonly");
+    $("#btnAdd").removeAttr("disabled");
+    $("#btnUpdate").removeAttr("disabled");
 }
 
 

@@ -39,19 +39,19 @@
 
                         <div class="form-group">
                         <label for="MetricID">Code:</label>
-                        <input type="text" class="form-control MetricID" name="MetricID" value="@ViewBag.Guid" readonly>
+                        <input type="text" class="form-control" id="MetricID" name="MetricID" value="@ViewBag.Guid" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="FiscalYearID">Fiscal Year:</label>
-                        <select class="form-control FiscalYearID" name="FiscalYearID">
+                        <select class="form-control" id="FiscalYearID" name="FiscalYearID">
                             <!--Dynamically Content-->
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="MetricCategory">Category:</label>
-                        <input type="text" class="form-control MetricCategory" name="MetricCategory" list="CategoriesList">
+                        <input type="text" class="form-control" id="MetricCategory" name="MetricCategory" list="CategoriesList">
                         <datalist id="CategoriesList">
                             <!--Dynamically Content-->
                         </datalist>
@@ -59,12 +59,12 @@
 
                     <div class="form-group">
                         <label for="MetricName">Name:</label>
-                        <input type="text" class="form-control MetricName" name="MetricName">
+                        <input type="text" class="form-control" id="MetricName" name="MetricName">
                     </div>
 
                         <div class="form-group">
                         <label for="Description">Description:</label>
-                        <textarea class="form-control Description" name="Description" rows="5"></textarea>
+                        <textarea class="form-control" id="Description" name="Description" rows="5"></textarea>
                     </div>
 
 
@@ -127,7 +127,7 @@
 
             options.push('<option value="' + key + '">' + text + '</option>');
         }
-        $('.FiscalYearID').html(options.join(''));
+        $('#FiscalYearID').html(options.join(''));
     }
 
     function callbackGetCategories(data) {
