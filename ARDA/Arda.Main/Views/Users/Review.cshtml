@@ -3,6 +3,11 @@
     <strong>Success!</strong>
 </div>
 
+<div id="msgWarning" class="alert alert-warning" style="display: none;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>You must select at least one permission!</strong>
+</div>
+
 <div id="msgError" class="alert alert-danger" style="display: none;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Error!</strong>
@@ -10,7 +15,7 @@
 
 <section class="concontainer-fluid">
     <div class="col-xs-12">
-       <div class="row">
+        <div class="row">
             <header class="ctn-header-dashboard">
                 <div class="col-xs-12 col-lg-3 col-md-3">
                     <h1>Review Permissions</h1>
@@ -23,35 +28,36 @@
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#SearchUserModal">Search User</button>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="clearfix"></div>
             </header>
-           <div style="display: none;" id="UserInfoPanel">
-           <div class="col-lg-3 col-md-3 col-xs-12">
-               <div id="userInfo" class="panel-user-info">
-                   
-                       
-                       <img id="imgBox" width="280" height="280" src="~/images/Loading_icon.gif" />
-                       <p class="text-center"><strong id="displayName"></strong></p>
-                       <p class="text-center"><i class="fa fa-envelope"></i> <span id="mail"></span></p>
-                   
-               </div>
-           </div>
+            <div style="display: none;" id="UserInfoPanel">
+                <div class="col-lg-3 col-md-3 col-xs-12">
+                    <div id="userInfo" class="panel-user-info">
 
-           <div id="permissionsPanel"  class="col-lg-9 col-md-9 col-xs-12 panel-permissions-panel">
 
-               <div id="PermissionsList"></div>
+                        <img id="imgBox" width="280" height="280" src="~/images/Loading_icon.gif" />
+                        <p class="text-center"><strong id="displayName"></strong></p>
+                        <p class="text-center"><i class="fa fa-envelope"></i> <span id="mail"></span></p>
 
-               <footer class="col-lg-12 col-md-12 col-xs-12 panel-footer-permissions">
-                   <button id="btnUpdate" type="button" class="btn btn-default">Update Permissions</button>
-                    <button id="btnClean" type="button" class="btn btn-primary">Clean</button>
-                  
-                   <div class="clearfix"></div>
-               </footer>
+                    </div>
+                </div>
 
-           </div>
-           </div>
+                <div id="permissionsPanel" class="col-lg-9 col-md-9 col-xs-12 panel-permissions-panel">
+
+                    <div id="PermissionsList"></div>
+
+                    <footer class="col-lg-12 col-md-12 col-xs-12 panel-footer-permissions">
+                        <button id="btnUpdate" type="button" class="btn btn-default">Set Permissions</button>
+                        <button id="btnBan" type="button" class="btn btn-warning">Ban User</button>
+                        <button id="btnClean" type="button" class="btn btn-primary">Clean</button>
+
+                        <div class="clearfix"></div>
+                    </footer>
+
+                </div>
+            </div>
 
         </div>
     </div>
@@ -104,9 +110,9 @@
                 clearForm();
             }
         });
-
-        $('#btnClean').click(clearForm);
         $('#btnUpdate').click(updatePermissions);
+        $('#btnBan').click(banUser);
+        $('#btnClean').click(clearForm);
     }
 
     function getPendingUsers() {
@@ -277,19 +283,48 @@
             }
         });
 
-
-        var permissions = '{ "permissions" : [';
-        for (var i = 0; i < selected.length; i++) {
-            permissions += '{ "category":"' + selected[i][0] + '" , "resource":"' + selected[i][1] + '" }';
-            if (i < selected.length - 1) {
-                permissions += ',';
+        if (selected.length>0) {
+            var permissions = '{ "permissions" : [';
+            for (var i = 0; i < selected.length; i++) {
+                permissions += '{ "category":"' + selected[i][0] + '" , "resource":"' + selected[i][1] + '" }';
+                if (i < selected.length - 1) {
+                    permissions += ',';
+                }
             }
-        }
-        permissions += ']}';
+            permissions += ']}';
 
+            var user = $('#mail').text();
+            var url = '/users/Update?user=' + user;
+
+
+            $.ajax({
+                url: url,
+                type: "PUT",
+                data: permissions,
+                success: function (data, textStatus, jqXHR) {
+                    if (data.IsSuccessStatusCode) {
+                        $('html,body').scrollTop(0);
+                        $('#msgSuccess').fadeIn();
+                    } else {
+                        $('html,body').scrollTop(0);
+                        $('#msgError').fadeIn();
+                    }
+                    clearForm();
+                    //Update Pending Users:
+                    $("#table-pending-users").DataTable().destroy();
+                    getPendingUsers();
+                }
+            });
+        } else {
+            $('html,body').scrollTop(0);
+            $('#msgWarning').fadeIn();
+        }
+    }
+
+    function banUser() {
+        var permissions = '{ "permissions" : []}';
         var user = $('#mail').text();
         var url = '/users/Update?user=' + user;
-
 
         $.ajax({
             url: url,
@@ -297,8 +332,10 @@
             data: permissions,
             success: function (data, textStatus, jqXHR) {
                 if (data.IsSuccessStatusCode) {
+                    $('html,body').scrollTop(0);
                     $('#msgSuccess').fadeIn();
                 } else {
+                    $('html,body').scrollTop(0);
                     $('#msgError').fadeIn();
                 }
                 clearForm();
