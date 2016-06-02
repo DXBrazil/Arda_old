@@ -1,4 +1,5 @@
 ﻿@model Arda.Common.ViewModels.UserMainViewModel
+
 <section class="concontainer-fluid">
 
     <div class="col-xs-12">
@@ -133,16 +134,6 @@
             item.append(divControls);
             $('#PermissionsList').append(item);
         }
-
-        $('.permission-group').on('click', function (e) {
-            var checkBox = $(this).children(":first").find('input');
-            var value = checkBox.prop('checked');
-            if (value == true) {
-                checkBox.prop('checked', false);
-            } else {
-                checkBox.prop('checked', true);
-            }
-        });
     }
 
     function callbackGetUserPermissions(data) {
