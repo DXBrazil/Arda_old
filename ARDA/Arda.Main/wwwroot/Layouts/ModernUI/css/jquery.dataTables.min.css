@@ -23,6 +23,10 @@ table.dataTable thead td {
     border-bottom: 1px solid #111
 }
 
+table.dataTable thead th:last-child{
+    min-width: 360px;
+}
+
 table.dataTable thead th:active,
 table.dataTable thead td:active {
     outline: none

@@ -16,14 +16,16 @@
 
                 <!-- Some information -->
                 <div class="col-xs-12 col-lg-3 col-md-4">
-
+                    <a href="/Users/Edit?userID=@Model.Email" class="ds-button-edit">
+                        <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this User?
+                    </a>
                 </div>
 
                 <!-- Clear some garbage -->
                 <div class="clearfix"></div>
 
             </header>
-
+            <div id="UserInfoPanel">
             <div class="col-xs-12">
                 <!--User Info Panel-->
                 <div class="row" style="margin-top:20px;">
@@ -51,18 +53,14 @@
 
                 <!--Permissions Panel-->
                 <div class="row">
-                    <h4>Permissions:</h4>
-                    <div class="col-lg-4">
-                        <ul id="PermissionsList"></ul>
+
+                    <div id="permissionsPanel" class="col-lg-9 col-md-9 col-xs-12 panel-permissions-panel">
+                        <h4>Permissions:</h4>
+                        <div id="PermissionsList"></div>
 
                     </div>
-                </div>
 
-                <!--Footer Panel-->
-                <div class="row">
-                    <a href="/Users/Edit?userID=@Model.Email" class="ds-button-edit">
-                        <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this User?
-                    </a>
+                </div>
                 </div>
             </div>
         </div>
@@ -116,18 +114,16 @@
             var category = data[i].Category;
             var resources = data[i].Resources;
 
-            var item = $('<li>');
-            var title = $('<p>').text(category);
+            var item = $('<div class="col-lg-4 col-md-4 cold-xs-12 panel-permissions-item">');
+            var title = $('<h2 class="title-permission-list">').text(category);
             item.append(title);
 
             var divControls = $('<div>').css('margin', '0 0 0 40px;');
             for (var j = 0; j < resources.length; j++) {
                 var res = resources[j];
                 var divControl = '<div class="input-group permission-group">' +
-                                    '<span class="input-group-addon">' +
-                                        '<input type="checkbox" disabled class="permissions-item" category="' + category + '" resource="' + res + '">' +
-                                    '</span>' +
-                                    '<input type="text" class="form-control" readonly value="' + res + '">' +
+                                    '<input type="checkbox" class="permissions-item" id="permission_' + j + category + '" category="' + category + '" resource="' + res + '">' +
+                                    '<label for="permission_' + j + category + '">' + res + '</label>' +
                                  '</div>';
                 divControls.append(divControl);
             }

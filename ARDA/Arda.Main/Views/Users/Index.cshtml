@@ -100,7 +100,13 @@
             // Loading datatable to review users.
             var table = $("#table-users");
             table.DataTable({
-                data: data
+                data: data,
+                "columnDefs": [
+            {
+                "width": "25%", "targets": 3,
+                "orderable": false
+            }
+                ]
             });
         }
     }

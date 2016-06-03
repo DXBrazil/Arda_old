@@ -16839,6 +16839,7 @@ welcome-picture {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: 600;
+    cursor: pointer;
         }
         .data-sorting-buttons a .fa {
             margin-right: 5px;

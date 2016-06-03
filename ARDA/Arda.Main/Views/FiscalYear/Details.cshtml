@@ -41,9 +41,11 @@
                             <label for="FiscalYearNumber">Fiscal Year (numeric form):</label>
                             <input type="text" class="form-control" id="FiscalYearNumber" value="@Model.FullNumericFiscalYearMain" disabled> 
                         </div>
-                        <a href="/FiscalYear/Edit/@Model.FiscalYearID" class="btn btn-info">
-                            <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this Fiscal Year?
-                        </a>
+                        <div class="data-sorting-buttons">
+                            <a href="/FiscalYear/Edit/@Model.FiscalYearID" class="ds-button-edit">
+                                <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this Fiscal Year?
+                            </a>
+                        </div>
                     </form>
                     
                 </div>

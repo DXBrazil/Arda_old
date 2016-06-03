@@ -119,7 +119,7 @@ namespace Arda.Main.Controllers
                     dataRow.Add(user.Name.ToString());
                     dataRow.Add(user.Email.ToString());
                     dataRow.Add(getUserSituation(user.Status));
-                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/users/details?userID={user.Email}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i>Details</div></a><div class='data-sorting-buttons'><a href='/users/edit?userID={user.Email}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a></div><div class='data-sorting-buttons'><a data-toggle='modal' data-target='#DeleteUserModal' onclick=\"ModalDeleteUser('{user.Email}','{user.Name}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i></a></div>");
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/users/details?userID={user.Email}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i>Details</div></a><div class='data-sorting-buttons'><a href='/users/edit?userID={user.Email}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>Edit</a></div><div class='data-sorting-buttons'><a data-toggle='modal' data-target='#DeleteUserModal' onclick=\"ModalDeleteUser('{user.Email}','{user.Name}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i>Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
