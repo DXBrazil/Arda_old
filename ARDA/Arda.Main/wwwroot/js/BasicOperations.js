@@ -245,13 +245,69 @@ $(function ($) {
             }).fail(function (e, f) {
                 $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
                 $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
-                $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
                 EnableFiscalYearFields();
             });
         }
     });
 
+    $("#form-edit-metric").validate({
+        rules: {
+            MetricID: "required",
+            FiscalYearID: "required",
+            MetricCategory: "required",
+            MetricName: "required",
+            Description: "required"
+        },
+        messages: {
+            MetricID: "Please, inform the Metric code.",
+            FiscalYearID: "Please, select a fiscal year.",
+            MetricCategory: "Please, type or choose a category.",
+            MetricName: "Please, type a name.",
+            Description: "Please, type a description."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            DisableMetricFields();
+            $("#btnUpdate").text("Updating metric data...");
 
+            $.ajax({
+                url: "/Metric/EditMetric",
+                type: "PUT",
+                data: $(form).serialize()
+            }).done(function (data) {
+                if (data.IsSuccessStatusCode) {
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The metric was updated succefully.</div>");
+                    $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    //EnableFiscalYearFields();
+
+                    RedirectIn(3000, "/Metric/Index");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableFiscalYearFields();
+                }
+            }).fail(function (e, f) {
+                $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                EnableMetricFields();
+            });
+        }
+    });
 
     $("#form-add-metric").validate({
         rules: {
@@ -306,7 +362,6 @@ $(function ($) {
                 }
             }).fail(function (e, f) {
                 $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
-                $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
                 $("#btnAdd").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
                 EnableMetricFields();
             });
@@ -391,6 +446,23 @@ function ModalDelete_FiscalYear(FiscalYearID, TextualFiscalYear) {
     $("#generic-modal .modal-title").html("<strong>" + ModalTitle + "</strong>");
     $("#generic-modal .modal-body").html(ModalBody);
     $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteFiscalYear('" + FiscalYearID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
+}
+
+function ModalDelete_Metric(MetricID, MetricCategory, MetricName) {
+    //Defining values
+    var ModalTitle = "Deleting '" + MetricName + "' record";
+    var ModalBody = "<p style='margin-bottom:20px; font-weight: 400;' class='p-modal-body'>This operation will be permanent. Are you sure?</p>";
+    ModalBody += "<p><ul>";
+    ModalBody += "<li>Metric ID: " + MetricID + "</li>";
+    ModalBody += "<li>Metric Category: " + MetricCategory + "</li>";
+    ModalBody += "<li>Metric Name: " + MetricName + "</li>";
+    ModalBody += "</ul></p>";
+    ModalBody += "<div id='message-panel' style='margin-top: 10px;'></div>"
+
+    //Injecting contents
+    $("#generic-modal .modal-title").html("<strong>" + ModalTitle + "</strong>");
+    $("#generic-modal .modal-body").html(ModalBody);
+    $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteMetric('" + MetricID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
 }
 
 
@@ -478,6 +550,24 @@ function DeleteFiscalYear(fiscalYearID) {
             if (data.Status) {
                 $("#message-panel").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Fiscal year successful deleted.</div>");
                 RedirectIn(4000, "/FiscalYear/Index");
+            } else {
+                $("#message-panel").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> We found an error in this request. Try again in a few minutes.</div>");
+            }
+        }
+    });
+}
+
+function DeleteMetric(metricID) {
+    $("#btnDelete").attr("disabled", "disabled");
+
+    $.ajax({
+        url: "/Metric/DeleteMetric",
+        type: "DELETE",
+        data: { id: metricID },
+        success: function (data) {
+            if (data.IsSuccessStatusCode) {
+                $("#message-panel").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Metric successful deleted.</div>");
+                RedirectIn(3000, "/Metric/Index");
             } else {
                 $("#message-panel").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> We found an error in this request. Try again in a few minutes.</div>");
             }

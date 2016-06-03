@@ -93,21 +93,19 @@ namespace Arda.Kanban.Repositories
         {
             try
             {
-                var response = (from m in _context.Metrics
-                                join fy in _context.FiscalYears on m.FiscalYear.FiscalYearID equals fy.FiscalYearID
-                                where m.MetricID == id
-                                select m).First();
-
-                var metric = new MetricMainViewModel()
-                {
-                    MetricID = response.MetricID,
-                    MetricCategory = response.MetricCategory,
-                    MetricName = response.MetricName,
-                    Description = response.Description,
-                    FiscalYearID = response.FiscalYear.FiscalYearID,
-                    FullNumericFiscalYear = response.FiscalYear.FullNumericFiscalYear,
-                    TextualFiscalYear = response.FiscalYear.TextualFiscalYear
-                };
+                var metric = (from m in _context.Metrics
+                              join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
+                              where m.MetricID == id
+                              select new MetricMainViewModel
+                              {
+                                  MetricID = m.MetricID,
+                                  MetricCategory = m.MetricCategory,
+                                  MetricName = m.MetricName,
+                                  Description = m.Description,
+                                  FiscalYearID = m.FiscalYear.FiscalYearID,
+                                  FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
+                                  TextualFiscalYear = m.FiscalYear.TextualFiscalYear
+                              }).First();
 
                 if (metric != null)
                 {
@@ -129,7 +127,14 @@ namespace Arda.Kanban.Repositories
         {
             try
             {
-                var metricToBeUpdated = _context.Metrics.First(m => m.MetricID == metric.MetricID);
+                var metricToBeUpdated = (from m in _context.Metrics
+                                         where m.MetricID == metric.MetricID
+                                         select m).First();
+
+                var fyToBeIncluded = (from fy in _context.FiscalYears
+                                      where fy.FiscalYearID == metric.FiscalYearID
+                                      select fy).First();
+                
 
                 if (metricToBeUpdated != null)
                 {
@@ -137,7 +142,7 @@ namespace Arda.Kanban.Repositories
                     metricToBeUpdated.MetricName = metric.MetricName;
                     metricToBeUpdated.MetricCategory = metric.MetricCategory;
                     metricToBeUpdated.Description = metric.Description;
-                    metricToBeUpdated.FiscalYear.FiscalYearID = metric.FiscalYearID;
+                    metricToBeUpdated.FiscalYear = fyToBeIncluded;
 
                     var response = _context.SaveChanges();
                     return true;

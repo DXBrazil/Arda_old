@@ -40,22 +40,27 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
+                var metricToBeViewed = Util.ConnectToRemoteService<MetricMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
 
-                if (fiscalYearToBeViewed != null)
+                if (metricToBeViewed != null)
                 {
-                    var finalFiscalYear = new FiscalYearMainViewModel()
+                    var metric = new MetricMainViewModel()
                     {
-                        FiscalYearID = fiscalYearToBeViewed.FiscalYearID,
-                        FullNumericFiscalYearMain = fiscalYearToBeViewed.FullNumericFiscalYearMain,
-                        TextualFiscalYearMain = fiscalYearToBeViewed.TextualFiscalYearMain
+                        MetricID = metricToBeViewed.MetricID,
+                        MetricCategory = metricToBeViewed.MetricCategory,
+                        MetricName = metricToBeViewed.MetricName,
+                        Description = metricToBeViewed.Description,
+                        FiscalYearID = metricToBeViewed.FiscalYearID,
+                        TextualFiscalYear = metricToBeViewed.TextualFiscalYear,
+                        FullNumericFiscalYear = metricToBeViewed.FullNumericFiscalYear
                     };
 
-                    return View(finalFiscalYear);
+                    return View(metric);
                 }
                 else
                 {
-                    return View();
+                    ViewBag.Message = "The system has not found the metric.";
+                    return View("Error");
                 }
             }
             catch (Exception ex)
@@ -73,22 +78,27 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
+                var metricToBeViewed = Util.ConnectToRemoteService<MetricMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
 
-                if (fiscalYearToBeViewed != null)
+                if (metricToBeViewed != null)
                 {
-                    var finalFiscalYear = new FiscalYearMainViewModel()
+                    var metric = new MetricMainViewModel()
                     {
-                        FiscalYearID = fiscalYearToBeViewed.FiscalYearID,
-                        FullNumericFiscalYearMain = fiscalYearToBeViewed.FullNumericFiscalYearMain,
-                        TextualFiscalYearMain = fiscalYearToBeViewed.TextualFiscalYearMain
+                        MetricID = metricToBeViewed.MetricID,
+                        MetricCategory = metricToBeViewed.MetricCategory,
+                        MetricName = metricToBeViewed.MetricName,
+                        Description = metricToBeViewed.Description,
+                        FiscalYearID = metricToBeViewed.FiscalYearID,
+                        TextualFiscalYear = metricToBeViewed.TextualFiscalYear,
+                        FullNumericFiscalYear = metricToBeViewed.FullNumericFiscalYear
                     };
 
-                    return View(finalFiscalYear);
+                    return View(metric);
                 }
                 else
                 {
-                    return View();
+                    ViewBag.Message = "The system has not found the metric.";
+                    return View("Error");
                 }
             }
             catch (Exception ex)
@@ -100,11 +110,10 @@ namespace Arda.Main.Controllers
 
         #endregion
 
-
         #region Actions
 
         [HttpGet]
-        public JsonResult ListAllMetrics()
+        public async Task<JsonResult> ListAllMetrics()
         {
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
@@ -112,7 +121,7 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentMetrics = Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "").Result;
+                var existentMetrics = await Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
 
                 foreach (MetricMainViewModel m in existentMetrics)
                 {
@@ -120,7 +129,7 @@ namespace Arda.Main.Controllers
                     dataRow.Add(m.TextualFiscalYear.ToString());
                     dataRow.Add(m.MetricCategory.ToString());
                     dataRow.Add(m.MetricName.ToString());
-                    dataRow.Add($"<a href='/metric/details/{m.MetricID}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/metric/edit/{m.MetricID}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a href='javascript:void()' data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Metric('{m.MetricID}','{m.MetricCategory}','{m.MetricName}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<a href='/metric/details/{m.MetricID}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/metric/edit/{m.MetricID}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Metric('{m.MetricID}','{m.MetricCategory}','{m.MetricName}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -133,7 +142,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpGet]
-        public JsonResult ListAllCategories()
+        public async Task<JsonResult> ListAllCategories()
         {
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
@@ -141,7 +150,7 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentMetrics = Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "").Result;
+                var existentMetrics = await Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
 
                 foreach (MetricMainViewModel m in existentMetrics)
                 {
@@ -181,19 +190,17 @@ namespace Arda.Main.Controllers
             }
         }
 
-        [HttpPost]
-        public HttpResponseMessage EditFiscalYear(MetricMainViewModel fiscalyear)
+        [HttpPut]
+        public async Task<HttpResponseMessage> EditMetric(MetricMainViewModel metric)
         {
-            if (fiscalyear == null)
+            if (metric == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
-            // Getting uniqueName
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-            // Getting the selected fiscal year
-            var responseAboutUpdate = Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/fiscalyear/editfiscalyearbyid", uniqueName, "", fiscalyear).Result;
+            var responseAboutUpdate = await Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/metric/editmetricbyid", uniqueName, "", metric);
 
             if (responseAboutUpdate.IsSuccessStatusCode)
             {
@@ -206,15 +213,13 @@ namespace Arda.Main.Controllers
         }
 
         [HttpDelete]
-        public HttpResponseMessage DeleteMetric(Guid id)
+        public async Task<HttpResponseMessage> DeleteMetric(Guid id)
         {
             try
             {
-                // Getting uniqueName
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-                // Getting the selected fiscal year
-                var fiscalYearToBeDeleted = Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/fiscalyear/deletefiscalyearbyid?id=" + id, uniqueName, "", id).Result;
+                var fiscalYearToBeDeleted = await Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/metric/deletemetricbyid?id=" + id, uniqueName, "", id);
 
                 if (fiscalYearToBeDeleted.IsSuccessStatusCode)
                 {

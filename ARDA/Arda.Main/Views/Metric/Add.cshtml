@@ -29,43 +29,42 @@
 
             </header>
 
-            
+
 
             <div style="margin-top:20px;">
 
                 <div class="col-xs-12 col-md-8" style="border-right:1px solid #efefef;">
 
                     <form id="form-add-metric" role="form" data-toggle="validation">
+                        <div class="form-group">
+                            <label for="MetricID">Code:</label>
+                            <input type="text" class="form-control" id="MetricID" name="MetricID" value="@ViewBag.Guid" readonly>
+                        </div>
 
                         <div class="form-group">
-                        <label for="MetricID">Code:</label>
-                        <input type="text" class="form-control" id="MetricID" name="MetricID" value="@ViewBag.Guid" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="FiscalYearID">Fiscal Year:</label>
-                        <select class="form-control" id="FiscalYearID" name="FiscalYearID">
-                            <!--Dynamically Content-->
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="MetricCategory">Category:</label>
-                        <input type="text" class="form-control" id="MetricCategory" name="MetricCategory" list="CategoriesList">
-                        <datalist id="CategoriesList">
-                            <!--Dynamically Content-->
-                        </datalist>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="MetricName">Name:</label>
-                        <input type="text" class="form-control" id="MetricName" name="MetricName">
-                    </div>
+                            <label for="FiscalYearID">Fiscal Year:</label>
+                            <select class="form-control" id="FiscalYearID" name="FiscalYearID">
+                                <!--Dynamically Content-->
+                            </select>
+                        </div>
 
                         <div class="form-group">
-                        <label for="Description">Description:</label>
-                        <textarea class="form-control" id="Description" name="Description" rows="5"></textarea>
-                    </div>
+                            <label for="MetricCategory">Category:</label>
+                            <input type="text" class="form-control" id="MetricCategory" name="MetricCategory" list="CategoriesList">
+                            <datalist id="CategoriesList">
+                                <!--Dynamically Content-->
+                            </datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="MetricName">Name:</label>
+                            <input type="text" class="form-control" id="MetricName" name="MetricName">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Description">Description:</label>
+                            <textarea class="form-control" id="Description" name="Description" rows="5"></textarea>
+                        </div>
 
 
                         <button type="submit" class="btn btn-info" id="btnAdd">
@@ -114,7 +113,7 @@
 
     function callbackGetFYTextual(data) {
         data = data.aaData;
-        
+
         var searchWord = '/details/';
         var len = searchWord.length;
         var options = [];
