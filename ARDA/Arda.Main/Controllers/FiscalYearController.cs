@@ -42,7 +42,7 @@ namespace Arda.Main.Controllers
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(fy.TextualFiscalYearMain.ToString());
                     dataRow.Add(fy.FullNumericFiscalYearMain.ToString());
-                    dataRow.Add($"<a href='/fiscalyear/details/{fy.FiscalYearID}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/fiscalyear/edit/{fy.FiscalYearID}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a href='javascript:void()' data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_FiscalYear('{fy.FiscalYearID}','{fy.TextualFiscalYearMain}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/fiscalyear/details/{fy.FiscalYearID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i>Details</a></div><div class='data-sorting-buttons'><a href='/fiscalyear/edit/{fy.FiscalYearID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>Edit</a></div><div class='data-sorting-buttons'><a href='javascript:void()' data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_FiscalYear('{fy.FiscalYearID}','{fy.TextualFiscalYearMain}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i>Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }

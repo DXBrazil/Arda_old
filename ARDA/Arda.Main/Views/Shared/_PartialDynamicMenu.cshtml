@@ -58,8 +58,7 @@
                 Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong>
             </li>
             <li class="nav-item--signout nav-item">
-                
-                <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger btn-sm">Logout</a>
+                <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
             </li>
         </ul>
     </div>

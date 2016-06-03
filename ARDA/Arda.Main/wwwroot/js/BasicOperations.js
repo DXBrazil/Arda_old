@@ -5,7 +5,7 @@ $(function ($) {
         "sAjaxSource": "/FiscalYear/ListAllFiscalYears",
         "columnDefs": [
             {
-                "width": "10%", "targets": 2,
+                "width": "33%", "targets": 2,
                 "orderable": false
             }
         ]
@@ -407,7 +407,6 @@ function DeleteFiscalYear(fiscalYearID) {
 
 $(function () {
     $('a[href*="#"]:not([href="#"])').click(function () {
-        alert("entrou aqui");
         if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
             var e = $(this.hash);
             if (e = e.length ? e : $("[name=" + this.hash.slice(1) + "]"), e.length) return $("html, body").animate({
