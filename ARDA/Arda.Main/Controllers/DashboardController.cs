@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Arda.Main.Infra;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using Microsoft.AspNet.Authorization;
-using Newtonsoft.Json;
+
+// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Arda.Main.Controllers
 {
-    [Authorize]
     public class DashboardController : Controller
     {
-
+        // GET: /<controller>/
         public IActionResult Index()
         {
             return View();

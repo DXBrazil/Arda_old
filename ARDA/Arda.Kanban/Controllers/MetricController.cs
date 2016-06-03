@@ -3,39 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using System.Net;
-using Arda.Kanban.Models;
 using Arda.Kanban.Interfaces;
-using Arda.Common.ViewModels;
-using Newtonsoft.Json;
 using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net;
+using Arda.Common.ViewModels;
 
 namespace Arda.Kanban.Controllers
 {
     [Route("api/[controller]")]
-    public class FiscalYearController : Controller
+    public class MetricController : Controller
     {
-        private IFiscalYearRepository _repository;
+        IMetricRepository _repository;
 
-        public FiscalYearController(IFiscalYearRepository repository)
+        public MetricController(IMetricRepository repository)
         {
             _repository = repository;
         }
 
         [HttpPost]
-        [Route("addfiscalyear")]
+        [Route("add")]
         public HttpResponseMessage Add()
         {
             try
             {
                 System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
                 string requestFromPost = reader.ReadToEnd();
-                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearMainViewModel>(requestFromPost);
+                var metric = JsonConvert.DeserializeObject<MetricMainViewModel>(requestFromPost);
 
                 // Calling update
-                var fiscalyear = _repository.AddNewFiscalYear(fiscalYear);
+                var response = _repository.AddNewMetric(metric);
 
-                if (fiscalyear)
+                if (response)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
@@ -52,15 +51,15 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("list")]
-        public IEnumerable<FiscalYearMainViewModel> List()
+        public IEnumerable<MetricMainViewModel> List()
         {
             try
             {
-                var fiscalyears = _repository.GetAllFiscalYears();
+                var metrics = _repository.GetAllMetrics();
 
-                if (fiscalyears != null)
+                if (metrics != null)
                 {
-                    return fiscalyears;
+                    return metrics;
                 }
                 else
                 {
@@ -74,16 +73,16 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpGet]
-        [Route("getfiscalyearbyid")]
-        public FiscalYearMainViewModel GetFiscalYearByID(Guid id)
+        [Route("getmetricbyid")]
+        public MetricMainViewModel GetMetricByID(Guid id)
         {
             try
             {
-                var fiscalYear = _repository.GetFiscalYearByID(id);
+                var metric = _repository.GetMetricByID(id);
 
-                if (fiscalYear != null)
+                if (metric != null)
                 {
-                    return fiscalYear;
+                    return metric;
                 }
                 else
                 {
@@ -97,19 +96,19 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpPut]
-        [Route("editfiscalyearbyid")]
-        public IActionResult EditFiscalYearByID()
+        [Route("editmetricbyid")]
+        public IActionResult EditMetricByID()
         {
             try
             {
                 System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
                 string requestFromPost = reader.ReadToEnd();
-                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearMainViewModel>(requestFromPost);
+                var metric = JsonConvert.DeserializeObject<MetricMainViewModel>(requestFromPost);
 
                 // Calling update
-                var fiscalyear = _repository.EditFiscalYearByID(fiscalYear);
+                var response = _repository.EditMetricByID(metric);
 
-                if (fiscalyear)
+                if (response)
                 {
                     return new HttpStatusCodeResult((int)HttpStatusCode.OK);
                 }
@@ -125,12 +124,12 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpDelete]
-        [Route("deletefiscalyearbyid")]
-        public HttpResponseMessage DeleteFiscalYearByID(Guid id)
+        [Route("deletemetricbyid")]
+        public HttpResponseMessage DeleteMetricByID(Guid id)
         {
             try
             {
-                var response = _repository.DeleteFiscalYearByID(id);
+                var response = _repository.DeleteMetricByID(id);
 
                 if (response)
                 {

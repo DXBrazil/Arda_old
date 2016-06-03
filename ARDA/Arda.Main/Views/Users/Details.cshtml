@@ -1,0 +1,156 @@
+﻿@model Arda.Common.ViewModels.UserMainViewModel
+
+<section class="concontainer-fluid">
+
+    <div class="col-xs-12">
+        <div class="row">
+            <header class="ctn-header-dashboard">
+
+                <!-- Title -->
+                <div class="col-xs-12 col-lg-3 col-md-4">
+                    <h2>
+                        User
+                    </h2>
+                    <p>Details about "@Model.Name"</p>
+                </div>
+
+                <!-- Some information -->
+                <div class="col-xs-12 col-lg-3 col-md-4">
+
+                </div>
+
+                <!-- Clear some garbage -->
+                <div class="clearfix"></div>
+
+            </header>
+
+            <div class="col-xs-12">
+                <!--User Info Panel-->
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-md-8" style="border-right:1px solid #efefef;">
+                        <form role="form">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <img id="UserPhoto" width="200" height="200" src="~/images/Loading_icon.gif" />
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="FiscalYearText">Name:</label>
+                                    <input type="text" class="form-control" id="UserName" value="@Model.Name" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="UserEmail">E-mail:</label>
+                                    <input type="text" class="form-control" id="UserEmail" value="@Model.Email" disabled>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+                <!--Permissions Panel-->
+                <div class="row">
+                    <h4>Permissions:</h4>
+                    <div class="col-lg-4">
+                        <ul id="PermissionsList"></ul>
+
+                    </div>
+                </div>
+
+                <!--Footer Panel-->
+                <div class="row">
+                    <a href="/Users/Edit?userID=@Model.Email" class="ds-button-edit">
+                        <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this User?
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var token = '@ViewBag.Token';
+
+    $(function () {
+        //Initialize:
+        Initialize();
+        //Get User Picture:
+        var user = $('#UserEmail').val();
+        GetImage(user, token);
+        //Get All Permissions:
+        $.getJSON('/users/GetAllResources', '', callbackGetResourceItems);
+        //Get User Permissions:
+        $.getJSON('/users/GetUserPermissions?user=' + user, '', callbackGetUserPermissions);
+    });
+
+    function Initialize() {
+    }
+
+    function GetImage(user, token) {
+        var url = "https://graph.microsoft.com/v1.0/users/" + user + "/photo/$value";
+        var elem = "UserPhoto";
+        GetImageBase64FromGraph(url, token, elem);
+    }
+
+    function GetImageBase64FromGraph(url, token, element) {
+        var request = new XMLHttpRequest;
+        request.open("GET", url);
+        request.setRequestHeader("Authorization", token);
+        request.responseType = "blob";
+        request.onload = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                var image = document.getElementById(element);
+                var reader = new FileReader();
+                reader.onload = function () {
+                    image.src = reader.result;
+                }
+                reader.readAsDataURL(request.response);
+            }
+        };
+        request.send(null);
+    }
+
+    function callbackGetResourceItems(data) {
+        for (var i = 0; i < data.length; i++) {
+            var category = data[i].Category;
+            var resources = data[i].Resources;
+
+            var item = $('<li>');
+            var title = $('<p>').text(category);
+            item.append(title);
+
+            var divControls = $('<div>').css('margin', '0 0 0 40px;');
+            for (var j = 0; j < resources.length; j++) {
+                var res = resources[j];
+                var divControl = '<div class="input-group permission-group">' +
+                                    '<span class="input-group-addon">' +
+                                        '<input type="checkbox" disabled class="permissions-item" category="' + category + '" resource="' + res + '">' +
+                                    '</span>' +
+                                    '<input type="text" class="form-control" readonly value="' + res + '">' +
+                                 '</div>';
+                divControls.append(divControl);
+            }
+            item.append(divControls);
+            $('#PermissionsList').append(item);
+        }
+    }
+
+    function callbackGetUserPermissions(data) {
+        data = data.permissions;
+        console.log(data);
+        var items = $('.permissions-item');
+        for (var i = 0; i < data.length; i++) {
+            var cat = data[i].category;
+            var res = data[i].resource;
+            items.each(function () {
+                var obj = $(this);
+                var attr = [];
+                if (obj.attr('category') == cat && obj.attr('resource') == res) {
+                    obj.prop('checked', true);
+                }
+            });
+        }
+    }
+
+</script>
