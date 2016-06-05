@@ -25,5 +25,8 @@ namespace Arda.Kanban.Models
 
 
         public virtual FiscalYear FiscalYear { get; set; }
+
+        public virtual IEnumerable<WorkloadBacklogMetric> WBMetrics { get; set; }
+
     }
 }
