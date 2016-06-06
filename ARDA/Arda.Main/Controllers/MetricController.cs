@@ -129,7 +129,7 @@ namespace Arda.Main.Controllers
                     dataRow.Add(m.TextualFiscalYear.ToString());
                     dataRow.Add(m.MetricCategory.ToString());
                     dataRow.Add(m.MetricName.ToString());
-                    dataRow.Add($"<a href='/metric/details/{m.MetricID}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/metric/edit/{m.MetricID}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Metric('{m.MetricID}','{m.MetricCategory}','{m.MetricName}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/metric/details/{m.MetricID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/metric/edit/{m.MetricID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Metric('{m.MetricID}','{m.MetricCategory}','{m.MetricName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }

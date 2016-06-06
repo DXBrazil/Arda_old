@@ -1,0 +1,78 @@
+﻿<section class="concontainer-fluid">
+
+    <div class="col-xs-12">
+        <div class="row">
+            <header class="ctn-header-dashboard">
+
+                <!-- Title -->
+                <div class="col-xs-12 col-lg-3 col-md-4">
+                    <h2>
+                        Work Appointment
+                    </h2>
+                    <p>Adding a new work appointment to specific workload</p>
+                </div>
+
+                <!-- Some information -->
+                <div class="col-xs-12 col-lg-3 col-md-4">
+
+                </div>
+
+                <!-- Clear some garbage -->
+                <div class="clearfix"></div>
+
+
+            </header>
+
+            <div style="margin-top:20px;">
+
+                <div class="col-xs-12 col-md-8" style="border-right:1px solid #efefef;">
+
+                    <form id="form-add-appointment" role="form" data-toggle="validation">
+
+                        <div class="form-group">
+                            <label for="AppointmentID">Code:</label>
+                            <input type="text" class="form-control" id="AppointmentID" name="AppointmentID" value="@ViewBag.Guid" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="AppointmentToProfessional">Appointment to:</label>
+                            <input type="text" class="form-control" id="AppointmentToProfessional" value="@User.Claims.First(claim => claim.Type == "name").Value" name="AppointmentToProfessional" readonly>
+                            <input type="hidden" value="@User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Workload">Workload:</label>
+                            <input type="text" class="form-control" id="Workload" name="Workload" list="WorkloadList">
+                            <datalist id="WorkloadList">
+                                <!--Dynamically Content-->
+                            </datalist>
+                        </div>
+
+                        <button type="submit" class="btn btn-info" id="btnAdd">
+                            <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
+                        </button>
+
+                    </form>
+
+                    <div style="margin-top:20px;" id="message">
+                        <!-- Message dynamically inputed here -->
+                    </div>
+
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <h3>
+                        New work appointment
+                    </h3>
+                    <p>
+                        To add a new work appointment, please click on button bellow. <br />
+                        <div style="margin-bottom:50px;">
+                            <a asp-controller="Appointment" asp-action="Add" class="btn btn-success" style="width:100px;">+ Add</a>
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+

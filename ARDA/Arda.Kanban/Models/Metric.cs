@@ -23,7 +23,8 @@ namespace Arda.Kanban.Models
         [Required]
         public string Description { get; set; }
 
-
         public virtual FiscalYear FiscalYear { get; set; }
+
+        //public virtual ICollection<MetricsByWorkload> MetricsByWorkloads { get; set; }
     }
 }
