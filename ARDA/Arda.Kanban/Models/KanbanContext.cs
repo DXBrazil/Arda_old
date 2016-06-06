@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Entity;
+﻿using Arda.Kanban.ViewModels;
+using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,39 +13,20 @@ namespace Arda.Kanban.Models
 
         public DbSet<Metric> Metrics { get; set; }
 
-        //public DbSet<Technology> Technologies { get; set; }
+        public DbSet<Activity> Activities { get; set; }
 
-        //public DbSet<Workload> Workloads { get; set; }
+        public DbSet<Technology> Technologies { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    // Metrics
-        //    modelBuilder.Entity<MetricsByWorkload>()
-        //        .HasKey(t => new { t.MetricID, t.WorkloadID });
+        public DbSet<File> Files { get; set; }
 
-        //    modelBuilder.Entity<MetricsByWorkload>()
-        //        .HasOne(pt => pt.Metric)
-        //        .WithMany(p => p.MetricsByWorkloads)
-        //        .HasForeignKey(pt => pt.MetricID);
+        public DbSet<UserKanbanViewModel> UsersKanban { get; set; }
 
-        //    modelBuilder.Entity<MetricsByWorkload>()
-        //        .HasOne(pt => pt.Workload)
-        //        .WithMany(t => t.MetricsByWorkloads)
-        //        .HasForeignKey(pt => pt.WorkloadID);
+        public DbSet<WorkloadBacklog> WorkloadBacklogs { get; set; }
 
-        //    // Technologies
-        //    modelBuilder.Entity<TechnologiesByWorkload>()
-        //        .HasKey(t => new { t.TechnologyID, t.WorkloadID });
+        public DbSet<WorkloadBacklogMetric> WorkloadBacklogMetrics { get; set; }
 
-        //    modelBuilder.Entity<TechnologiesByWorkload>()
-        //        .HasOne(pt => pt.Technology)
-        //        .WithMany(p => p.TechnologiesByWorkloads)
-        //        .HasForeignKey(pt => pt.TechnologyID);
+        public DbSet<WorkloadBacklogTechnology> WorkloadBacklogTechnologies { get; set; }
 
-        //    modelBuilder.Entity<TechnologiesByWorkload>()
-        //        .HasOne(pt => pt.Workload)
-        //        .WithMany(t => t.TechnologiesByWorkloads)
-        //        .HasForeignKey(pt => pt.WorkloadID);
-        //}
+        public DbSet<WorkloadBacklogUser> WorkloadBacklogUsers { get; set; }
     }
 }

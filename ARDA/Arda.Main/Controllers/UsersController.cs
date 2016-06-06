@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System.Net;
 using Arda.Common.JSON;
 
+//TODO: Cynthia, please check users layout (selecting in details screen)
 //TODO: Refactor name Users to User
 namespace Arda.Main.Controllers
 {

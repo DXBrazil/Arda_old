@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace Arda.Kanban.Models
 {
-    [Table("Technologies")]
-    public class Technology
+    [Table("WorkloadBacklogTechnologies")]
+    public class WorkloadBacklogTechnology
     {
         [Key]
         [Required]
-        public Guid TechnologyID { get; set; }
+        public Guid WBUTechnologyID { get; set; }
 
-        [Required]
-        public string TechnologyName { get; set; }
+        public virtual WorkloadBacklog WorkloadBacklog { get; set; }
 
-        public virtual IEnumerable<WorkloadBacklogTechnology> WBTechnologies { get; set; }
+        public virtual Technology Technology { get; set; }
     }
 }
