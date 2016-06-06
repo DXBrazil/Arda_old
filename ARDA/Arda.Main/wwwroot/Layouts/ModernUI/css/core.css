@@ -16444,7 +16444,7 @@ button.close {
 .cover {
   height: 60vh;
   margin-bottom: 30px;
-  padding: 200px 0;
+  padding: 200px 0 150px;
   display: table;
   width: 100%; 
   background: url(../img/cover.jpg) center no-repeat;
@@ -16879,4 +16879,10 @@ welcome-picture {
             .ds-button-delete:hover {
                 background-color: #fff;
                 color: #F25022;
+            }
+
+            .title-manager-sec {
+                    border-bottom: 3px solid #2B2E37;
+                    padding-bottom: 15px;
+                    margin-bottom: 45px;
             }
