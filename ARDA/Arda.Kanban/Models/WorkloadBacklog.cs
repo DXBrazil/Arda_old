@@ -50,6 +50,8 @@ namespace Arda.Kanban.Models
 
         public virtual IEnumerable<WorkloadBacklogTechnology> WBTechnologies { get; set; }
 
+        public virtual IEnumerable<Appointment> WBAppointments { get; set; }
+
     }
 
     public enum Expertise

@@ -17,5 +17,7 @@ namespace Arda.Kanban.ViewModels
 
 
         public virtual IEnumerable<WorkloadBacklogUser> WBUsers { get; set; }
+
+        public virtual IEnumerable<Appointment> AppointmentUsers { get; set; }
     }
 }

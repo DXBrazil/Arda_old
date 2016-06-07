@@ -668,7 +668,7 @@ function LoadCKEditor()
 
 function LoadDatePicker()
 {
-    $('#sandbox-container .input-group.date').datepicker({
+    $('#AppointmentDate').datepicker({
         format: "mm/dd/yyyy",
         autoclose: true,
         todayHighlight: true
