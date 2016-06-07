@@ -8,8 +8,8 @@ using Arda.Kanban.Models;
 namespace Arda.Kanban.Migrations
 {
     [DbContext(typeof(KanbanContext))]
-    [Migration("20160605230248_Initial")]
-    partial class Initial
+    [Migration("20160606122421_ArdaMigration_06062016_0924")]
+    partial class ArdaMigration_06062016_0924
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

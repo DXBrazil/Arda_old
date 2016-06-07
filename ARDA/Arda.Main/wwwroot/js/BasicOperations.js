@@ -1,5 +1,11 @@
 ﻿// Functions with automatic initialization
 $(function ($) {
+    //Initialize:
+    //Initialize();
+
+    //Get All Pending Users:
+    //GetWorkloadsByUser();
+
     // Loading datatable to fiscal years.
     $("#table-fiscalyears").DataTable({
         "sAjaxSource": "/FiscalYear/ListAllFiscalYears",
@@ -34,8 +40,7 @@ $(function ($) {
                 ClearModalForm();
                 RedirectTo("http://localhost:2168/Dashboard/Index");
             }
-            else if (data.Status == "Inactive")
-            {
+            else if (data.Status == "Inactive") {
                 $("#MessagePanelLogin").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> The requested user is here but is inactive. Please, consult the system admin.</div>");
                 $("#signin").html("Sign in");
                 ClearModalForm();
@@ -44,8 +49,7 @@ $(function ($) {
                 $("#signin").removeAttr("disabled");
 
             }
-            else
-            {
+            else {
                 $("#MessagePanelLogin").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Ops!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
                 $("#signin").html("Sign in");
                 ClearModalForm();
@@ -107,7 +111,7 @@ $(function ($) {
         if ($("input[name='radiooption']:checked").val() == "1") {
             Value = $("#YourCompleteName").val();
         }
-        else if($("input[name='radiooption']:checked").val() == "2") {
+        else if ($("input[name='radiooption']:checked").val() == "2") {
             Value = $("#YourEmail").val();
         }
         else {
@@ -367,10 +371,10 @@ $(function ($) {
             });
         }
     });
+
+    GetWorkloadsByUser();
 });
-
 // General functions
-
 
 // Modais
 
@@ -531,7 +535,6 @@ function EnableMetricFields() {
     $("#btnUpdate").removeAttr("disabled");
 }
 
-
 function RedirectIn(delay, url)
 {
     setTimeout(function () {
@@ -584,7 +587,6 @@ $(window).scroll(function () {
     }
 });
 
-
 function DeleteMetric(metricID) {
     $("#btnDelete").attr("disabled", "disabled");
 
@@ -601,4 +603,39 @@ function DeleteMetric(metricID) {
             }
         }
     });
+}
+
+// Search workloads
+
+function GetWorkloadsByUser() {
+    var url = '/Workload/ListWorkloadsByUser';
+    $.ajax({
+        url: url,
+        type: "GET",
+        cache: false,
+        success: function (data, textStatus, jqXHR) {
+            CallbackGetWorkloadsByUser(data);
+        }
+    });
+}
+
+function CallbackGetWorkloadsByUser(data) {
+
+    //Set number of returned records
+    var num = data.length;
+
+    if (num > 0) {
+        $('#Workload').autocomplete({
+            lookup: data,
+            minLength: 2,
+            onSelect: function (suggestion) {
+                $("#WorkloadId").val(suggestion.data);
+            }
+        });
+    }
+    else
+    {
+        $('#Workload').attr('disabled', 'disabled');
+        $('#btnAddWorkload').attr('disabled', 'disabled');
+    }
 }

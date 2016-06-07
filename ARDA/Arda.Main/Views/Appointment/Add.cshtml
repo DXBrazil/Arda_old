@@ -42,13 +42,11 @@
 
                         <div class="form-group">
                             <label for="Workload">Workload:</label>
-                            <input type="text" class="form-control" id="Workload" name="Workload" list="WorkloadList">
-                            <datalist id="WorkloadList">
-                                <!--Dynamically Content-->
-                            </datalist>
+                            <input type="hidden" name="WorkloadId" id="WorkloadId" />
+                            <input id="Workload" name="Workload" type="search" class="form-control" placeholder="Type part of workload name">
                         </div>
 
-                        <button type="submit" class="btn btn-info" id="btnAdd">
+                        <button type="submit" class="btn btn-info" id="btnAddWorkload">
                             <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
                         </button>
 
@@ -75,4 +73,5 @@
         </div>
     </div>
 </section>
+
 
