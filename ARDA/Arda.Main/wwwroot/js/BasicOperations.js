@@ -372,7 +372,17 @@ $(function ($) {
         }
     });
 
+    // Calling workloads by current user
     GetWorkloadsByUser();
+
+    // Apply mask money to appointment screen
+    LoadMaskMoney();
+
+    // Load CKEditor
+    LoadCKEditor();
+
+    // Load DatePicker
+    LoadDatePicker();
 });
 // General functions
 
@@ -638,4 +648,29 @@ function CallbackGetWorkloadsByUser(data) {
         $('#Workload').attr('disabled', 'disabled');
         $('#btnAddWorkload').attr('disabled', 'disabled');
     }
+}
+
+// Mask money
+
+function LoadMaskMoney()
+{
+    $("#TE").maskMoney({ prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false });
+}
+
+// CKEditor
+
+function LoadCKEditor()
+{
+    CKEDITOR.replace('Editor');
+}
+
+// Datepicker
+
+function LoadDatePicker()
+{
+    $('#sandbox-container .input-group.date').datepicker({
+        format: "mm/dd/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    });
 }

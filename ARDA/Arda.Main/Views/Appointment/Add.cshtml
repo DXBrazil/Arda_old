@@ -46,6 +46,43 @@
                             <input id="Workload" name="Workload" type="search" class="form-control" placeholder="Type part of workload name">
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-4" id="sandbox-container">
+                                @*<div class="form-group">*@
+                                    <label for="AppointmentDate">Appointment date:</label>
+                                    <div class="input-group date">
+                                        <input type="text" id="AppointmentDate" name="AppointmentDate" class="form-control">
+                                        <span class="input-group-addon"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+                                    </div>
+                                @*</div>*@
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="Hours">Hours dispensed (on refered date):</label>
+                                    <select id="Hours" name="Hours" class="form-control">
+                                        <option value="" selected>- SELECT -</option>
+                                        @for (int i = 1; i <= 24; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="TE">T&E (if applyable):</label>
+                                    <input type="text" id="TE" name="TE" class="form-control" placeholder="R$ 0,00" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Editor">Any comment about this activity?</label>
+                            <textarea class="form-control" rows="5" id="Editor"></textarea>
+                        </div>
+
                         <button type="submit" class="btn btn-info" id="btnAddWorkload">
                             <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
                         </button>
