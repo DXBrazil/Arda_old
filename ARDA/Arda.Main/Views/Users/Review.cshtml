@@ -45,13 +45,21 @@
                 </div>
 
                 <div id="permissionsPanel" class="col-lg-9 col-md-9 col-xs-12 panel-permissions-panel">
-
+                    <div class="col-lg-12 cold-md-12 col-xs-12"><h2 class="title-manager-sec">Permissions:</h2></div>
                     <div id="PermissionsList"></div>
 
                     <footer class="col-lg-12 col-md-12 col-xs-12 panel-footer-permissions">
-                        <button id="btnUpdate" type="button" class="btn btn-default">Set Permissions</button>
-                        <button id="btnBan" type="button" class="btn btn-warning">Ban User</button>
-                        <button id="btnClean" type="button" class="btn btn-primary">Clean</button>
+                        <div class="data-sorting-buttons">
+                            <button id="btnUpdate" type="button" class="ds-button-update"><i class="fa fa-retweet" aria-hidden="true"></i>Set Permissions</button>
+                        </div>
+
+                        <div class="data-sorting-buttons">
+                            <button id="btnBan" type="button" class="ds-button-warning"><i class="fa fa-ban" aria-hidden="true"></i>Ban User</button>
+                        </div>
+
+                        <div class="data-sorting-buttons">
+                            <button id="btnClean" type="button" class="ds-button-reset">Clean</button>
+                        </div>
 
                         <div class="clearfix"></div>
                     </footer>
@@ -229,7 +237,7 @@
             var title = $('<h2 class="title-permission-list">').text(category);
             item.append(title);
 
-            var divControls = $('<div>').css('margin', '0 0 0 40px;');
+            var divControls = $('<div>').css('margin', '0');
             for (var j = 0; j < resources.length; j++) {
                 var res = resources[j];
                 var divControl = '<div class="input-group permission-group">' +

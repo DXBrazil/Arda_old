@@ -16504,6 +16504,16 @@ button.close {
     margin-top: 0;
     line-height: 50px; }
 
+.ctn-header-dashboard .data-sorting-buttons,
+.ctn-header-dashboard .data-sorting-buttons a {
+    float: right;
+        margin-right: 10px;
+}
+
+.permission-group label.field--disable {
+    cursor: default;
+}
+
 .dashboard-filter {
   font-weight: 400;
   line-height: 44px;
@@ -16743,7 +16753,7 @@ welcome-picture {
 
                 .permissions-item:checked + label {color: #fff;}
 
-                .panel-footer-permissions button{
+                .panel-footer-permissions .data-sorting-buttons {
                     float: right;
                     margin-left: 20px;
                 }
@@ -16765,6 +16775,7 @@ welcome-picture {
 
                 .navbar-landing-scrolled {
                     background-color: #fff;
+                    box-shadow: 1px 1px 2px #ddd;
                 }
 
                 .navbar.navbar-landing.navbar-landing-scrolled li a {
@@ -16773,6 +16784,7 @@ welcome-picture {
 
                 .navbar.navbar-landing{
                     padding: 10px 0;
+                    
                 }
 
                 .navbar-landing #navbar .nav {
@@ -16807,6 +16819,9 @@ welcome-picture {
                     
 .navbar.navbar-landing li a {
     color: #2d89ef;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
                 }
 
@@ -16834,14 +16849,16 @@ welcome-picture {
             float: left;
             margin-left: 15px;
         }
-        .data-sorting-buttons a{
+        .data-sorting-buttons a,
+        .data-sorting-buttons button{
                 line-height: 45px;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
         }
-        .data-sorting-buttons a .fa {
+        .data-sorting-buttons a .fa,
+        .data-sorting-buttons button .fa {
             margin-right: 5px;
             font-size: 17px;
         }
@@ -16864,11 +16881,48 @@ welcome-picture {
     border: 2px solid #01A4EF;
         }
 
+        .ds-button-update {
+            background-color: #80CC28;
+    color: #fff;
+    border: 2px solid #80CC28;
+        }
+
+        .ds-button-update:hover {
+                background-color: #fff;
+                color: #80CC28;
+   
+        }
+
         .ds-button-edit:hover {
                 background-color: #fff;
                 color: #01A4EF;
    
+        } 
+
+        .ds-button-warning {
+                background-color: #ee1111;
+                color: #fff;
+                border: 2px solid #ee1111;
         }
+
+        .ds-button-warning:hover {
+                background-color: #fff;
+                color: #ee1111;
+        }
+
+                .ds-button-reset {
+                background-color: #918F90;
+                color: #fff;
+                border: 2px solid #918F90;
+        }
+
+        .ds-button-reset:hover {
+                background-color: #fff;
+                color: #918F90;
+        }
+
+
+        
 
         .ds-button-delete {
                 background-color: #F25022;
