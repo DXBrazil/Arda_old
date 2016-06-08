@@ -1,4 +1,4 @@
-﻿using Arda.Common.Kanban.Models;
+﻿using Arda.Common.Models.Kanban;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Kanban.ViewModels
+namespace Arda.Common.ViewModels.Kanban
 {
     [Table("UsersKanban")]
     public class UserKanbanViewModel

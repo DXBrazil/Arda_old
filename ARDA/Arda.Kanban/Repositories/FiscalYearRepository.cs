@@ -1,12 +1,12 @@
-﻿using Arda.Kanban.Interfaces;
-using Arda.Common.Kanban.Models;
+﻿using Arda.Common.Interfaces.Kanban;
+using Arda.Common.Models.Kanban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 
 namespace Arda.Kanban.Repositories
 {
@@ -20,7 +20,7 @@ namespace Arda.Kanban.Repositories
         }
 
         // Adds a new fiscal year to the system.
-        public bool AddNewFiscalYear(FiscalYearMainViewModel fiscalyear)
+        public bool AddNewFiscalYear(FiscalYearViewModel fiscalyear)
         {
             try
             {
@@ -50,14 +50,14 @@ namespace Arda.Kanban.Repositories
         }
 
         // Return a 'numberOfOccurencies' to controller.
-        public List<FiscalYearMainViewModel> GetAllFiscalYears()
+        public List<FiscalYearViewModel> GetAllFiscalYears()
         {
             try
             {
                 //_context.FiscalYears.OrderByDescending(fy => fy.FullNumericFiscalYear).ToList();
                 var response = (from f in _context.FiscalYears
                                 orderby f.FullNumericFiscalYear
-                                select new FiscalYearMainViewModel
+                                select new FiscalYearViewModel
                                 {
                                     FiscalYearID = f.FiscalYearID,
                                     FullNumericFiscalYearMain = f.FullNumericFiscalYear,
@@ -80,13 +80,13 @@ namespace Arda.Kanban.Repositories
         }
 
         // Return fiscal year based on ID
-        public FiscalYearMainViewModel GetFiscalYearByID(Guid id)
+        public FiscalYearViewModel GetFiscalYearByID(Guid id)
         {
             try
             {
                 var response = _context.FiscalYears.Where(fy => fy.FiscalYearID.Equals(id)).SingleOrDefault();
 
-                var fiscalYear = new FiscalYearMainViewModel()
+                var fiscalYear = new FiscalYearViewModel()
                 {
                     FiscalYearID = response.FiscalYearID,
                     TextualFiscalYearMain = response.TextualFiscalYear,
@@ -109,7 +109,7 @@ namespace Arda.Kanban.Repositories
         }
 
         // Update fiscal year data based on ID
-        public bool EditFiscalYearByID(FiscalYearMainViewModel fiscalyear)
+        public bool EditFiscalYearByID(FiscalYearViewModel fiscalyear)
         {
             try
             {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Permissions.Models
+namespace Arda.Common.Models.Permissions
 {
     [Table("Users")]
     public class User

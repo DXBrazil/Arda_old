@@ -10,8 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
-using Arda.Common.Kanban.Models;
-using Arda.Kanban.Interfaces;
+using Arda.Common.Models.Kanban;
+using Arda.Common.Interfaces.Kanban;
 using Arda.Kanban.Repositories;
 using Arda.Common.Middlewares;
 

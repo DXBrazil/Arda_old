@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Arda.Common.Utils;
 using System.Net.Http;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using Microsoft.AspNet.Authorization;
 
 namespace Arda.Main.Controllers
@@ -22,7 +22,7 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", uniqueName, "");
+                var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", uniqueName, "");
 
                 var dados = existentWorkloads.Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ")" })
                                              .Distinct()

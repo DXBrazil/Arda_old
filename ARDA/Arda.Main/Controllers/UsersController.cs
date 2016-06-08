@@ -9,7 +9,7 @@ using Arda.Main.Utils;
 using System.Net.Http;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using System.IO;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using Arda.Common.Utils;
 using Newtonsoft.Json;
 using System.Net;
@@ -67,7 +67,7 @@ namespace Arda.Main.Controllers
                 ViewBag.Token = result.AccessToken;
 
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
+                var user = await Util.ConnectToRemoteService<UserViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
                 return View(user);
             }
             catch (Exception)
@@ -86,7 +86,7 @@ namespace Arda.Main.Controllers
                 ViewBag.Token = result.AccessToken;
 
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
+                var user = await Util.ConnectToRemoteService<UserViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
                 return View(user);
             }
             catch (Exception)
@@ -111,10 +111,10 @@ namespace Arda.Main.Controllers
             try
             {
                 // Getting the response of remote service
-                var existentUsers = await Util.ConnectToRemoteService<List<UserMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusers", uniqueName, "");
+                var existentUsers = await Util.ConnectToRemoteService<List<UserViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusers", uniqueName, "");
 
                 // Mouting rows data
-                foreach (UserMainViewModel user in existentUsers)
+                foreach (UserViewModel user in existentUsers)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(user.Name.ToString());
@@ -140,10 +140,10 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var users = await Util.ConnectToRemoteService<List<UserMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getpendingusers", uniqueName, "");
+                var users = await Util.ConnectToRemoteService<List<UserViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getpendingusers", uniqueName, "");
 
                 // Mouting rows data
-                foreach (UserMainViewModel user in users)
+                foreach (UserViewModel user in users)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(user.Name.ToString());

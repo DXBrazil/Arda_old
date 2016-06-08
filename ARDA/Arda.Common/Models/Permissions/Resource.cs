@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Permissions.Models
+namespace Arda.Common.Models.Permissions
 {
     [DebuggerDisplay("ID={ResourceID}, Name={ResourceName}")]
     [Table("Resources")]

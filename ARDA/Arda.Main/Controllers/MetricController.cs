@@ -10,7 +10,7 @@ using Microsoft.AspNet.Authorization;
 using Newtonsoft.Json;
 using Arda.Common.JSON;
 using Arda.Common.Utils;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using System.Net;
 
 namespace Arda.Main.Controllers
@@ -40,11 +40,11 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var metricToBeViewed = Util.ConnectToRemoteService<MetricMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
+                var metricToBeViewed = Util.ConnectToRemoteService<MetricViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
 
                 if (metricToBeViewed != null)
                 {
-                    var metric = new MetricMainViewModel()
+                    var metric = new MetricViewModel()
                     {
                         MetricID = metricToBeViewed.MetricID,
                         MetricCategory = metricToBeViewed.MetricCategory,
@@ -78,11 +78,11 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var metricToBeViewed = Util.ConnectToRemoteService<MetricMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
+                var metricToBeViewed = Util.ConnectToRemoteService<MetricViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
 
                 if (metricToBeViewed != null)
                 {
-                    var metric = new MetricMainViewModel()
+                    var metric = new MetricViewModel()
                     {
                         MetricID = metricToBeViewed.MetricID,
                         MetricCategory = metricToBeViewed.MetricCategory,
@@ -121,9 +121,9 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentMetrics = await Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
+                var existentMetrics = await Util.ConnectToRemoteService<List<MetricViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
 
-                foreach (MetricMainViewModel m in existentMetrics)
+                foreach (MetricViewModel m in existentMetrics)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(m.TextualFiscalYear.ToString());
@@ -150,9 +150,9 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentMetrics = await Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
+                var existentMetrics = await Util.ConnectToRemoteService<List<MetricViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
 
-                foreach (MetricMainViewModel m in existentMetrics)
+                foreach (MetricViewModel m in existentMetrics)
                 {
                     if (!categories.Contains(m.MetricCategory))
                     {
@@ -169,7 +169,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> AddMetric(MetricMainViewModel metric)
+        public async Task<HttpResponseMessage> AddMetric(MetricViewModel metric)
         {
             if (metric == null)
             {
@@ -191,7 +191,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPut]
-        public async Task<HttpResponseMessage> EditMetric(MetricMainViewModel metric)
+        public async Task<HttpResponseMessage> EditMetric(MetricViewModel metric)
         {
             if (metric == null)
             {

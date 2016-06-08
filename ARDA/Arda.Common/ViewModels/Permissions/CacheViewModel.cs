@@ -1,11 +1,11 @@
-﻿using Arda.Permissions.Models;
+﻿using Arda.Common.Models.Permissions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Permissions.ViewModels
+namespace Arda.Common.ViewModels.Permissions
 {
 
     public class CacheViewModel

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Common.ViewModels
+namespace Arda.Common.ViewModels.Main
 {
-    public class UserMainViewModel
+    public class UserViewModel
     {
         public string Name { get; set; }
 

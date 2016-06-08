@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Reports.Interfaces
+namespace Arda.Common.Interfaces.Reports
 {
     public interface IReportsRepository
     {

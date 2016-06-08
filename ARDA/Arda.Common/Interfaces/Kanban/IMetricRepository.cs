@@ -1,25 +1,25 @@
-﻿using Arda.Common.ViewModels;
-using Arda.Common.Kanban.Models;
+﻿using Arda.Common.ViewModels.Main;
+using Arda.Common.Models.Kanban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Kanban.Interfaces
+namespace Arda.Common.Interfaces.Kanban
 {
     public interface IMetricRepository
     {
         // Add a new metric to the database.
-        bool AddNewMetric(MetricMainViewModel metric);
+        bool AddNewMetric(MetricViewModel metric);
 
         // Update some metric data based on id.
-        bool EditMetricByID(MetricMainViewModel metric);
+        bool EditMetricByID(MetricViewModel metric);
 
         // Return a list of metrics.
-        List<MetricMainViewModel> GetAllMetrics();
+        List<MetricViewModel> GetAllMetrics();
 
         // Return a specific metric by ID.
-        MetricMainViewModel GetMetricByID(Guid id);
+        MetricViewModel GetMetricByID(Guid id);
 
         // Delete a metric based on ID
         bool DeleteMetricByID(Guid id);

@@ -3,7 +3,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using Arda.Permissions.Models;
+using Arda.Common.Models.Permissions;
 
 namespace Arda.Permissions.Migrations
 {
@@ -17,7 +17,7 @@ namespace Arda.Permissions.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16386")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Arda.Permissions.Models.Module", b =>
+            modelBuilder.Entity("Arda.Common.Models.Permissions.Module", b =>
                 {
                     b.Property<int>("ModuleID")
                         .ValueGeneratedOnAdd();
@@ -33,7 +33,7 @@ namespace Arda.Permissions.Migrations
                     b.HasAnnotation("Relational:TableName", "Modules");
                 });
 
-            modelBuilder.Entity("Arda.Permissions.Models.Resource", b =>
+            modelBuilder.Entity("Arda.Common.Models.Permissions.Resource", b =>
                 {
                     b.Property<int>("ResourceID")
                         .ValueGeneratedOnAdd();
@@ -58,7 +58,7 @@ namespace Arda.Permissions.Migrations
                     b.HasAnnotation("Relational:TableName", "Resources");
                 });
 
-            modelBuilder.Entity("Arda.Permissions.Models.User", b =>
+            modelBuilder.Entity("Arda.Common.Models.Permissions.User", b =>
                 {
                     b.Property<string>("UniqueName");
 
@@ -72,7 +72,7 @@ namespace Arda.Permissions.Migrations
                     b.HasAnnotation("Relational:TableName", "Users");
                 });
 
-            modelBuilder.Entity("Arda.Permissions.Models.UsersPermission", b =>
+            modelBuilder.Entity("Arda.Common.Models.Permissions.UsersPermission", b =>
                 {
                     b.Property<int>("PermissionID")
                         .ValueGeneratedOnAdd();
@@ -86,20 +86,20 @@ namespace Arda.Permissions.Migrations
                     b.HasAnnotation("Relational:TableName", "UsersPermissions");
                 });
 
-            modelBuilder.Entity("Arda.Permissions.Models.Resource", b =>
+            modelBuilder.Entity("Arda.Common.Models.Permissions.Resource", b =>
                 {
-                    b.HasOne("Arda.Permissions.Models.Module")
+                    b.HasOne("Arda.Common.Models.Permissions.Module")
                         .WithMany()
                         .HasForeignKey("ModuleID");
                 });
 
-            modelBuilder.Entity("Arda.Permissions.Models.UsersPermission", b =>
+            modelBuilder.Entity("Arda.Common.Models.Permissions.UsersPermission", b =>
                 {
-                    b.HasOne("Arda.Permissions.Models.Resource")
+                    b.HasOne("Arda.Common.Models.Permissions.Resource")
                         .WithMany()
                         .HasForeignKey("ResourceID");
 
-                    b.HasOne("Arda.Permissions.Models.User")
+                    b.HasOne("Arda.Common.Models.Permissions.User")
                         .WithMany()
                         .HasForeignKey("UniqueName");
                 });

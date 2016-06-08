@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Arda.Kanban.Interfaces;
+using Arda.Common.Interfaces.Kanban;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 
 namespace Arda.Kanban.Controllers
 {
@@ -29,7 +29,7 @@ namespace Arda.Kanban.Controllers
             {
                 System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
                 string requestFromPost = reader.ReadToEnd();
-                var metric = JsonConvert.DeserializeObject<MetricMainViewModel>(requestFromPost);
+                var metric = JsonConvert.DeserializeObject<MetricViewModel>(requestFromPost);
 
                 // Calling update
                 var response = _repository.AddNewMetric(metric);
@@ -51,7 +51,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("list")]
-        public IEnumerable<MetricMainViewModel> List()
+        public IEnumerable<MetricViewModel> List()
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("getmetricbyid")]
-        public MetricMainViewModel GetMetricByID(Guid id)
+        public MetricViewModel GetMetricByID(Guid id)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace Arda.Kanban.Controllers
             {
                 System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
                 string requestFromPost = reader.ReadToEnd();
-                var metric = JsonConvert.DeserializeObject<MetricMainViewModel>(requestFromPost);
+                var metric = JsonConvert.DeserializeObject<MetricViewModel>(requestFromPost);
 
                 // Calling update
                 var response = _repository.EditMetricByID(metric);

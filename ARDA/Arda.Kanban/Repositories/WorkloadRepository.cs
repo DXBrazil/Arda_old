@@ -1,6 +1,6 @@
-﻿using Arda.Common.ViewModels;
-using Arda.Kanban.Interfaces;
-using Arda.Common.Kanban.Models;
+﻿using Arda.Common.ViewModels.Main;
+using Arda.Common.Interfaces.Kanban;
+using Arda.Common.Models.Kanban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Arda.Kanban.Repositories
             _context = context;
         }
 
-        public List<WorkloadsByUserMainViewModel> GetWorkloadsByUser(string uniqueName)
+        public List<WorkloadsByUserViewModel> GetWorkloadsByUser(string uniqueName)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace Arda.Kanban.Repositories
                                 join uk in _context.UsersKanban on wbu.KanbanUser.UniqueName equals uk.UniqueName
                                 where uk.UniqueName.Equals(uniqueName)
                                 orderby wb.WBTitle
-                                select new WorkloadsByUserMainViewModel
+                                select new WorkloadsByUserViewModel
                                 {
                                     _WorkloadID = wb.WBID,
                                     _WorkloadTitle = wb.WBTitle,

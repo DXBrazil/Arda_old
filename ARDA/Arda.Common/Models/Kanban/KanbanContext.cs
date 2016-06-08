@@ -1,11 +1,11 @@
-﻿using Arda.Kanban.ViewModels;
+﻿using Arda.Common.ViewModels.Kanban;
 using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Common.Kanban.Models
+namespace Arda.Common.Models.Kanban
 {
     public class KanbanContext : DbContext
     {

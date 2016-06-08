@@ -1,4 +1,4 @@
-﻿using Arda.Kanban.ViewModels;
+﻿using Arda.Common.ViewModels.Kanban;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Common.Kanban.Models
+namespace Arda.Common.Models.Kanban
 {
     [Table("Appointments")]
     public class Appointment

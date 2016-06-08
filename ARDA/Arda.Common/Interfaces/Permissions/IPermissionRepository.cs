@@ -1,10 +1,8 @@
-﻿using Arda.Common.ViewModels;
-using Arda.Permissions.Models;
-using Arda.Permissions.ViewModels;
-using System;
+﻿using Arda.Common.ViewModels.Main;
+using Arda.Common.Models.Permissions;
 using System.Collections.Generic;
 
-namespace Arda.Permissions.Interfaces
+namespace Arda.Common.Interfaces.Permissions
 {
     public interface IPermissionRepository
     {
@@ -40,15 +38,15 @@ namespace Arda.Permissions.Interfaces
 
         int GetNumberOfUsersToApprove();
 
-        IEnumerable<UserMainViewModel> GetPendingUsers();
+        IEnumerable<UserViewModel> GetPendingUsers();
 
         IEnumerable<ResourcesViewModel> GetAllPermissions();
 
         PermissionsViewModel GetUserPermissions(string uniqueName);
 
-        IEnumerable<UserMainViewModel> GetUsers();
+        IEnumerable<UserViewModel> GetUsers();
 
-        UserMainViewModel GetUser(string uniqueName);
+        UserViewModel GetUser(string uniqueName);
 
         void Seed();
     }

@@ -1,4 +1,4 @@
-﻿using Arda.Reports.Interfaces;
+﻿using Arda.Common.Interfaces.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;

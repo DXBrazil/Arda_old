@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Common.Kanban.Models
+namespace Arda.Common.Models.Kanban
 {
     [Table("Technologies")]
     public class Technology

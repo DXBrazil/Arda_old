@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Arda.Common.Utils;
 using System.Net.Http;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using System.Net;
 
 namespace Arda.Main.Controllers
@@ -19,7 +19,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> AddAppointment(AppointmentMainViewModel appointment)
+        public async Task<HttpResponseMessage> AddAppointment(AppointmentViewModel appointment)
         {
             if (appointment == null)
             {

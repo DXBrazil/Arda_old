@@ -6,7 +6,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
 using System.Net.Http;
 using Arda.Common.Utils;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using Newtonsoft.Json;
 using Arda.Common.JSON;
 using System.Net;
@@ -34,10 +34,10 @@ namespace Arda.Main.Controllers
             try
             {
                 // Getting the response of remote service
-                var existentFiscalYears = Util.ConnectToRemoteService<List<FiscalYearMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/list", uniqueName, "").Result;
+                var existentFiscalYears = Util.ConnectToRemoteService<List<FiscalYearViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/list", uniqueName, "").Result;
 
                 // Mouting rows data
-                foreach (FiscalYearMainViewModel fy in existentFiscalYears)
+                foreach (FiscalYearViewModel fy in existentFiscalYears)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(fy.TextualFiscalYearMain.ToString());
@@ -63,11 +63,11 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
+                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
 
                 if (fiscalYearToBeViewed != null)
                 {
-                    var finalFiscalYear = new FiscalYearMainViewModel()
+                    var finalFiscalYear = new FiscalYearViewModel()
                     {
                         FiscalYearID = fiscalYearToBeViewed.FiscalYearID,
                         FullNumericFiscalYearMain = fiscalYearToBeViewed.FullNumericFiscalYearMain,
@@ -96,11 +96,11 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
+                var fiscalYearToBeViewed = Util.ConnectToRemoteService<FiscalYearViewModel>(HttpMethod.Get, Util.KanbanURL + "api/fiscalyear/getfiscalyearbyid?id=" + id, uniqueName, "").Result;
 
                 if (fiscalYearToBeViewed != null)
                 {
-                    var finalFiscalYear = new FiscalYearMainViewModel()
+                    var finalFiscalYear = new FiscalYearViewModel()
                     {
                         FiscalYearID = fiscalYearToBeViewed.FiscalYearID,
                         FullNumericFiscalYearMain = fiscalYearToBeViewed.FullNumericFiscalYearMain,
@@ -122,7 +122,7 @@ namespace Arda.Main.Controllers
 
         // Update the fiscal year in database
         [HttpPost]
-        public JsonResult EditFiscalYear(FiscalYearMainViewModel fiscalyear)
+        public JsonResult EditFiscalYear(FiscalYearViewModel fiscalyear)
         {
             if (fiscalyear == null)
             {
@@ -179,7 +179,7 @@ namespace Arda.Main.Controllers
             return View();
         }
 
-        public JsonResult AddFiscalYear(FiscalYearMainViewModel fiscalYear)
+        public JsonResult AddFiscalYear(FiscalYearViewModel fiscalYear)
         {
             if (fiscalYear == null)
             {

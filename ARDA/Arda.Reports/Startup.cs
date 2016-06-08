@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 using Arda.Common.Middlewares;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
-using Arda.Reports.Models;
+using Arda.Common.Models.Reports;
 using Microsoft.Data.Entity;
-using Arda.Reports.Interfaces;
+using Arda.Common.Interfaces.Reports;
 using Arda.Reports.Repositories;
 
 namespace Arda.Reports

@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.AspNet.Mvc;
-using Arda.Permissions.Interfaces;
+using Arda.Common.Interfaces.Permissions;
+using Arda.Common.Models.Permissions;
 using System.Net.Http;
 using System.Net;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -30,7 +31,7 @@ namespace Arda.Permissions.Controllers
             {
                 if (uniqueName != null && name != null && code != null)
                 {
-                    Models.User responseUser = null;
+                    User responseUser = null;
                     bool responseEmail = false;
 
                     bool UserExists = _permission.VerifyIfUserIsInUserPermissionsDatabase(uniqueName);

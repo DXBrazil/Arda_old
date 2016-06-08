@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Arda.Common.ViewModels;
-using Arda.Kanban.Interfaces;
+using Arda.Common.ViewModels.Main;
+using Arda.Common.Interfaces.Kanban;
+
 
 namespace Arda.Kanban.Controllers
 {
@@ -20,7 +21,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("listworkloadbyuser")]
-        public IEnumerable<WorkloadsByUserMainViewModel> ListWorkloadByUser()
+        public IEnumerable<WorkloadsByUserViewModel> ListWorkloadByUser()
         {
             try
             {
