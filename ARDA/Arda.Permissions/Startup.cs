@@ -7,7 +7,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Arda.Common.Models.Permissions;
+using Arda.Kanban.Models;
 using Microsoft.Data.Entity;
 using Arda.Common.Interfaces.Permissions;
 using Arda.Permissions.Repositories;

@@ -3,7 +3,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using Arda.Common.Models.Kanban;
+using Arda.Kanban.Models;
 
 namespace Arda.Kanban.Migrations
 {
@@ -16,7 +16,7 @@ namespace Arda.Kanban.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16386")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Arda.Kanban.Models.Activity", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.Activity", b =>
                 {
                     b.Property<Guid>("ActivityID")
                         .ValueGeneratedOnAdd();
@@ -29,7 +29,31 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "Activities");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.File", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.Appointment", b =>
+                {
+                    b.Property<Guid>("AppointmentID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AppointmentComment");
+
+                    b.Property<DateTime>("AppointmentDate");
+
+                    b.Property<int>("AppointmentHoursDispensed");
+
+                    b.Property<decimal>("AppointmentTE");
+
+                    b.Property<string>("AppointmentUserUniqueName")
+                        .IsRequired();
+
+                    b.Property<Guid?>("AppointmentWorkloadWBID")
+                        .IsRequired();
+
+                    b.HasKey("AppointmentID");
+
+                    b.HasAnnotation("Relational:TableName", "Appointments");
+                });
+
+            modelBuilder.Entity("Arda.Common.Models.Kanban.File", b =>
                 {
                     b.Property<Guid>("FileID")
                         .ValueGeneratedOnAdd();
@@ -49,7 +73,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "Files");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.FiscalYear", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.FiscalYear", b =>
                 {
                     b.Property<Guid>("FiscalYearID")
                         .ValueGeneratedOnAdd();
@@ -64,7 +88,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "FiscalYears");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.Metric", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.Metric", b =>
                 {
                     b.Property<Guid>("MetricID")
                         .ValueGeneratedOnAdd();
@@ -85,7 +109,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "Metrics");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.Technology", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.Technology", b =>
                 {
                     b.Property<Guid>("TechnologyID")
                         .ValueGeneratedOnAdd();
@@ -98,7 +122,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "Technologies");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklog", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklog", b =>
                 {
                     b.Property<Guid>("WBID")
                         .ValueGeneratedOnAdd();
@@ -128,7 +152,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "WorkloadBacklogs");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklogMetric", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogMetric", b =>
                 {
                     b.Property<Guid>("WBMetricID")
                         .ValueGeneratedOnAdd();
@@ -142,7 +166,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "WorkloadBacklogMetrics");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklogTechnology", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogTechnology", b =>
                 {
                     b.Property<Guid>("WBUTechnologyID")
                         .ValueGeneratedOnAdd();
@@ -156,7 +180,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "WorkloadBacklogTechnologies");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklogUser", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogUser", b =>
                 {
                     b.Property<Guid>("WBUserID")
                         .ValueGeneratedOnAdd();
@@ -170,7 +194,7 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "WorkloadBacklogUsers");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.ViewModels.UserKanbanViewModel", b =>
+            modelBuilder.Entity("Arda.Common.ViewModels.Kanban.UserKanbanViewModel", b =>
                 {
                     b.Property<string>("UniqueName");
 
@@ -179,56 +203,67 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "UsersKanban");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.File", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.Appointment", b =>
                 {
-                    b.HasOne("Arda.Kanban.Models.WorkloadBacklog")
+                    b.HasOne("Arda.Common.ViewModels.Kanban.UserKanbanViewModel")
+                        .WithMany()
+                        .HasForeignKey("AppointmentUserUniqueName");
+
+                    b.HasOne("Arda.Common.Models.Kanban.WorkloadBacklog")
+                        .WithMany()
+                        .HasForeignKey("AppointmentWorkloadWBID");
+                });
+
+            modelBuilder.Entity("Arda.Common.Models.Kanban.File", b =>
+                {
+                    b.HasOne("Arda.Common.Models.Kanban.WorkloadBacklog")
                         .WithMany()
                         .HasForeignKey("WorkloadBacklogWBID");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.Metric", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.Metric", b =>
                 {
-                    b.HasOne("Arda.Kanban.Models.FiscalYear")
+                    b.HasOne("Arda.Common.Models.Kanban.FiscalYear")
                         .WithMany()
                         .HasForeignKey("FiscalYearFiscalYearID");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklog", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklog", b =>
                 {
-                    b.HasOne("Arda.Kanban.Models.Activity")
+                    b.HasOne("Arda.Common.Models.Kanban.Activity")
                         .WithMany()
                         .HasForeignKey("WBActivityActivityID");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklogMetric", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogMetric", b =>
                 {
-                    b.HasOne("Arda.Kanban.Models.Metric")
+                    b.HasOne("Arda.Common.Models.Kanban.Metric")
                         .WithMany()
                         .HasForeignKey("MetricMetricID");
 
-                    b.HasOne("Arda.Kanban.Models.WorkloadBacklog")
+                    b.HasOne("Arda.Common.Models.Kanban.WorkloadBacklog")
                         .WithMany()
                         .HasForeignKey("WorkloadBacklogWBID");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklogTechnology", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogTechnology", b =>
                 {
-                    b.HasOne("Arda.Kanban.Models.Technology")
+                    b.HasOne("Arda.Common.Models.Kanban.Technology")
                         .WithMany()
                         .HasForeignKey("TechnologyTechnologyID");
 
-                    b.HasOne("Arda.Kanban.Models.WorkloadBacklog")
+                    b.HasOne("Arda.Common.Models.Kanban.WorkloadBacklog")
                         .WithMany()
                         .HasForeignKey("WorkloadBacklogWBID");
                 });
 
-            modelBuilder.Entity("Arda.Kanban.Models.WorkloadBacklogUser", b =>
+            modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogUser", b =>
                 {
-                    b.HasOne("Arda.Kanban.ViewModels.UserKanbanViewModel")
+                    b.HasOne("Arda.Common.ViewModels.Kanban.UserKanbanViewModel")
                         .WithMany()
                         .HasForeignKey("KanbanUserUniqueName");
 
-                    b.HasOne("Arda.Kanban.Models.WorkloadBacklog")
+                    b.HasOne("Arda.Common.Models.Kanban.WorkloadBacklog")
                         .WithMany()
                         .HasForeignKey("WorkloadBacklogWBID");
                 });

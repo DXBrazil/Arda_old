@@ -1,11 +1,12 @@
-﻿using Microsoft.Data.Entity;
+﻿using Arda.Common.Models.Permissions;
+using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 
-namespace Arda.Common.Models.Permissions
+namespace Arda.Kanban.Models
 {
     public class PermissionsContext : DbContext
     {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Arda.Common.Models.Kanban;
 using Arda.Common.ViewModels.Main;
+using Arda.Kanban.Models;
 
 namespace Arda.Kanban.Repositories
 {

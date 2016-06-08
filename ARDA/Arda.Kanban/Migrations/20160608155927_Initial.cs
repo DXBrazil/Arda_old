@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Arda.Kanban.Migrations
 {
-    public partial class ArdaMigration_06062016_0924 : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -96,6 +96,34 @@ namespace Arda.Kanban.Migrations
                         principalTable: "FiscalYears",
                         principalColumn: "FiscalYearID",
                         onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    AppointmentID = table.Column<Guid>(nullable: false),
+                    AppointmentComment = table.Column<string>(nullable: true),
+                    AppointmentDate = table.Column<DateTime>(nullable: false),
+                    AppointmentHoursDispensed = table.Column<int>(nullable: false),
+                    AppointmentTE = table.Column<decimal>(nullable: false),
+                    AppointmentUserUniqueName = table.Column<string>(nullable: false),
+                    AppointmentWorkloadWBID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.AppointmentID);
+                    table.ForeignKey(
+                        name: "FK_Appointment_UserKanbanViewModel_AppointmentUserUniqueName",
+                        column: x => x.AppointmentUserUniqueName,
+                        principalTable: "UsersKanban",
+                        principalColumn: "UniqueName",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointment_WorkloadBacklog_AppointmentWorkloadWBID",
+                        column: x => x.AppointmentWorkloadWBID,
+                        principalTable: "WorkloadBacklogs",
+                        principalColumn: "WBID",
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "Files",
@@ -193,6 +221,7 @@ namespace Arda.Kanban.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable("Appointments");
             migrationBuilder.DropTable("Files");
             migrationBuilder.DropTable("WorkloadBacklogMetrics");
             migrationBuilder.DropTable("WorkloadBacklogTechnologies");

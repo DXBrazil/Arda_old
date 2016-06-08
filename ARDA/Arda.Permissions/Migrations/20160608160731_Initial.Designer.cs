@@ -3,13 +3,13 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using Arda.Common.Models.Permissions;
+using Arda.Kanban.Models;
 
 namespace Arda.Permissions.Migrations
 {
     [DbContext(typeof(PermissionsContext))]
-    [Migration("20160601160716_initial-permissions")]
-    partial class initialpermissions
+    [Migration("20160608160731_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

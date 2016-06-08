@@ -3,7 +3,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using Arda.Common.Models.Permissions;
+using Arda.Kanban.Models;
 
 namespace Arda.Permissions.Migrations
 {

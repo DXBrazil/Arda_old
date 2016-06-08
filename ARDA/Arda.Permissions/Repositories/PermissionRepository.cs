@@ -10,6 +10,7 @@ using Arda.Common.Email;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Arda.Common.ViewModels.Main;
+using Arda.Kanban.Models;
 
 namespace Arda.Permissions.Repositories
 {

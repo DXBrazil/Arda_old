@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Arda.Common.ViewModels.Main;
+using Arda.Kanban.Models;
 
 namespace Arda.Kanban.Repositories
 {
