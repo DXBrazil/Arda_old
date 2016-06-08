@@ -66,10 +66,9 @@
                             <textarea class="form-control" id="Description" name="Description" rows="5"></textarea>
                         </div>
 
-
-                        <button type="submit" class="btn btn-info" id="btnAdd">
-                            <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
-                        </button>
+                        <div class="data-sorting-buttons">
+                            <button id="btnAdd" type="submit" class="ds-button-update"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                        </div>
 
                     </form>
 
@@ -84,8 +83,8 @@
                     </h3>
                     <p>
                         To add a new Metric, please click on button bellow. <br />
-                        <div style="margin-bottom:50px;">
-                            <a asp-controller="Metric" asp-action="Add" class="btn btn-success" style="width:100px;">+ Add</a>
+                        <div class="data-sorting-buttons">
+                            <a asp-controller="Metric" asp-action="Add" class="ds-button-update"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
                         </div>
                     </p>
                 </div>
