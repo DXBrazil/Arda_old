@@ -106,6 +106,36 @@ namespace Arda.Common.Utils
             }
         }
 
+        public static async Task<HttpResponseMessage> ConnectToRemoteService<T>(HttpMethod method, string url, T body)
+        {
+            try
+            {
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(method, url);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                if (body != null)
+                {
+                    var serialized = JsonConvert.SerializeObject(body);
+                    request.Content = new ByteArrayContent(GetBytes(serialized));
+                }
+                
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public static async Task<HttpResponseMessage> ConnectToRemoteService<T>(HttpMethod method, string url, string uniqueName, string code, Guid id)
         {
             try

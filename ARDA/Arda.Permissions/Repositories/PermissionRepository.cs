@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Arda.Common.ViewModels.Main;
 using Arda.Kanban.Models;
+using System.Net.Http;
 
 namespace Arda.Permissions.Repositories
 {
+    //TODO: Splits in User and Permission Repository
     public class PermissionRepository : IPermissionRepository
     {
         private PermissionsContext _context;
@@ -23,27 +25,6 @@ namespace Arda.Permissions.Repositories
         {
             _context = context;
             _cache = cache;
-        }
-
-        public void Seed()
-        {
-            //_context.Modules.Add(new Module() { ModuleName = "Infos", Endpoint = "http://localhost:2891/" });
-            //_context.Modules.Add(new Module() { ModuleName = "Values", Endpoint = "http://localhost:2891/" });
-            //_context.SaveChanges();
-            //var mod1 = _context.Modules.First(m => m.ModuleName == "Infos");
-            //var mod2 = _context.Modules.First(m => m.ModuleName == "Values");
-            //_context.Resources.Add(new Resource() { ModuleID = mod1.ModuleID, ResourceName = "getinfo" });
-            //_context.Resources.Add(new Resource() { ModuleID = mod2.ModuleID, ResourceName = "getvalues" });
-            //_context.SaveChanges();
-            var res =
-                from r in _context.Resources
-                where r.ResourceName == "index"
-                select r;
-            foreach (Resource r in res)
-            {
-
-            }
-            var obj = _context.Resources.ToList();
         }
 
 
@@ -188,6 +169,14 @@ namespace Arda.Permissions.Repositories
                 _context.UsersPermissions.RemoveRange(userPermissions);
                 _context.Users.Remove(user);
                 _context.SaveChanges();
+
+                //From Kanban:
+                var res = Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/user/delete?userID=" + uniqueName, "kanban", "kanban").Result;
+
+                if (!res.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
             }
             catch (Exception)
             {
@@ -309,10 +298,19 @@ namespace Arda.Permissions.Repositories
                     UserPermissions = new List<UsersPermission>()
                 };
 
+                //Save on Permissions
                 _context.Users.Add(user);
-                var response = _context.SaveChanges();
+                _context.SaveChanges();
 
-                if (response >= 0)
+                //Save on Kanban
+                var kanbanUser = new Common.ViewModels.Kanban.UserViewModel()
+                {
+                    UniqueName = user.UniqueName,
+                    Name = user.Name
+                };
+                var res = Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/user/add", "kanban", "kanban",  kanbanUser).Result;
+
+                if (res.IsSuccessStatusCode)
                 {
                     return user;
                 }
@@ -502,13 +500,13 @@ namespace Arda.Permissions.Repositories
             try
             {
                 var data = (from user in _context.Users
-                           where user.UniqueName==uniqueName
-                           select new UserViewModel
-                           {
-                               Name = user.Name,
-                               Email = user.UniqueName,
-                               Status = (int)user.Status
-                           }).First();
+                            where user.UniqueName == uniqueName
+                            select new UserViewModel
+                            {
+                                Name = user.Name,
+                                Email = user.UniqueName,
+                                Status = (int)user.Status
+                            }).First();
 
                 return data;
             }

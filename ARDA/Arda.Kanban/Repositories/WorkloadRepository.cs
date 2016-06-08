@@ -23,7 +23,7 @@ namespace Arda.Kanban.Repositories
             {
                 var response = (from wb in _context.WorkloadBacklogs
                                 join wbu in _context.WorkloadBacklogUsers on wb.WBUsers.SingleOrDefault().WBUserID equals wbu.WBUserID
-                                join uk in _context.UsersKanban on wbu.KanbanUser.UniqueName equals uk.UniqueName
+                                join uk in _context.Users on wbu.User.UniqueName equals uk.UniqueName
                                 where uk.UniqueName.Equals(uniqueName)
                                 orderby wb.WBTitle
                                 select new WorkloadsByUserViewModel

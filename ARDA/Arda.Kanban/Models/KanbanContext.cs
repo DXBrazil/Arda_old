@@ -1,5 +1,4 @@
 ﻿using Arda.Common.Models.Kanban;
-using Arda.Common.ViewModels.Kanban;
 using Microsoft.Data.Entity;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace Arda.Kanban.Models
 
         public DbSet<File> Files { get; set; }
 
-        public DbSet<UserKanbanViewModel> UsersKanban { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<WorkloadBacklog> WorkloadBacklogs { get; set; }
 

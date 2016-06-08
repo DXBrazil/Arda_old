@@ -43,14 +43,15 @@ namespace Arda.Kanban.Migrations
                     table.PrimaryKey("PK_Technology", x => x.TechnologyID);
                 });
             migrationBuilder.CreateTable(
-                name: "UsersKanban",
+                name: "Users",
                 columns: table => new
                 {
-                    UniqueName = table.Column<string>(nullable: false)
+                    UniqueName = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserKanbanViewModel", x => x.UniqueName);
+                    table.PrimaryKey("PK_User", x => x.UniqueName);
                 });
             migrationBuilder.CreateTable(
                 name: "WorkloadBacklogs",
@@ -113,9 +114,9 @@ namespace Arda.Kanban.Migrations
                 {
                     table.PrimaryKey("PK_Appointment", x => x.AppointmentID);
                     table.ForeignKey(
-                        name: "FK_Appointment_UserKanbanViewModel_AppointmentUserUniqueName",
+                        name: "FK_Appointment_User_AppointmentUserUniqueName",
                         column: x => x.AppointmentUserUniqueName,
-                        principalTable: "UsersKanban",
+                        principalTable: "Users",
                         principalColumn: "UniqueName",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -174,16 +175,16 @@ namespace Arda.Kanban.Migrations
                 columns: table => new
                 {
                     WBUserID = table.Column<Guid>(nullable: false),
-                    KanbanUserUniqueName = table.Column<string>(nullable: true),
+                    UserUniqueName = table.Column<string>(nullable: true),
                     WorkloadBacklogWBID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkloadBacklogUser", x => x.WBUserID);
                     table.ForeignKey(
-                        name: "FK_WorkloadBacklogUser_UserKanbanViewModel_KanbanUserUniqueName",
-                        column: x => x.KanbanUserUniqueName,
-                        principalTable: "UsersKanban",
+                        name: "FK_WorkloadBacklogUser_User_UserUniqueName",
+                        column: x => x.UserUniqueName,
+                        principalTable: "Users",
                         principalColumn: "UniqueName",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -228,7 +229,7 @@ namespace Arda.Kanban.Migrations
             migrationBuilder.DropTable("WorkloadBacklogUsers");
             migrationBuilder.DropTable("Metrics");
             migrationBuilder.DropTable("Technologies");
-            migrationBuilder.DropTable("UsersKanban");
+            migrationBuilder.DropTable("Users");
             migrationBuilder.DropTable("WorkloadBacklogs");
             migrationBuilder.DropTable("FiscalYears");
             migrationBuilder.DropTable("Activities");

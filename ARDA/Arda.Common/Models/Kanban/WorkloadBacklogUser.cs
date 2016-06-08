@@ -1,5 +1,4 @@
-﻿using Arda.Common.ViewModels.Kanban;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,6 +17,6 @@ namespace Arda.Common.Models.Kanban
 
         public virtual WorkloadBacklog WorkloadBacklog { get; set; }
 
-        public virtual UserKanbanViewModel KanbanUser { get; set; }
+        public virtual User User { get; set; }
     }
 }

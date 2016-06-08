@@ -122,6 +122,18 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "Technologies");
                 });
 
+            modelBuilder.Entity("Arda.Common.Models.Kanban.User", b =>
+                {
+                    b.Property<string>("UniqueName");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("UniqueName");
+
+                    b.HasAnnotation("Relational:TableName", "Users");
+                });
+
             modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklog", b =>
                 {
                     b.Property<Guid>("WBID")
@@ -185,7 +197,7 @@ namespace Arda.Kanban.Migrations
                     b.Property<Guid>("WBUserID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("KanbanUserUniqueName");
+                    b.Property<string>("UserUniqueName");
 
                     b.Property<Guid?>("WorkloadBacklogWBID");
 
@@ -194,18 +206,9 @@ namespace Arda.Kanban.Migrations
                     b.HasAnnotation("Relational:TableName", "WorkloadBacklogUsers");
                 });
 
-            modelBuilder.Entity("Arda.Common.ViewModels.Kanban.UserKanbanViewModel", b =>
-                {
-                    b.Property<string>("UniqueName");
-
-                    b.HasKey("UniqueName");
-
-                    b.HasAnnotation("Relational:TableName", "UsersKanban");
-                });
-
             modelBuilder.Entity("Arda.Common.Models.Kanban.Appointment", b =>
                 {
-                    b.HasOne("Arda.Common.ViewModels.Kanban.UserKanbanViewModel")
+                    b.HasOne("Arda.Common.Models.Kanban.User")
                         .WithMany()
                         .HasForeignKey("AppointmentUserUniqueName");
 
@@ -259,9 +262,9 @@ namespace Arda.Kanban.Migrations
 
             modelBuilder.Entity("Arda.Common.Models.Kanban.WorkloadBacklogUser", b =>
                 {
-                    b.HasOne("Arda.Common.ViewModels.Kanban.UserKanbanViewModel")
+                    b.HasOne("Arda.Common.Models.Kanban.User")
                         .WithMany()
-                        .HasForeignKey("KanbanUserUniqueName");
+                        .HasForeignKey("UserUniqueName");
 
                     b.HasOne("Arda.Common.Models.Kanban.WorkloadBacklog")
                         .WithMany()

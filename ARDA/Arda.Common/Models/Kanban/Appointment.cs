@@ -1,5 +1,4 @@
-﻿using Arda.Common.ViewModels.Kanban;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +15,7 @@ namespace Arda.Common.Models.Kanban
         public Guid AppointmentID { get; set; }
 
         [Required]
-        public virtual UserKanbanViewModel AppointmentUser { get; set; }
+        public virtual User AppointmentUser { get; set; }
 
         [Required]
         public virtual WorkloadBacklog AppointmentWorkload { get; set; }

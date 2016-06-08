@@ -6,14 +6,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Common.ViewModels.Kanban
+namespace Arda.Common.Models.Kanban
 {
-    [Table("UsersKanban")]
-    public class UserKanbanViewModel
+    [Table("Users")]
+    public class User
     {
         [Key]
         [Required]
         public string UniqueName { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
 
 
         public virtual IEnumerable<WorkloadBacklogUser> WBUsers { get; set; }

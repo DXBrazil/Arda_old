@@ -47,7 +47,5 @@ namespace Arda.Common.Interfaces.Permissions
         IEnumerable<UserViewModel> GetUsers();
 
         UserViewModel GetUser(string uniqueName);
-
-        void Seed();
     }
 }
