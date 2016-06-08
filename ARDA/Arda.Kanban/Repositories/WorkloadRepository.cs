@@ -1,6 +1,6 @@
 ﻿using Arda.Common.ViewModels;
 using Arda.Kanban.Interfaces;
-using Arda.Kanban.Models;
+using Arda.Common.Kanban.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

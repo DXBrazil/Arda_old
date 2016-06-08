@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Kanban.Models
+namespace Arda.Common.Kanban.Models
 {
     public class KanbanContext : DbContext
     {

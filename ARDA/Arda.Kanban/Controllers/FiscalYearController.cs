@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using System.Net;
-using Arda.Kanban.Models;
+using Arda.Common.Kanban.Models;
 using Arda.Kanban.Interfaces;
 using Arda.Common.ViewModels;
 using Newtonsoft.Json;

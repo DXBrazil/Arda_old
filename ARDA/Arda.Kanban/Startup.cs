@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
-using Arda.Kanban.Models;
+using Arda.Common.Kanban.Models;
 using Arda.Kanban.Interfaces;
 using Arda.Kanban.Repositories;
 using Arda.Common.Middlewares;
@@ -62,8 +62,8 @@ namespace Arda.Kanban
             }));
 
             ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Kanban;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Kanban;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            //var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Kanban;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Kanban;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(Connection));
 
             //Registering services.

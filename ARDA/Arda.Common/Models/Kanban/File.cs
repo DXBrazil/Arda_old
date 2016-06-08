@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Arda.Kanban.Models
+namespace Arda.Common.Kanban.Models
 {
     [Table("Files")]
     public class File

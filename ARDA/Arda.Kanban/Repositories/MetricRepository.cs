@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arda.Common.ViewModels;
-using Arda.Kanban.Models;
+using Arda.Common.Kanban.Models;
 
 namespace Arda.Kanban.Repositories
 {

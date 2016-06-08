@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Arda.Kanban.Models
+namespace Arda.Common.Kanban.Models
 {
     [Table("WorkloadBacklogUsers")]
     public class WorkloadBacklogUser
