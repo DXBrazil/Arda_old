@@ -17952,6 +17952,7 @@ welcome-picture {
     width: 100%;
     position: relative;
     cursor: pointer;
+    color: #767676;
 }
 .folder-header,
 .folder-footer {
@@ -17999,13 +18000,18 @@ welcome-picture {
     display: block;
     width: 80%;
     height: 40px;
+    font: normal normal normal 25px/1 FontAwesome;
+    line-height: 40px;
+    text-align: center;
 }
-.folder-check-ipt-status:checked + label:before {
-    background-color: #3c763d;
+.folder-check-ipt-status:checked + label:before,
+.folder-check-status:hover:before {
+    background-color: #80CC28;
+    content: "\f00c";
+    color: #fff;
 }
 .folder-footer {
     position: relative;
     height: 50px;
     font-size: 12px;
-    color: #767676;
 }
