@@ -17,6 +17,32 @@ namespace Arda.Kanban.Repositories
             _context = context;
         }
 
+
+        public bool AddNewWorkload(WorkloadViewModel workload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteWorkloadByID(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool EditWorkload(WorkloadViewModel workload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<WorkloadViewModel> GetAllWorkloads()
+        {
+            throw new NotImplementedException();
+        }
+
+        public WorkloadViewModel GetWorkloadByID(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<WorkloadsByUserViewModel> GetWorkloadsByUser(string uniqueName)
         {
             try
@@ -47,6 +73,11 @@ namespace Arda.Kanban.Repositories
             {
                 return null;
             }
+        }
+
+        IEnumerable<WorkloadsByUserViewModel> IWorkloadRepository.GetWorkloadsByUser(string uniqueName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

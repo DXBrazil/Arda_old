@@ -154,6 +154,8 @@ namespace Arda.Kanban.Migrations
 
                     b.Property<int>("WBExpertise");
 
+                    b.Property<bool>("WBIsWorkload");
+
                     b.Property<DateTime>("WBStartDate");
 
                     b.Property<string>("WBTitle")

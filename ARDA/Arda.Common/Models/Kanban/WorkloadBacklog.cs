@@ -16,6 +16,9 @@ namespace Arda.Common.Models.Kanban
         public Guid WBID { get; set; }
 
         [Required]
+        public bool WBIsWorkload { get; set; }
+
+        [Required]
         public DateTime WBStartDate { get; set; }
 
         [Required]

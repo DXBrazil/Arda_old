@@ -8,7 +8,7 @@ using Arda.Kanban.Models;
 namespace Arda.Kanban.Migrations
 {
     [DbContext(typeof(KanbanContext))]
-    [Migration("20160608170729_Initial")]
+    [Migration("20160609165714_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,6 +154,8 @@ namespace Arda.Kanban.Migrations
                     b.Property<DateTime>("WBEndDate");
 
                     b.Property<int>("WBExpertise");
+
+                    b.Property<bool>("WBIsWorkload");
 
                     b.Property<DateTime>("WBStartDate");
 

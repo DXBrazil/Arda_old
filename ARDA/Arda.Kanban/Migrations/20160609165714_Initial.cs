@@ -65,6 +65,7 @@ namespace Arda.Kanban.Migrations
                     WBDescription = table.Column<string>(nullable: true),
                     WBEndDate = table.Column<DateTime>(nullable: false),
                     WBExpertise = table.Column<int>(nullable: false),
+                    WBIsWorkload = table.Column<bool>(nullable: false),
                     WBStartDate = table.Column<DateTime>(nullable: false),
                     WBTitle = table.Column<string>(nullable: false)
                 },
