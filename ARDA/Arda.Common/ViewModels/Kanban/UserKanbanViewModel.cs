@@ -15,9 +15,8 @@ namespace Arda.Common.ViewModels.Kanban
         [Required]
         public string UniqueName { get; set; }
 
-
         public virtual IEnumerable<WorkloadBacklogUser> WBUsers { get; set; }
 
-        public virtual IEnumerable<Appointment> AppointmentUsers { get; set; }
+        public virtual ICollection<Appointment> AppointmentUsers { get; set; }
     }
 }

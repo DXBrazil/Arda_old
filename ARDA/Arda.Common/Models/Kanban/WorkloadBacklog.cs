@@ -50,7 +50,7 @@ namespace Arda.Common.Models.Kanban
 
         public virtual IEnumerable<WorkloadBacklogTechnology> WBTechnologies { get; set; }
 
-        public virtual IEnumerable<Appointment> WBAppointments { get; set; }
+        public virtual ICollection<Appointment> WBAppointments { get; set; }
 
     }
 
