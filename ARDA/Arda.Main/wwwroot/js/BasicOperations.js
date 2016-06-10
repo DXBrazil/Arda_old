@@ -14,9 +14,15 @@ $(function ($) {
     //Loading datatable to appointments.
     $("#table-appointments").DataTable({
         "sAjaxSource": "/Appointment/ListAllAppointments",
+        "columns": [
+            { "width": "35%" },
+            { "width": "15%" },
+            { "width": "10%" },
+            { "width": "5%" },
+            { "width": "20%" }
+        ],
         "columnDefs": [
             {
-                "width": "33%", "targets": 2,
                 "orderable": false
             }
         ]
@@ -540,6 +546,25 @@ function ModalDelete_Metric(MetricID, MetricCategory, MetricName) {
     $("#generic-modal .modal-title").html("<strong>" + ModalTitle + "</strong>");
     $("#generic-modal .modal-body").html(ModalBody);
     $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteMetric('" + MetricID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
+}
+
+function ModalDelete_Appointment(AppointmentID, WorkloadTitle, AppointmentDate, AppointmentHoursDispensed, AppointmentUserName) {
+    //Defining values
+    var ModalTitle = "Deleting appointment to '" + WorkloadTitle + "' workload";
+    var ModalBody = "<p style='margin-bottom:20px; font-weight: 400;' class='p-modal-body'>This operation will be permanent. Are you sure?</p>";
+    ModalBody += "<p><ul>";
+    ModalBody += "<li>Appointment ID: " + AppointmentID + "</li>";
+    ModalBody += "<li>Workload: " + WorkloadTitle + "</li>";
+    ModalBody += "<li>Registered in: " + AppointmentDate + "</li>";
+    ModalBody += "<li>Hours dispensed: " + AppointmentHoursDispensed + "</li>";
+    ModalBody += "<li>User: " + AppointmentUserName + "</li>";
+    ModalBody += "</ul></p>";
+    ModalBody += "<div id='message-panel' style='margin-top: 10px;'></div>"
+
+    //Injecting contents
+    $("#generic-modal .modal-title").html("<strong>" + ModalTitle + "</strong>");
+    $("#generic-modal .modal-body").html(ModalBody);
+    $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteAppointment('" + AppointmentID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
 }
 
 

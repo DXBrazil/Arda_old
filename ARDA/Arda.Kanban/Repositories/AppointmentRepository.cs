@@ -75,7 +75,8 @@ namespace Arda.Kanban.Repositories
                                     _AppointmentWorkloadWBID = a.AppointmentWorkload.WBID,
                                     _WorkloadTitle = w.WBTitle,
                                     _AppointmentDate = a.AppointmentDate,
-                                    _AppointmentHoursDispensed = a.AppointmentHoursDispensed
+                                    _AppointmentHoursDispensed = a.AppointmentHoursDispensed,
+                                    _AppointmentUserUniqueName = a.AppointmentUser.UniqueName
                                 }).ToList();
 
                 if (response != null)
@@ -90,6 +91,41 @@ namespace Arda.Kanban.Repositories
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public AppointmentViewModel GetAppointmentByID(Guid id)
+        {
+            try
+            {
+                var appointment = (from a in _context.Appointments
+                                  join w in _context.WorkloadBacklogs on a.AppointmentWorkload.WBID equals w.WBID
+                                  join u in _context.UsersKanban on a.AppointmentUser.UniqueName equals u.UniqueName
+                                  where a.AppointmentID == id
+                                  select new AppointmentViewModel
+                                  {
+                                      _AppointmentID = a.AppointmentID,
+                                      _AppointmentUserUniqueName = u.UniqueName,
+                                      _AppointmentDate = a.AppointmentDate,
+                                      _AppointmentHoursDispensed = a.AppointmentHoursDispensed,
+                                      _AppointmentTE = a.AppointmentTE,
+                                      _AppointmentWorkloadWBID = w.WBID,
+                                      _WorkloadTitle = w.WBTitle,
+                                      _AppointmentComment = a.AppointmentComment
+                                  }).First();
+
+                if (appointment != null)
+                {
+                    return appointment;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

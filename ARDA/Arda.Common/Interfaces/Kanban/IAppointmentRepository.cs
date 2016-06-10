@@ -11,5 +11,7 @@ namespace Arda.Common.Interfaces.Kanban
         bool AddNewAppointment(AppointmentViewModel appointment);
 
         List<AppointmentViewModel> GetAllAppointments();
+
+        AppointmentViewModel GetAppointmentByID(Guid id);
     }
 }

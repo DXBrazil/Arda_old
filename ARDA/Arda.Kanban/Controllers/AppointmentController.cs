@@ -71,5 +71,28 @@ namespace Arda.Kanban.Controllers
                 return null;
             }
         }
+
+        [HttpGet]
+        [Route("getappointmentbyid")]
+        public AppointmentViewModel GetAppointmentByID(Guid id)
+        {
+            try
+            {
+                var appointment = _repository.GetAppointmentByID(id);
+
+                if (appointment != null)
+                {
+                    return appointment;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }
