@@ -9,5 +9,7 @@ namespace Arda.Common.Interfaces.Kanban
     public interface IAppointmentRepository
     {
         bool AddNewAppointment(AppointmentViewModel appointment);
+
+        List<AppointmentViewModel> GetAllAppointments();
     }
 }

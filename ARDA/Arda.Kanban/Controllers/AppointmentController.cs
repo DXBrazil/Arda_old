@@ -48,5 +48,28 @@ namespace Arda.Kanban.Controllers
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
+
+        [HttpGet]
+        [Route("list")]
+        public IEnumerable<AppointmentViewModel> List()
+        {
+            try
+            {
+                var appointments = _repository.GetAllAppointments();
+
+                if (appointments != null)
+                {
+                    return appointments;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

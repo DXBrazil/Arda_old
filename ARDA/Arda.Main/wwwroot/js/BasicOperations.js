@@ -11,6 +11,17 @@ $(function ($) {
         ]
     });
 
+    //Loading datatable to appointments.
+    $("#table-appointments").DataTable({
+        "sAjaxSource": "/Appointment/ListAllAppointments",
+        "columnDefs": [
+            {
+                "width": "33%", "targets": 2,
+                "orderable": false
+            }
+        ]
+    });
+
     // Send the new account request to specific controller/action in Arda.Main.
     $("#loginform").submit(function (e) {
         e.preventDefault();
@@ -409,7 +420,7 @@ $(function ($) {
                 if (data.IsSuccessStatusCode) {
                     $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The appointment has been added into Arda.</div>");
                     $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
-                    RedirectIn(3000, "/Appointments/My");
+                    RedirectIn(3000, "/Appointment/My");
                 }
                 else {
                     $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");

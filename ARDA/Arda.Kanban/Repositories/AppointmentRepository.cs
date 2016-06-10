@@ -61,5 +61,36 @@ namespace Arda.Kanban.Repositories
                 throw new Exception(e.StackTrace);
             }
         }
+
+        public List<AppointmentViewModel> GetAllAppointments()
+        {
+            try
+            {
+                var response = (from a in _context.Appointments
+                                join w in _context.WorkloadBacklogs on a.AppointmentWorkload.WBID equals w.WBID
+                                orderby a.AppointmentDate descending
+                                select new AppointmentViewModel
+                                {
+                                    _AppointmentID = a.AppointmentID,
+                                    _AppointmentWorkloadWBID = a.AppointmentWorkload.WBID,
+                                    _WorkloadTitle = w.WBTitle,
+                                    _AppointmentDate = a.AppointmentDate,
+                                    _AppointmentHoursDispensed = a.AppointmentHoursDispensed
+                                }).ToList();
+
+                if (response != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }
