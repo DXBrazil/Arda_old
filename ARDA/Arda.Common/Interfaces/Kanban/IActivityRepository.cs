@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Arda.Common.Interfaces.Kanban
 {
-    public interface ITechnologyRepository
-    {       
-        // Return a list of all technologies.
-        IEnumerable<TechnologyViewModel> GetAllTechnologies();
+    public interface IActivityRepository
+    {
+        // Return a list of all activities.
+        IEnumerable<ActivityViewModel> GetAllActivities();
     }
 }

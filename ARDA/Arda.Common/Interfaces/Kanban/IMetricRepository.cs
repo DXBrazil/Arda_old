@@ -18,6 +18,9 @@ namespace Arda.Common.Interfaces.Kanban
         // Return a list of metrics.
         List<MetricViewModel> GetAllMetrics();
 
+        // Return a list of metrics by year.
+        List<MetricViewModel> GetAllMetrics(int year);
+
         // Return a specific metric by ID.
         MetricViewModel GetMetricByID(Guid id);
 

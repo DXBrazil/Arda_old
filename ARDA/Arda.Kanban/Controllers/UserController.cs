@@ -23,13 +23,14 @@ namespace Arda.Kanban.Controllers
             _repository = repository;
         }
 
+
         [HttpPost]
         [Route("add")]
         public HttpResponseMessage AddUser()
         {
             System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
             string requestFromPost = reader.ReadToEnd();
-            var user = JsonConvert.DeserializeObject<UserViewModel>(requestFromPost);
+            var user = JsonConvert.DeserializeObject<UserKanbanViewModel>(requestFromPost);
 
             if (user != null)
             {
@@ -70,6 +71,29 @@ namespace Arda.Kanban.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
+            }
+        }
+
+        [HttpGet]
+        [Route("list")]
+        public IEnumerable<UserKanbanViewModel> List()
+        {
+            try
+            {
+                var users = _repository.GetAllUsers();
+
+                if (users != null)
+                {
+                    return users;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

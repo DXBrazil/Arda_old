@@ -100,7 +100,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getpendingusers")]
-        public IEnumerable<UserViewModel> GetPendingUsers()
+        public IEnumerable<UserMainViewModel> GetPendingUsers()
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getusers")]
-        public IEnumerable<UserViewModel> GetUsers()
+        public IEnumerable<UserMainViewModel> GetUsers()
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getuser")]
-        public UserViewModel GetUser(string uniqueName)
+        public UserMainViewModel GetUser(string uniqueName)
         {
             try
             {

@@ -142,6 +142,25 @@ namespace Arda.Main.Controllers
         }
 
         [HttpGet]
+        public async Task<JsonResult> GetMetrics()
+        {
+            // Getting uniqueName
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            try
+            {
+                // Getting the response of remote service
+                var metrics = await Util.ConnectToRemoteService<List<MetricViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/listbyyear?year=" + DateTime.Now.Year, uniqueName, "");
+
+                return Json(metrics);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         public async Task<JsonResult> ListAllCategories()
         {
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;

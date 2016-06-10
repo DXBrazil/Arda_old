@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace Arda.Common.ViewModels.Main
 {
-    public class WorkloadViewModel
+    public class ActivityViewModel
     {
+        public Guid ActivityID { get; set; }
 
+        public string ActivityName { get; set; }
     }
 }

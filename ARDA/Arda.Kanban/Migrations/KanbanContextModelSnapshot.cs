@@ -158,6 +158,8 @@ namespace Arda.Kanban.Migrations
 
                     b.Property<DateTime>("WBStartDate");
 
+                    b.Property<int>("WBStatus");
+
                     b.Property<string>("WBTitle")
                         .IsRequired();
 

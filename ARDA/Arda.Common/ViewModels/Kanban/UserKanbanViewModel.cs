@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Arda.Common.ViewModels.Kanban
 {
-    public class UserViewModel
+    public class UserKanbanViewModel
     {
         public string UniqueName { get; set; }
 

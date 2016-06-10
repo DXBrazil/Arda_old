@@ -19,6 +19,9 @@ namespace Arda.Common.Models.Kanban
         public bool WBIsWorkload { get; set; }
 
         [Required]
+        public Status WBStatus { get; set; }
+
+        [Required]
         public DateTime WBStartDate { get; set; }
 
         [Required]
@@ -55,6 +58,14 @@ namespace Arda.Common.Models.Kanban
 
         public virtual IEnumerable<Appointment> WBAppointments { get; set; }
 
+    }
+
+    public enum Status
+    {
+        To_Do,
+        Doing,
+        Done,
+        Approved
     }
 
     public enum Expertise

@@ -1,10 +1,5 @@
 ﻿// Functions with automatic initialization
 $(function ($) {
-    //Initialize:
-    //Initialize();
-
-    //Get All Pending Users:
-    //GetWorkloadsByUser();
 
     // Loading datatable to fiscal years.
     $("#table-fiscalyears").DataTable({

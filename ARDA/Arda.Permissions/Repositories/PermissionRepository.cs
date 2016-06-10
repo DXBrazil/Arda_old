@@ -303,7 +303,7 @@ namespace Arda.Permissions.Repositories
                 _context.SaveChanges();
 
                 //Save on Kanban
-                var kanbanUser = new Common.ViewModels.Kanban.UserViewModel()
+                var kanbanUser = new Common.ViewModels.Kanban.UserKanbanViewModel()
                 {
                     UniqueName = user.UniqueName,
                     Name = user.Name
@@ -406,13 +406,13 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<UserViewModel> GetPendingUsers()
+        public IEnumerable<UserMainViewModel> GetPendingUsers()
         {
             try
             {
                 var data = from users in _context.Users
                            where users.Status == PermissionStatus.Waiting_Review
-                           select new UserViewModel
+                           select new UserMainViewModel
                            {
                                Name = users.Name,
                                Email = users.UniqueName,
@@ -475,12 +475,12 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<UserViewModel> GetUsers()
+        public IEnumerable<UserMainViewModel> GetUsers()
         {
             try
             {
                 var data = from users in _context.Users
-                           select new UserViewModel
+                           select new UserMainViewModel
                            {
                                Name = users.Name,
                                Email = users.UniqueName,
@@ -495,13 +495,13 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public UserViewModel GetUser(string uniqueName)
+        public UserMainViewModel GetUser(string uniqueName)
         {
             try
             {
                 var data = (from user in _context.Users
                             where user.UniqueName == uniqueName
-                            select new UserViewModel
+                            select new UserMainViewModel
                             {
                                 Name = user.Name,
                                 Email = user.UniqueName,

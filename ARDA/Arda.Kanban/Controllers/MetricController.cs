@@ -73,6 +73,29 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpGet]
+        [Route("listbyyear")]
+        public IEnumerable<MetricViewModel> List(int year)
+        {
+            try
+            {
+                var metrics = _repository.GetAllMetrics(year);
+
+                if (metrics != null)
+                {
+                    return metrics;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
         [Route("getmetricbyid")]
         public MetricViewModel GetMetricByID(Guid id)
         {

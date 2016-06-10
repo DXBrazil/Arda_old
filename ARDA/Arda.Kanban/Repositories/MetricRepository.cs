@@ -89,6 +89,41 @@ namespace Arda.Kanban.Repositories
             }
         }
 
+        // Return all metrics by year
+        public List<MetricViewModel> GetAllMetrics(int year)
+        {
+            try
+            {
+                var response = (from m in _context.Metrics
+                                join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
+                                where f.FullNumericFiscalYear == year
+                                orderby f.FullNumericFiscalYear, m.MetricCategory
+                                select new MetricViewModel
+                                {
+                                    MetricID = m.MetricID,
+                                    MetricCategory = m.MetricCategory,
+                                    MetricName = m.MetricName,
+                                    Description = m.Description,
+                                    FiscalYearID = m.FiscalYear.FiscalYearID,
+                                    FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
+                                    TextualFiscalYear = m.FiscalYear.TextualFiscalYear
+                                }).ToList();
+
+                if (response != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         // Return metric based on ID
         public MetricViewModel GetMetricByID(Guid id)
         {

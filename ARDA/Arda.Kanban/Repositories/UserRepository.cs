@@ -19,7 +19,7 @@ namespace Arda.Kanban.Repositories
         }
 
 
-        public bool AddNewUser(UserViewModel user)
+        public bool AddNewUser(UserKanbanViewModel user)
         {
             try
             {
@@ -55,6 +55,33 @@ namespace Arda.Kanban.Repositories
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public IEnumerable<UserKanbanViewModel> GetAllUsers()
+        {
+            try
+            {
+                var response = (from u in _context.Users
+                                orderby u.Name
+                                select new UserKanbanViewModel
+                                {
+                                    UniqueName = u.UniqueName,
+                                    Name = u.Name
+                                }).ToList();
+
+                if (response != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

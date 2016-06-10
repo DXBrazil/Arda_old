@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Arda.Common.ViewModels.Main
 {
-    public class UserViewModel
+    public class UserMainViewModel
     {
         public string Name { get; set; }
 

@@ -38,14 +38,14 @@ namespace Arda.Common.Interfaces.Permissions
 
         int GetNumberOfUsersToApprove();
 
-        IEnumerable<UserViewModel> GetPendingUsers();
+        IEnumerable<UserMainViewModel> GetPendingUsers();
 
         IEnumerable<ResourcesViewModel> GetAllPermissions();
 
         PermissionsViewModel GetUserPermissions(string uniqueName);
 
-        IEnumerable<UserViewModel> GetUsers();
+        IEnumerable<UserMainViewModel> GetUsers();
 
-        UserViewModel GetUser(string uniqueName);
+        UserMainViewModel GetUser(string uniqueName);
     }
 }

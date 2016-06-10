@@ -67,10 +67,12 @@ namespace Arda.Kanban
             services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(Connection));
 
             //Registering services.
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFiscalYearRepository, FiscalYearRepository>();
             services.AddScoped<IMetricRepository, MetricRepository>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
+            services.AddScoped<ITechnologyRepository, TechnologyRepository>();
             services.AddScoped<IWorkloadRepository, WorkloadRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
