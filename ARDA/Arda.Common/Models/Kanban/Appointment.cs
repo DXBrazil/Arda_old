@@ -15,10 +15,8 @@ namespace Arda.Common.Models.Kanban
         [Required]
         public Guid AppointmentID { get; set; }
 
-        [Required]
         public virtual UserKanbanViewModel AppointmentUser { get; set; }
 
-        [Required]
         public virtual WorkloadBacklog AppointmentWorkload { get; set; }
 
         [Required]

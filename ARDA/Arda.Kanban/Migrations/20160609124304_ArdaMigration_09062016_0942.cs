@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Arda.Kanban.Migrations
 {
-    public partial class Initial : Migration
+    public partial class ArdaMigration_09062016_0942 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -106,8 +106,8 @@ namespace Arda.Kanban.Migrations
                     AppointmentDate = table.Column<DateTime>(nullable: false),
                     AppointmentHoursDispensed = table.Column<int>(nullable: false),
                     AppointmentTE = table.Column<decimal>(nullable: false),
-                    AppointmentUserUniqueName = table.Column<string>(nullable: false),
-                    AppointmentWorkloadWBID = table.Column<Guid>(nullable: false)
+                    AppointmentUserUniqueName = table.Column<string>(nullable: true),
+                    AppointmentWorkloadWBID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -117,13 +117,13 @@ namespace Arda.Kanban.Migrations
                         column: x => x.AppointmentUserUniqueName,
                         principalTable: "UsersKanban",
                         principalColumn: "UniqueName",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Appointment_WorkloadBacklog_AppointmentWorkloadWBID",
                         column: x => x.AppointmentWorkloadWBID,
                         principalTable: "WorkloadBacklogs",
                         principalColumn: "WBID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
                 name: "Files",

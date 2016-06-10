@@ -8,8 +8,8 @@ using Arda.Kanban.Models;
 namespace Arda.Kanban.Migrations
 {
     [DbContext(typeof(KanbanContext))]
-    [Migration("20160608155927_Initial")]
-    partial class Initial
+    [Migration("20160609124304_ArdaMigration_09062016_0942")]
+    partial class ArdaMigration_09062016_0942
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,11 +43,9 @@ namespace Arda.Kanban.Migrations
 
                     b.Property<decimal>("AppointmentTE");
 
-                    b.Property<string>("AppointmentUserUniqueName")
-                        .IsRequired();
+                    b.Property<string>("AppointmentUserUniqueName");
 
-                    b.Property<Guid?>("AppointmentWorkloadWBID")
-                        .IsRequired();
+                    b.Property<Guid?>("AppointmentWorkloadWBID");
 
                     b.HasKey("AppointmentID");
 

@@ -1,11 +1,5 @@
 ﻿// Functions with automatic initialization
 $(function ($) {
-    //Initialize:
-    //Initialize();
-
-    //Get All Pending Users:
-    //GetWorkloadsByUser();
-
     // Loading datatable to fiscal years.
     $("#table-fiscalyears").DataTable({
         "sAjaxSource": "/FiscalYear/ListAllFiscalYears",
@@ -372,6 +366,64 @@ $(function ($) {
         }
     });
 
+    $("#form-add-appointment").validate({
+        rules: {
+            _AppointmentID: "required",
+            _AppointmentUserName: "required",
+            _WorkloadTitle: "required",
+            _AppointmentDate: "required",
+            _AppointmentHoursDispensed: "required"
+        },
+        messages: {
+            _AppointmentID: "Sorry but, we need appointment code.",
+            _AppointmentUserName: "Ops! Who is doind this appointment? Mandatory info.",
+            _WorkloadTitle: "Ops! You must type the workload. The system will find the occurrency in database.",
+            _AppointmentDate: "Ops! Date is mandatory.",
+            _AppointmentHoursDispensed: "Ops! Hours dispensed is mandatory."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            UpdateCKEditor();
+            DisableAppointmentFields();
+            $("#btnAddAppointment").text("Saving appointment...");
+
+            $.ajax({
+                url: "/Appointment/AddAppointment",
+                type: "POST",
+                data: $(form).serialize()
+            }).done(function (data) {
+                if (data.IsSuccessStatusCode) {
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The appointment has been added into Arda.</div>");
+                    $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    RedirectIn(3000, "/Appointments/My");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableAppointmentFields();
+                }
+            }).fail(function (e, f) {
+                $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                EnableAppointmentFields();
+            });
+        }
+    });
+
     // Calling workloads by current user
     GetWorkloadsByUser();
 
@@ -536,6 +588,15 @@ function DisableMetricFields() {
     $("#btnUpdate").attr("disabled", "disabled");
 }
 
+function DisableAppointmentFields()
+{
+    $("#_WorkloadTitle").attr("readonly", "readonly");
+    $("#_AppointmentDate").attr("readonly", "readonly");
+    $("#_AppointmentHoursDispensed").attr("readonly", "readonly");
+    $("#_AppointmentTE").attr("readonly", "readonly");
+    $("#_AppointmentComment").attr("readonly", "readonly");
+}
+
 function EnableMetricFields() {
     $(".FiscalYearID").removeAttr("readonly");
     $(".MetricCategory").removeAttr("readonly");
@@ -543,6 +604,15 @@ function EnableMetricFields() {
     $(".Description").removeAttr("readonly");
     $("#btnAdd").removeAttr("disabled");
     $("#btnUpdate").removeAttr("disabled");
+}
+
+function EnableAppointmentFields()
+{
+    $("#_WorkloadTitle").removeAttr("readonly", "readonly");
+    $("#_AppointmentDate").removeAttr("readonly", "readonly");
+    $("#_AppointmentHoursDispensed").removeAttr("readonly", "readonly");
+    $("#_AppointmentTE").removeAttr("readonly", "readonly");
+    $("#_AppointmentComment").removeAttr("readonly", "readonly");
 }
 
 function RedirectIn(delay, url)
@@ -635,17 +705,17 @@ function CallbackGetWorkloadsByUser(data) {
     var num = data.length;
 
     if (num > 0) {
-        $('#Workload').autocomplete({
+        $('#_WorkloadTitle').autocomplete({
             lookup: data,
             minLength: 2,
             onSelect: function (suggestion) {
-                $("#WorkloadId").val(suggestion.data);
+                $("#_AppointmentWorkloadWBID").val(suggestion.data);
             }
         });
     }
     else
     {
-        $('#Workload').attr('disabled', 'disabled');
+        $('#_WorkloadTitle').attr('disabled', 'disabled');
         $('#btnAddWorkload').attr('disabled', 'disabled');
     }
 }
@@ -654,22 +724,29 @@ function CallbackGetWorkloadsByUser(data) {
 
 function LoadMaskMoney()
 {
-    $("#TE").maskMoney({ prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false });
+    $("#_AppointmentTE").maskMoney({ prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false });
 }
 
 // CKEditor
 
 function LoadCKEditor()
 {
-    CKEDITOR.replace('Editor');
+    CKEDITOR.replace('_AppointmentComment');
+}
+
+function UpdateCKEditor()
+{
+    for (instance in CKEDITOR.instances) {
+        CKEDITOR.instances[instance].updateElement();
+    }
 }
 
 // Datepicker
 
 function LoadDatePicker()
 {
-    $('#AppointmentDate').datepicker({
-        format: "mm/dd/yyyy",
+    $('#_AppointmentDate').datepicker({
+        format: "dd/mm/yyyy",
         autoclose: true,
         todayHighlight: true
     });
