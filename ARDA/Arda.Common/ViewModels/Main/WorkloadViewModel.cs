@@ -32,7 +32,8 @@ namespace Arda.Common.ViewModels.Main
         
         public string WBActivity { get; set; }
 
-        public IEnumerable<string> WBFilesLinks { get; set; }
+        //GUID, URL and Name:
+        public IEnumerable<Tuple<string, string, string>> WBFilesList { get; set; }
 
         public IEnumerable<string> WBMetrics { get; set; }
 

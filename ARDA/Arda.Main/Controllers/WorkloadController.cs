@@ -7,6 +7,13 @@ using Arda.Common.Utils;
 using System.Net.Http;
 using Arda.Common.ViewModels.Main;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.IO;
+using Microsoft.Net.Http.Headers;
+using System.Net;
 
 namespace Arda.Main.Controllers
 {
@@ -34,6 +41,62 @@ namespace Arda.Main.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> Add(ICollection<IFormFile> WBFiles, WorkloadViewModel Workload)
+        {
+            //Owner:
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+            //Complete WB fields:
+            Workload.WBCreatedBy = uniqueName;
+            Workload.WBCreatedDate = DateTime.Now;
+            //Iterate over files:
+            try
+            {
+                if (WBFiles.Count > 0)
+                {
+                    var fileList = new List<Tuple<string, string, string>>();
+                    var Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
+                    var connectionString = Configuration["Storage:AzureBLOB:ConnectionString"];
+                    var containerName = Configuration["Storage:AzureBLOB:ContainerName"];
+                    // Retrieve storage account information from connection string
+                    CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
+                    // Create a blob client for interacting with the blob service.
+                    CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                    // Create a container for organizing blobs within the storage account.
+                    CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+
+                    foreach (var file in WBFiles)
+                    {
+                        if (file.Length > 0)
+                        {
+                            //Get file properties:
+                            var filePath = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            var fileName = new FileInfo(filePath).Name;
+                            var fileExt = new FileInfo(filePath).Extension;
+                            var fileID = Util.GenerateNewGuid().ToString();
+                            var fileNameUpload = string.Concat(fileID, fileExt);
+                            //Upload the file:
+                            CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileNameUpload);
+                            await blockBlob.UploadFromFileAsync(filePath);
+                            //Retrieve the url:
+                            string fileURL = blockBlob.Uri.ToString();
+                            //GUID, URL and Name:
+                            fileList.Add(Tuple.Create(fileID, fileURL, fileName));
+                        }
+                    }
+                    //Adds the file lists to the workload object:
+                    Workload.WBFilesList = fileList;
+                }
+                //TODO: Add Workload to DB
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+
         }
     }
 }

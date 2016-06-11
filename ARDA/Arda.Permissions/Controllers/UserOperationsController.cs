@@ -40,6 +40,9 @@ namespace Arda.Permissions.Controllers
             {
                 //Cache doesn't exists
                 //TODO: Returns a message requiring to login again
+                var menu = _permission.GetUserMenuSerialized(uniqueName);
+                return menu;
+
                 throw ex;
             }
         }
