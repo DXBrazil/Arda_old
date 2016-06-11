@@ -185,7 +185,7 @@
             </div>
             <div class="modal-body">
 
-                <form id="form-add-workload" role="form" data-toggle="validation">
+                <form id="form-add-workload" method="post" asp-action="Index" asp-controller="Dashboard" enctype="multipart/form-data">
                     <div class="row" hidden>
                         <div id="#formWBID" class="col-md-9">
                             <div class="form-group">
@@ -300,17 +300,28 @@
                         </div>
                     </div>
 
-                    <div class="row" hidden>
+                    <div class="row">
                         <div class="col-md-12">
                             <label for="WBFiles">File:</label>
                             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                                 <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-                                <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input id="WBFiles" type="file" name="WBFiles"></span>
+                                <span class="input-group-addon btn btn-default btn-file">
+                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                    <input id="WBFiles" type="file" name="WBFiles" multiple>
+                                </span>
                                 <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
                             </div>
                         </div>
                     </div>
                 </form>
+
+                <form method="post" asp-action="Index" asp-controller="Dashboard" enctype="multipart/form-data" id="form1">
+                    <input type="file" name="files" multiple />
+                    <input type="text" name="text" />
+                    <br />
+                    <input type="submit" value="Upload" />
+                </form>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -336,12 +347,14 @@
         //Get User Users:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
 
-        //$('#newWorkload').modal();
+        $('#newWorkload').modal();
     });
 
     function Initialize() {
         //Click events:
-        $('#btnAdd').click(addWorkload);
+        $('#btnAdd').click(function() {
+            document.getElementById("form-add-workload").submit();
+        });
 
         //Other events:
         $('#WBComplexity').on('change', changeComplexity);
@@ -367,6 +380,21 @@
             hide_min_max: true,
             hide_from_to: true,
             grid: false
+        });
+
+
+
+
+        $('#form1').submit(function (e) {
+            alert('hey!');
+            $.ajax({
+                url: 'Dashboard/Index',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            });
+            e.preventDefault();
         });
     }
 
@@ -455,6 +483,8 @@
             nonSelectedText: 'Click to select the users'
         });
     }
+
+  
 
     function addWorkload() {
 
