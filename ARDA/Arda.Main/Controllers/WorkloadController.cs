@@ -44,13 +44,13 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Add(ICollection<IFormFile> WBFiles, WorkloadViewModel Workload)
+        public async Task<HttpResponseMessage> Add(ICollection<IFormFile> WBFiles, WorkloadViewModel workload)
         {
             //Owner:
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
             //Complete WB fields:
-            Workload.WBCreatedBy = uniqueName;
-            Workload.WBCreatedDate = DateTime.Now;
+            workload.WBCreatedBy = uniqueName;
+            workload.WBCreatedDate = DateTime.Now;
             //Iterate over files:
             try
             {
@@ -87,10 +87,18 @@ namespace Arda.Main.Controllers
                         }
                     }
                     //Adds the file lists to the workload object:
-                    Workload.WBFilesList = fileList;
+                    workload.WBFilesList = fileList;
                 }
-                //TODO: Add Workload to DB
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                var response = await Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/workload/add", uniqueName, "", workload);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
             }
             catch (Exception)
             {

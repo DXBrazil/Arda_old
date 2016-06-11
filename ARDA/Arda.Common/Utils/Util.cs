@@ -61,8 +61,11 @@ namespace Arda.Common.Utils
                 request.Headers.Add("unique_name", uniqueName);
                 request.Headers.Add("code", code);
 
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
+                var responseSend = await client.SendAsync(request);
+                var responseStr = await responseSend.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<HttpResponseMessage>(responseStr);
+
+                if (responseSend.IsSuccessStatusCode && responseObj.IsSuccessStatusCode)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
@@ -90,8 +93,11 @@ namespace Arda.Common.Utils
                 var serialized = JsonConvert.SerializeObject(body);
                 request.Content = new ByteArrayContent(GetBytes(serialized));
 
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
+                var responseSend = await client.SendAsync(request);
+                var responseStr = await responseSend.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<HttpResponseMessage>(responseStr);
+
+                if (responseSend.IsSuccessStatusCode && responseObj.IsSuccessStatusCode)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
@@ -119,9 +125,12 @@ namespace Arda.Common.Utils
                     var serialized = JsonConvert.SerializeObject(body);
                     request.Content = new ByteArrayContent(GetBytes(serialized));
                 }
-                
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
+
+                var responseSend = await client.SendAsync(request);
+                var responseStr = await responseSend.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<HttpResponseMessage>(responseStr);
+
+                if (responseSend.IsSuccessStatusCode && responseObj.IsSuccessStatusCode)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }
@@ -146,8 +155,11 @@ namespace Arda.Common.Utils
                 request.Headers.Add("unique_name", uniqueName);
                 request.Headers.Add("code", code);
 
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
+                var responseSend = await client.SendAsync(request);
+                var responseStr = await responseSend.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<HttpResponseMessage>(responseStr);
+
+                if (responseSend.IsSuccessStatusCode && responseObj.IsSuccessStatusCode)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 }

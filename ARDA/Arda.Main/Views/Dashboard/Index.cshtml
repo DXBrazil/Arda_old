@@ -182,7 +182,7 @@
 }
 
 
-<!-- Workload Modal -->
+@*<!-- Workload Modal -->
 <div class="modal fade" id="newWorkload" tabindex="-1" role="dialog" aria-labelledby="newWorkload">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -330,7 +330,9 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
+
+@await Html.PartialAsync("_AddWorkloadModal")
 
 <script>
 
@@ -471,6 +473,7 @@
             nonSelectedText: 'Click to select the users'
         });
     }
+
 
 
     function addWorkload(e) {
