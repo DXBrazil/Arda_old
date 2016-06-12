@@ -12,6 +12,6 @@ namespace Arda.Kanban.Models
 
         public virtual WorkloadBacklog WorkloadBacklog { get; set; }
 
-        public UserMainViewModel User{ get; set; }
+        //public UserMainViewModel User{ get; set; }
     }
 }
