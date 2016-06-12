@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Arda.Permissions.Interfaces;
-using Arda.Common.ViewModels;
+using Arda.Common.Interfaces.Permissions;
+using Arda.Common.ViewModels.Main;
 
 namespace Arda.Permissions.Controllers
 {
@@ -100,7 +100,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getpendingusers")]
-        public IEnumerable<UserMainViewModel> GetPendingUsers()
+        public IEnumerable<UserViewModel> GetPendingUsers()
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getusers")]
-        public IEnumerable<UserMainViewModel> GetUsers()
+        public IEnumerable<UserViewModel> GetUsers()
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Arda.Permissions.Controllers
 
         [HttpGet]
         [Route("getuser")]
-        public UserMainViewModel GetUser(string uniqueName)
+        public UserViewModel GetUser(string uniqueName)
         {
             try
             {

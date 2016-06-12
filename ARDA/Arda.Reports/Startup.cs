@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 using Arda.Common.Middlewares;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
-using Arda.Reports.Models;
+using Arda.Common.Models.Reports;
 using Microsoft.Data.Entity;
-using Arda.Reports.Interfaces;
+using Arda.Common.Interfaces.Reports;
 using Arda.Reports.Repositories;
 
 namespace Arda.Reports
@@ -57,7 +57,8 @@ namespace Arda.Reports
 
             //// Adding database connection by dependency injection.
             ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            var Connection = @"Server=CYZANON1-MS1;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            //var Connection = @"Server=CYZANON1-MS1;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Permissions;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddEntityFramework().AddSqlServer().AddDbContext<ReportsContext>(options => options.UseSqlServer(Connection));
 

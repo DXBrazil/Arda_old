@@ -1,11 +1,11 @@
 ﻿@using System.Security.Principal
 @using System.Net.Http;
 @using Arda.Common.Utils
-@using Arda.Common.ViewModels
+@using Arda.Common.ViewModels.Main
 
 @if (User.Identity.IsAuthenticated)
 {
-    
+
     <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -24,32 +24,31 @@
                 foreach (var item in menuItems)
                 {
                     //break;
-                    if (item.Items.Count == 1)
-                    {
-                        var displayLink = item.Items[0].Item1;
-                        var controller = item.Items[0].Item2;
-                        var action = item.Items[0].Item3;
-                        <li class="nav-item">
-                            <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@item.Category <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                @foreach (var subitem in item.Items)
-                                {
-                                    var displayLink = subitem.Item1;
-                                    var controller = subitem.Item2;
-                                    var action = subitem.Item3;
-                                    <li class="nav-item">
-                                        <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
-                                    </li>
-                                }
-                            </ul>
-                        </li>
-                    }
+                    @*if (item.Items.Count == 1)
+                        {
+                            var displayLink = item.Items[0].Item1;
+                            var controller = item.Items[0].Item2;
+                            var action = item.Items[0].Item3;
+                            <li class="nav-item">
+                                <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
+                            </li>
+                        }*@
+                    //else
+                    //{
+                    <li class="nav-item dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@item.Category <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @foreach (var subitem in item.Items)
+                            {
+                                var displayLink = subitem.Item1;
+                                var controller = subitem.Item2;
+                                var action = subitem.Item3;
+                                <li class="nav-item">
+                                    <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
                 }
             }
         </ul>
@@ -66,7 +65,7 @@
                 }
                 else
                 {
-    <div class="pull-right">
-        <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
-    </div>
-}
+                    <div class="pull-right">
+                        <a asp-controller="Account" asp-action="SignIn" class="icon-user"></a>
+                    </div>
+                }

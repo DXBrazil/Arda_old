@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
 using Arda.Kanban.Models;
-using Arda.Kanban.Interfaces;
+using Arda.Common.Interfaces.Kanban;
 using Arda.Kanban.Repositories;
 using Arda.Common.Middlewares;
 
@@ -62,13 +62,15 @@ namespace Arda.Kanban
             }));
 
             ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            //var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Kanban;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Kanban;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Kanban;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
+            //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Kanban;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(Connection));
 
             //Registering services.
             services.AddScoped<IFiscalYearRepository, FiscalYearRepository>();
             services.AddScoped<IMetricRepository, MetricRepository>();
+            services.AddScoped<IWorkloadRepository, WorkloadRepository>();
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

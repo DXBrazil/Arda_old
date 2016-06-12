@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using System.Net;
-using Arda.Kanban.Models;
-using Arda.Kanban.Interfaces;
-using Arda.Common.ViewModels;
+using Arda.Common.Models.Kanban;
+using Arda.Common.Interfaces.Kanban;
+using Arda.Common.ViewModels.Main;
 using Newtonsoft.Json;
 using System.Net.Http;
 
@@ -30,7 +30,7 @@ namespace Arda.Kanban.Controllers
             {
                 System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
                 string requestFromPost = reader.ReadToEnd();
-                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearMainViewModel>(requestFromPost);
+                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearViewModel>(requestFromPost);
 
                 // Calling update
                 var fiscalyear = _repository.AddNewFiscalYear(fiscalYear);
@@ -52,7 +52,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("list")]
-        public IEnumerable<FiscalYearMainViewModel> List()
+        public IEnumerable<FiscalYearViewModel> List()
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpGet]
         [Route("getfiscalyearbyid")]
-        public FiscalYearMainViewModel GetFiscalYearByID(Guid id)
+        public FiscalYearViewModel GetFiscalYearByID(Guid id)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace Arda.Kanban.Controllers
             {
                 System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
                 string requestFromPost = reader.ReadToEnd();
-                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearMainViewModel>(requestFromPost);
+                var fiscalYear = JsonConvert.DeserializeObject<FiscalYearViewModel>(requestFromPost);
 
                 // Calling update
                 var fiscalyear = _repository.EditFiscalYearByID(fiscalYear);

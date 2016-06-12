@@ -1,9 +1,10 @@
-﻿using Arda.Kanban.Interfaces;
+﻿using Arda.Common.Interfaces.Kanban;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Arda.Common.ViewModels;
+using Arda.Common.Models.Kanban;
+using Arda.Common.ViewModels.Main;
 using Arda.Kanban.Models;
 
 namespace Arda.Kanban.Repositories
@@ -18,7 +19,7 @@ namespace Arda.Kanban.Repositories
         }
 
         // Adds a new metric to the system.
-        public bool AddNewMetric(MetricMainViewModel metric)
+        public bool AddNewMetric(MetricViewModel metric)
         {
             try
             {
@@ -55,14 +56,14 @@ namespace Arda.Kanban.Repositories
         }
 
         // Return all metrics
-        public List<MetricMainViewModel> GetAllMetrics()
+        public List<MetricViewModel> GetAllMetrics()
         {
             try
             {
                 var response = (from m in _context.Metrics
                                 join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
                                 orderby f.FullNumericFiscalYear, m.MetricCategory
-                                select new MetricMainViewModel
+                                select new MetricViewModel
                                 {
                                     MetricID = m.MetricID,
                                     MetricCategory = m.MetricCategory,
@@ -89,14 +90,14 @@ namespace Arda.Kanban.Repositories
         }
 
         // Return metric based on ID
-        public MetricMainViewModel GetMetricByID(Guid id)
+        public MetricViewModel GetMetricByID(Guid id)
         {
             try
             {
                 var metric = (from m in _context.Metrics
                               join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
                               where m.MetricID == id
-                              select new MetricMainViewModel
+                              select new MetricViewModel
                               {
                                   MetricID = m.MetricID,
                                   MetricCategory = m.MetricCategory,
@@ -123,7 +124,7 @@ namespace Arda.Kanban.Repositories
         }
 
         // Update metric data based on ID
-        public bool EditMetricByID(MetricMainViewModel metric)
+        public bool EditMetricByID(MetricViewModel metric)
         {
             try
             {

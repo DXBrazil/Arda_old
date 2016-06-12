@@ -1,7 +1,7 @@
 ﻿@using System.Security.Principal
 @using System.Net.Http;
 @using Arda.Common.Utils
-@using Arda.Common.ViewModels
+@using Arda.Common.ViewModels.Main
 
 @{
     var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;

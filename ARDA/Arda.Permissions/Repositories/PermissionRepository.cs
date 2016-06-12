@@ -1,15 +1,16 @@
-﻿using Arda.Permissions.Interfaces;
-using Arda.Permissions.Models;
+﻿using Arda.Common.Interfaces.Permissions;
+using Arda.Common.Models.Permissions;
 using System;
 using System.Linq;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
-using Arda.Permissions.ViewModels;
+using Arda.Common.ViewModels.Permissions;
 using Arda.Common.Utils;
 using Arda.Common.Email;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
+using Arda.Kanban.Models;
 
 namespace Arda.Permissions.Repositories
 {
@@ -407,13 +408,13 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<UserMainViewModel> GetPendingUsers()
+        public IEnumerable<UserViewModel> GetPendingUsers()
         {
             try
             {
                 var data = from users in _context.Users
                            where users.Status == PermissionStatus.Waiting_Review
-                           select new UserMainViewModel
+                           select new UserViewModel
                            {
                                Name = users.Name,
                                Email = users.UniqueName,
@@ -476,12 +477,12 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public IEnumerable<UserMainViewModel> GetUsers()
+        public IEnumerable<UserViewModel> GetUsers()
         {
             try
             {
                 var data = from users in _context.Users
-                           select new UserMainViewModel
+                           select new UserViewModel
                            {
                                Name = users.Name,
                                Email = users.UniqueName,
@@ -496,13 +497,13 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        public UserMainViewModel GetUser(string uniqueName)
+        public UserViewModel GetUser(string uniqueName)
         {
             try
             {
                 var data = (from user in _context.Users
                            where user.UniqueName==uniqueName
-                           select new UserMainViewModel
+                           select new UserViewModel
                            {
                                Name = user.Name,
                                Email = user.UniqueName,

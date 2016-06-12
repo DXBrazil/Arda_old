@@ -1,0 +1,32 @@
+﻿using Arda.Common.ViewModels.Kanban;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Arda.Common.Models.Kanban
+{
+    [Table("Appointments")]
+    public class Appointment
+    {
+        [Key]
+        [Required]
+        public Guid AppointmentID { get; set; }
+
+        public virtual UserKanbanViewModel AppointmentUser { get; set; }
+
+        public virtual WorkloadBacklog AppointmentWorkload { get; set; }
+
+        [Required]
+        public DateTime AppointmentDate { get; set; }
+
+        [Required]
+        public int AppointmentHoursDispensed { get; set; }
+
+        public decimal AppointmentTE { get; set; }
+
+        public string AppointmentComment { get; set; }
+    }
+}

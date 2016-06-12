@@ -10,7 +10,7 @@ using Microsoft.AspNet.Authorization;
 using Newtonsoft.Json;
 using Arda.Common.JSON;
 using Arda.Common.Utils;
-using Arda.Common.ViewModels;
+using Arda.Common.ViewModels.Main;
 using System.Net;
 
 namespace Arda.Main.Controllers
@@ -40,11 +40,11 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var metricToBeViewed = Util.ConnectToRemoteService<MetricMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
+                var metricToBeViewed = Util.ConnectToRemoteService<MetricViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
 
                 if (metricToBeViewed != null)
                 {
-                    var metric = new MetricMainViewModel()
+                    var metric = new MetricViewModel()
                     {
                         MetricID = metricToBeViewed.MetricID,
                         MetricCategory = metricToBeViewed.MetricCategory,
@@ -78,11 +78,11 @@ namespace Arda.Main.Controllers
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
                 // Getting the selected fiscal year
-                var metricToBeViewed = Util.ConnectToRemoteService<MetricMainViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
+                var metricToBeViewed = Util.ConnectToRemoteService<MetricViewModel>(HttpMethod.Get, Util.KanbanURL + "api/metric/getmetricbyid?id=" + id, uniqueName, "").Result;
 
                 if (metricToBeViewed != null)
                 {
-                    var metric = new MetricMainViewModel()
+                    var metric = new MetricViewModel()
                     {
                         MetricID = metricToBeViewed.MetricID,
                         MetricCategory = metricToBeViewed.MetricCategory,
@@ -121,15 +121,15 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentMetrics = await Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
+                var existentMetrics = await Util.ConnectToRemoteService<List<MetricViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
 
-                foreach (MetricMainViewModel m in existentMetrics)
+                foreach (MetricViewModel m in existentMetrics)
                 {
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(m.TextualFiscalYear.ToString());
                     dataRow.Add(m.MetricCategory.ToString());
                     dataRow.Add(m.MetricName.ToString());
-                    dataRow.Add($"<a href='/metric/details/{m.MetricID}' class='btn btn-info'><i class='fa fa-align-justify' aria-hidden='true'></i></a>&nbsp;<a href='/metric/edit/{m.MetricID}' class='btn btn-info'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>&nbsp;<a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Metric('{m.MetricID}','{m.MetricCategory}','{m.MetricName}');\" class='btn btn-info'><i class='fa fa-trash' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/metric/details/{m.MetricID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/metric/edit/{m.MetricID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Metric('{m.MetricID}','{m.MetricCategory}','{m.MetricName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -150,9 +150,9 @@ namespace Arda.Main.Controllers
 
             try
             {
-                var existentMetrics = await Util.ConnectToRemoteService<List<MetricMainViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
+                var existentMetrics = await Util.ConnectToRemoteService<List<MetricViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/metric/list", uniqueName, "");
 
-                foreach (MetricMainViewModel m in existentMetrics)
+                foreach (MetricViewModel m in existentMetrics)
                 {
                     if (!categories.Contains(m.MetricCategory))
                     {
@@ -169,7 +169,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> AddMetric(MetricMainViewModel metric)
+        public async Task<HttpResponseMessage> AddMetric(MetricViewModel metric)
         {
             if (metric == null)
             {
@@ -191,7 +191,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPut]
-        public async Task<HttpResponseMessage> EditMetric(MetricMainViewModel metric)
+        public async Task<HttpResponseMessage> EditMetric(MetricViewModel metric)
         {
             if (metric == null)
             {
