@@ -676,6 +676,24 @@ function DeleteFiscalYear(fiscalYearID) {
     });
 }
 
+function DeleteAppointment(appointmentID) {
+    $("#btnDelete").attr("disabled", "disabled");
+
+    $.ajax({
+        url: "/Appointment/DeleteAppointment",
+        type: "DELETE",
+        data: { id: appointmentID },
+        success: function (data) {
+            if (data.IsSuccessStatusCode) {
+                $("#message-panel").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Appointment successful deleted.</div>");
+                RedirectIn(3000, "/Appointment/My");
+            } else {
+                $("#message-panel").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> We found an error in this request. Try again in a few minutes.</div>");
+            }
+        }
+    });
+}
+
 $(function () {
     $('a[href*="#"]:not([href="#"])').click(function () {
         if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {

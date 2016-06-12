@@ -94,5 +94,28 @@ namespace Arda.Kanban.Controllers
                 return null;
             }
         }
+
+        [HttpDelete]
+        [Route("deleteappointmentbyid")]
+        public HttpResponseMessage DeleteAppointmentByID(Guid id)
+        {
+            try
+            {
+                var response = _repository.DeleteAppointmentByID(id);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

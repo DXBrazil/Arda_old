@@ -128,5 +128,29 @@ namespace Arda.Kanban.Repositories
                 throw;
             }
         }
+
+        public bool DeleteAppointmentByID(Guid id)
+        {
+            try
+            {
+                var appointmentToBeDeleted = _context.Appointments.First(a => a.AppointmentID == id);
+
+                if (appointmentToBeDeleted != null)
+                {
+                    var response = _context.Remove(appointmentToBeDeleted);
+                    _context.SaveChanges();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
