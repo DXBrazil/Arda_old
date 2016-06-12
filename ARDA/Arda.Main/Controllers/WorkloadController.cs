@@ -56,7 +56,7 @@ namespace Arda.Main.Controllers
             {
                 if (WBFiles.Count > 0)
                 {
-                    var fileList = new List<Tuple<string, string, string>>();
+                    var fileList = new List<Tuple<Guid, string, string>>();
                     var Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
                     var connectionString = Configuration["Storage:AzureBLOB:ConnectionString"];
                     var containerName = Configuration["Storage:AzureBLOB:ContainerName"];
@@ -75,7 +75,7 @@ namespace Arda.Main.Controllers
                             var filePath = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                             var fileName = new FileInfo(filePath).Name;
                             var fileExt = new FileInfo(filePath).Extension;
-                            var fileID = Util.GenerateNewGuid().ToString();
+                            var fileID = Util.GenerateNewGuid();
                             var fileNameUpload = string.Concat(fileID, fileExt);
                             //Upload the file:
                             CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileNameUpload);

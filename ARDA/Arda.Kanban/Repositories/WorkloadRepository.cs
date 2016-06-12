@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Arda.Common.Models.Kanban;
 
 namespace Arda.Kanban.Repositories
 {
@@ -20,7 +21,83 @@ namespace Arda.Kanban.Repositories
 
         public bool AddNewWorkload(WorkloadViewModel workload)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //Load Activity:
+                var activity = _context.Activities.First(a => a.ActivityID == workload.WBActivity);
+                //Load Metrics:
+                var metricList = new List<WorkloadBacklogMetric>();
+                foreach (var mId in workload.WBMetrics)
+                {
+                    var metric = _context.Metrics.First(m => m.MetricID == mId);
+                    metricList.Add(new WorkloadBacklogMetric()
+                    {
+                        Metric = metric
+                    });
+                }
+                //Load Technologies:
+                var technologyList = new List<WorkloadBacklogTechnology>();
+                foreach (var tId in workload.WBTechnologies)
+                {
+                    var technology = _context.Technologies.First(t => t.TechnologyID == tId);
+                    technologyList.Add(new WorkloadBacklogTechnology()
+                    {
+                        Technology = technology
+                    });
+                }
+                //Load Users:
+                var userList = new List<WorkloadBacklogUser>();
+                foreach (var uniqueName in workload.WBUsers)
+                {
+                    var user = _context.Users.First(u => u.UniqueName == uniqueName);
+                    userList.Add(new WorkloadBacklogUser()
+                    {
+                        User = user
+                    });
+                }
+                //Associate Files:
+                var filesList = new List<File>();
+                foreach (var f in workload.WBFilesList)
+                {
+                    filesList.Add(new File()
+                    {
+                        FileID = f.Item1,
+                        FileLink = f.Item2,
+                        FileName = f.Item3,
+                        FileDescription = string.Empty,
+                    });
+                }
+                //Create workload object:
+                var workloadToBeSaved = new WorkloadBacklog()
+                {
+                    WBActivity = activity,
+                    WBAppointments = null,
+                    WBComplexity = (Complexity)workload.WBComplexity,
+                    WBCreatedBy = workload.WBCreatedBy,
+                    WBCreatedDate = workload.WBCreatedDate,
+                    WBDescription = workload.WBDescription,
+                    WBEndDate = workload.WBEndDate,
+                    WBExpertise = (Expertise)workload.WBExpertise,
+                    WBFiles = filesList,
+                    WBID = workload.WBID,
+                    WBIsWorkload = workload.WBIsWorkload,
+                    WBMetrics = metricList,
+                    WBStartDate = workload.WBStartDate,
+                    WBStatus = (Status)workload.WBStatus,
+                    WBTechnologies = technologyList,
+                    WBTitle  = workload.WBTitle,
+                    WBUsers = userList
+                };
+
+                _context.WorkloadBacklogs.Add(workloadToBeSaved);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+                //throw;
+            }
         }
 
         public bool DeleteWorkloadByID(Guid id)

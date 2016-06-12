@@ -17,6 +17,6 @@ namespace Arda.Common.Models.Kanban
         [Required]
         public string TechnologyName { get; set; }
 
-        public virtual IEnumerable<WorkloadBacklogTechnology> WBTechnologies { get; set; }
+        public virtual ICollection<WorkloadBacklogTechnology> WBTechnologies { get; set; }
     }
 }

@@ -20,8 +20,8 @@ namespace Arda.Common.Models.Kanban
 
 
 
-        public virtual IEnumerable<WorkloadBacklogUser> WBUsers { get; set; }
+        public virtual ICollection<WorkloadBacklogUser> WBUsers { get; set; }
 
-        public virtual IEnumerable<Appointment> AppointmentUsers { get; set; }
+        public virtual ICollection<Appointment> AppointmentUsers { get; set; }
     }
 }

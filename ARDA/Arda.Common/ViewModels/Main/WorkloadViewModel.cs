@@ -21,7 +21,7 @@ namespace Arda.Common.ViewModels.Main
 
         public string WBDescription { get; set; }
 
-        public string WBExpertise { get; set; }
+        public int WBExpertise { get; set; }
 
         public int WBComplexity { get; set; }
         
@@ -30,16 +30,16 @@ namespace Arda.Common.ViewModels.Main
         public DateTime WBCreatedDate { get; set; }
 
         
-        public string WBActivity { get; set; }
+        public Guid WBActivity { get; set; }
 
         //GUID, URL and Name:
-        public IEnumerable<Tuple<string, string, string>> WBFilesList { get; set; }
+        public IEnumerable<Tuple<Guid, string, string>> WBFilesList { get; set; }
 
-        public IEnumerable<string> WBMetrics { get; set; }
+        public IEnumerable<Guid> WBMetrics { get; set; }
 
         public IEnumerable<string> WBUsers { get; set; }
 
-        public IEnumerable<string> WBTechnologies { get; set; }
+        public IEnumerable<Guid> WBTechnologies { get; set; }
         
     }
 }

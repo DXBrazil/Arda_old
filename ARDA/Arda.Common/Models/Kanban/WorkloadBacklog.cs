@@ -46,17 +46,17 @@ namespace Arda.Common.Models.Kanban
 
 
         //Foreign Keys:
-        public virtual Activity WBActivity { get; set; }
+        public Activity WBActivity { get; set; }
 
-        public virtual IEnumerable<File> WBFiles { get; set; }
+        public ICollection<File> WBFiles { get; set; }
 
-        public virtual IEnumerable<WorkloadBacklogMetric> WBMetrics { get; set; }
+        public ICollection<WorkloadBacklogMetric> WBMetrics { get; set; }
         
-        public virtual IEnumerable<WorkloadBacklogUser> WBUsers { get; set; }
+        public ICollection<WorkloadBacklogUser> WBUsers { get; set; }
 
-        public virtual IEnumerable<WorkloadBacklogTechnology> WBTechnologies { get; set; }
+        public ICollection<WorkloadBacklogTechnology> WBTechnologies { get; set; }
 
-        public virtual IEnumerable<Appointment> WBAppointments { get; set; }
+        public ICollection<Appointment> WBAppointments { get; set; }
 
     }
 

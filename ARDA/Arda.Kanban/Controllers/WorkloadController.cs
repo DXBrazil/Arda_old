@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Arda.Common.ViewModels.Main;
 using Arda.Common.Interfaces.Kanban;
-
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net;
 
 namespace Arda.Kanban.Controllers
 {
@@ -17,6 +19,35 @@ namespace Arda.Kanban.Controllers
         public WorkloadController(IWorkloadRepository repository)
         {
             _repository = repository;
+        }
+
+
+        [HttpPost]
+        [Route("add")]
+        public HttpResponseMessage Add()
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var workload = JsonConvert.DeserializeObject<WorkloadViewModel>(requestFromPost);
+
+                // Calling add
+                var response = _repository.AddNewWorkload(workload);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet]
