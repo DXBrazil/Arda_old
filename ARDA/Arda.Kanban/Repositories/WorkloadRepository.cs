@@ -85,7 +85,7 @@ namespace Arda.Kanban.Repositories
                     WBStartDate = workload.WBStartDate,
                     WBStatus = (Status)workload.WBStatus,
                     WBTechnologies = technologyList,
-                    WBTitle  = workload.WBTitle,
+                    WBTitle = workload.WBTitle,
                     WBUsers = userList
                 };
 
@@ -96,13 +96,36 @@ namespace Arda.Kanban.Repositories
             catch (Exception)
             {
                 return false;
-                //throw;
             }
         }
 
         public bool DeleteWorkloadByID(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //Get files:
+                var files =  _context.Files.Where(f => f.WorkloadBacklog.WBID == id);
+                //Load Metrics:
+                var metrics = _context.WorkloadBacklogMetrics.Where(wbm => wbm.WorkloadBacklog.WBID == id);
+                //Load Technologies:
+                var technologies = _context.WorkloadBacklogTechnologies.Where(wbt => wbt.WorkloadBacklog.WBID == id);
+                //Load Users:
+                var users = _context.WorkloadBacklogUsers.Where(wbu => wbu.WorkloadBacklog.WBID == id);
+                //Get Workload:
+                var workload = _context.WorkloadBacklogs.First(w => w.WBID == id);
+                //Remove Everything:
+                _context.Files.RemoveRange(files);
+                _context.WorkloadBacklogMetrics.RemoveRange(metrics);
+                _context.WorkloadBacklogTechnologies.RemoveRange(technologies);
+                _context.WorkloadBacklogUsers.RemoveRange(users);
+                _context.WorkloadBacklogs.Remove(workload);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool EditWorkload(WorkloadViewModel workload)
@@ -117,10 +140,69 @@ namespace Arda.Kanban.Repositories
 
         public WorkloadViewModel GetWorkloadByID(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id != null)
+                {
+                    //Load files:
+                    var filesList = new List<Tuple<Guid, string, string>>();
+                    foreach (var f in _context.Files.Where(f => f.WorkloadBacklog.WBID == id))
+                    {
+                        //GUID, URL and Name:
+                        filesList.Add(new Tuple<Guid, string, string>(f.FileID, f.FileLink, f.FileName));
+                    }
+                    //Load Metrics:
+                    var metricList = (from wbm in _context.WorkloadBacklogMetrics
+                                      join m in _context.Metrics on wbm.Metric equals m
+                                      where wbm.WorkloadBacklog.WBID == id
+                                      select new Guid(wbm.Metric.MetricID.ToString())).ToList();
+                    //Load Technologies:
+                    var technologyList = (from wbt in _context.WorkloadBacklogTechnologies
+                                          join t in _context.Technologies on wbt.Technology equals t
+                                          where wbt.WorkloadBacklog.WBID == id
+                                          select new Guid(wbt.Technology.TechnologyID.ToString())).ToList();
+                    //Load Users:
+                    var userList = (from wbu in _context.WorkloadBacklogUsers
+                                    join u in _context.Users on wbu.User equals u
+                                    where wbu.WorkloadBacklog.WBID == id
+                                    select wbu.User.UniqueName).ToList();
+                    //Load workload:
+                    var workload = (from w in _context.WorkloadBacklogs
+                                    join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
+                                    where w.WBID == id
+                                    select new WorkloadViewModel()
+                                    {
+                                        WBActivity = a.ActivityID,
+                                        WBComplexity = (int)w.WBComplexity,
+                                        WBCreatedBy = w.WBCreatedBy,
+                                        WBCreatedDate = w.WBCreatedDate,
+                                        WBDescription = w.WBDescription,
+                                        WBEndDate = w.WBEndDate,
+                                        WBExpertise = (int)w.WBExpertise,
+                                        WBFilesList = filesList,
+                                        WBID = w.WBID,
+                                        WBIsWorkload = w.WBIsWorkload,
+                                        WBMetrics = metricList,
+                                        WBStartDate = w.WBStartDate,
+                                        WBStatus = (int)w.WBStatus,
+                                        WBTechnologies = technologyList,
+                                        WBTitle = w.WBTitle,
+                                        WBUsers = userList
+                                    }).First();
+                    return null;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public List<WorkloadsByUserViewModel> GetWorkloadsByUser(string uniqueName)
+        public IEnumerable<WorkloadsByUserViewModel> GetWorkloadsByUser(string uniqueName)
         {
             try
             {
@@ -152,9 +234,5 @@ namespace Arda.Kanban.Repositories
             }
         }
 
-        IEnumerable<WorkloadsByUserViewModel> IWorkloadRepository.GetWorkloadsByUser(string uniqueName)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

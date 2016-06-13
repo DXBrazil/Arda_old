@@ -73,5 +73,42 @@ namespace Arda.Kanban.Controllers
                 return null;
             }
         }
+
+        [HttpGet]
+        [Route("details")]
+        public WorkloadViewModel Details(Guid workloadID)
+        {
+            try
+            {
+                var workload = _repository.GetWorkloadByID(workloadID);
+                return workload;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public HttpResponseMessage Delete(Guid workloadID)
+        {
+            try
+            {
+                var response = _repository.DeleteWorkloadByID(workloadID);
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }
