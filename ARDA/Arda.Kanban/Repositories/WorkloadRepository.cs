@@ -189,7 +189,7 @@ namespace Arda.Kanban.Repositories
                                         WBTitle = w.WBTitle,
                                         WBUsers = userList
                                     }).First();
-                    return null;
+                    return workload;
                 }
                 else
                 {

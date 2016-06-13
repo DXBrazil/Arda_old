@@ -85,7 +85,7 @@ namespace Arda.Kanban.Controllers
             }
             catch (Exception)
             {
-                throw;
+                return null;
             }
         }
 
