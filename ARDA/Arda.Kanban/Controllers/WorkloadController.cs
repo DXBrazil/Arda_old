@@ -22,34 +22,6 @@ namespace Arda.Kanban.Controllers
         }
 
 
-        [HttpPost]
-        [Route("add")]
-        public HttpResponseMessage Add()
-        {
-            try
-            {
-                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
-                string requestFromPost = reader.ReadToEnd();
-                var workload = JsonConvert.DeserializeObject<WorkloadViewModel>(requestFromPost);
-
-                // Calling add
-                var response = _repository.AddNewWorkload(workload);
-
-                if (response)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                }
-            }
-            catch (Exception)
-            {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-            }
-        }
-
         [HttpGet]
         [Route("listworkloadbyuser")]
         public IEnumerable<WorkloadsByUserViewModel> ListWorkloadByUser()
@@ -58,6 +30,29 @@ namespace Arda.Kanban.Controllers
             {
                 var uniqueName = HttpContext.Request.Headers["unique_name"].ToString();
                 var workloads = _repository.GetWorkloadsByUser(uniqueName);
+
+                if (workloads != null)
+                {
+                    return workloads;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [Route("list")]
+        public IEnumerable<WorkloadViewModel> List()
+        {
+            try
+            {
+                var workloads = _repository.GetAllWorkloads();
 
                 if (workloads != null)
                 {
@@ -86,6 +81,62 @@ namespace Arda.Kanban.Controllers
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        [HttpPost]
+        [Route("add")]
+        public HttpResponseMessage Add()
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var workload = JsonConvert.DeserializeObject<WorkloadViewModel>(requestFromPost);
+
+                // Calling add
+                var response = _repository.AddNewWorkload(workload);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("edit")]
+        public HttpResponseMessage Edit(WorkloadViewModel w)
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var workload = JsonConvert.DeserializeObject<WorkloadViewModel>(requestFromPost);
+
+                // Calling update
+                var response = _repository.EditWorkload(workload);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
 
