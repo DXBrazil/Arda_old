@@ -207,10 +207,8 @@
         //Get User Users:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
 
-        //$('#_WBID').val('1a62b7b3-a875-4f15-8f77-688eeff3bce1');
+        //TODO: Remove this test line:
         $('#_WBID').val('fd6984f2-6483-4788-87c3-dbeef10a7d4e');
-
-        
     });
 
     function Initialize() {
@@ -261,7 +259,8 @@
         //Clean values:
         resetWorkloadForm();
         //Set submit event:
-        $('#form-add-workload').submit(addWorkload);
+        $('#form-workload').unbind();
+        $('#form-workload').submit(addWorkload);
 
         //Modal Title:
         $('#ModalTitle').text('New Workload:');
@@ -329,6 +328,9 @@
     }
 
     function editWorkloadState() {
+        //Set submit event:
+        $('#form-workload').unbind();
+        $('#form-workload').submit(updateWorkload);
         //Modal Title:
         $('#ModalTitle').text('Editing Workload:');
         //Fields:
@@ -347,6 +349,8 @@
         });
         $('.multiselect-container.dropdown-menu li a label input').removeAttr("disabled");
         $('.fileinput').removeClass('hidden');
+        //Events:
+        $('.fileDel').removeClass('hidden');
         //Buttons:
         $('#btnWorkloadReset').addClass('hidden');
         $('#btnWorkloadSend').text('Update');
@@ -540,6 +544,11 @@
         //Serializes form and append bootstrap-switch value:
         var data = new FormData(this);
         data.append('WBIsWorkload', value)
+        //Append previous files:
+        var files = $('#filesList div a.filePrev');
+        for (var i = 0; i < files.length; i++) {
+            data.append('oldFiles', files[i].attributes[2].value + '&' + files[i].href + '&' + files[i].text);
+        }
 
         $('#msg').text('Wait...');
         $.ajax({
@@ -637,13 +646,13 @@
                 var list = $('#filesList');
                 $(data.WBFilesList).each(function () {
                     var div = $('<div id="' + this.Item1 + '">');
-                    var a = $('<a FileID="' + this.Item1 + '" href=' + this.Item2 + '>').text(this.Item3);
-                    var remove = $('<a style="padding-left: 5px;"/>').text('(remove)');
-                    div.append(a);
-                    div.append(remove);
+                    var a = $('<a class="filePrev" FileID="' + this.Item1 + '" href=' + this.Item2 + '>').text(this.Item3);
+                    var remove = $('<a class="fileDel hidden" style="padding-left: 5px;"/>').text('(remove)');
                     remove.click(function () {
                         $(this).parent().remove();
                     });
+                    div.append(a);
+                    div.append(remove);
                     list.append(div);
                 });
             }
