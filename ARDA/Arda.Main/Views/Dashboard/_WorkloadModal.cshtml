@@ -1,9 +1,9 @@
-﻿<div class="modal fade" id="newWorkload" tabindex="-1" role="dialog" aria-labelledby="newWorkload">
+﻿<div class="modal fade" id="WorkloadModal" tabindex="-1" role="dialog" aria-labelledby="WorkloadModal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">New workload:</h4>
+                <h4 class="modal-title" id="ModalTitle"></h4>
             </div>
             <div class="modal-body">
 
@@ -12,7 +12,7 @@
                         <div id="#formWBID" class="col-md-9">
                             <div class="form-group">
                                 <label for="WBID">Code:</label>
-                                <input type="text" class="form-control" id="WBID" name="WBID" value="@ViewBag.Guid" readonly>
+                                <input type="text" class="form-control" id="WBID" name="WBID" readonly>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <label for="WBExpertise">Expertise:</label>
                                 <select class="form-control" id="WBExpertise" name="WBExpertise">
-                                    <option disabled selected>Select the expertise</option>
+                                    <option disabled selected value="-1">Select the expertise</option>
                                     <option value="0">Dev</option>
                                     <option value="1">Infra</option>
                                     <option value="2">DevOps</option>
@@ -125,6 +125,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="WBFiles">Files:</label>
+                            <div id="filesList"></div>
                             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                                 <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
                                 <span class="input-group-addon btn btn-default btn-file">
@@ -139,7 +140,10 @@
                     <div id="buttonsPanel">
                         <p id="msg"></p>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Add</button>
+                        <button type="button" class="btn btn-warning" id="btnWorkloadReset">Reset</button>
+                        <button type="button" class="btn btn-success" id="btnWorkloadEdit">Edit</button>
+                        <button type="button" class="btn btn-warning" id="btnWorkloadDelete">Delete</button>
+                        <button type="submit" class="btn btn-success" id="btnWorkloadSend"></button>
                     </div>
                 </form>
             </div>

@@ -21,6 +21,12 @@ namespace Arda.Main.Controllers
     public class WorkloadController : Controller
     {
         [HttpGet]
+        public JsonResult GetGuid()
+        {
+            return Json(Util.GenerateNewGuid());
+        }
+
+        [HttpGet]
         public async Task<JsonResult> ListWorkloadsByUser()
         {
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
@@ -105,6 +111,22 @@ namespace Arda.Main.Controllers
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
 
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetWorkload(Guid workloadID)
+        {
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            try
+            {
+                var workload = await Util.ConnectToRemoteService<WorkloadViewModel>(HttpMethod.Get, Util.KanbanURL + "api/workload/details?=" + workloadID, uniqueName, "");
+                return Json(workload);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

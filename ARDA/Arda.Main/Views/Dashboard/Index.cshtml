@@ -132,8 +132,13 @@
                         </div>
 
                         <div class="col-xs-12 col-lg-3 col-md-6">
-                            <button id="btnNew" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#newWorkload">New</button>
-                            <button id="btnDetails" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#workloadDetails">Details</button>
+                            <label for="_WBID">WBID:</label>
+                            <input id="_WBID" type="text"/>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-3 col-md-6">
+                            <button id="btnNew" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">New</button>
+                            <button id="btnDetails" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">Details</button>
                         </div>
 
                         <div class="clearfix"></div>
@@ -183,7 +188,7 @@
 }
 
 <!-- Add Workload Modal -->
-@await Html.PartialAsync("_AddWorkloadModal")
+@await Html.PartialAsync("_WorkloadModal")
 
 
 
@@ -203,17 +208,27 @@
         //Get User Users:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
 
-        $('#newWorkload').modal();
+        $('#_WBID').val('d9144058-0ad7-4770-3926-08d393a0b0bb');
     });
 
     function Initialize() {
         //Click events:
+
+        //New Workload:
+        $('#btnNew').click(newWorkloadState);
+        //Workload Details:
+        $('#btnDetails').click(detailsWorkloadState);
+        //Editing Workload:
+        $('#btnWorkloadEdit').click(editWorkloadState);
+        //Reset Button:
+        $('#btnWorkloadReset').click(resetWorkloadForm);
 
 
         //Other events:
         $('#WBComplexity').on('change', changeComplexity);
 
         $('#form-add-workload').submit(addWorkload);
+
 
         //Components:
         $("#WBIsWorkload").bootstrapSwitch();
@@ -235,11 +250,148 @@
             max: 5,
             hide_min_max: true,
             hide_from_to: true,
-            grid: false
+            grid: false,
+            keyboard: true
         });
-
-
     }
+
+    function newWorkloadState() {
+        resetWorkloadForm();
+        //Modal Title:
+        $('#ModalTitle').text('New Workload:');
+        //Get GUID:
+        $.getJSON('/workload/GetGuid', null, function (data) {
+            $('#WBID').attr('value', data);
+        });
+        //Fields:
+        $('#WBStartDate').removeAttr("disabled");
+        $('#WBEndDate').removeAttr("disabled");
+        if ($('#WBIsWorkload').bootstrapSwitch('disabled')) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        }
+        $('#WBTitle').removeAttr("disabled");
+        $('#WBDescription').removeAttr("disabled");
+        $('#WBExpertise').removeAttr("disabled");
+        $('#WBActivity').removeAttr("disabled");
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1,
+            disable: false
+        });
+        $('.multiselect-container.dropdown-menu li a label input').removeAttr("disabled");
+        $('.fileinput').removeClass('hidden');
+        //Buttons:
+        $('#btnWorkloadReset').removeClass('hidden');
+        $('#btnWorkloadSend').removeClass('hidden');
+        $('#btnWorkloadSend').text('Add');
+        $('#btnWorkloadEdit').addClass('hidden');
+        $('#btnWorkloadDelete').addClass('hidden');
+    }
+
+    function detailsWorkloadState() {
+        //Modal Title:
+        $('#ModalTitle').text('Workload Details:');
+        //Set GUID:
+        var guid = $('#_WBID').val();
+        $('#WBID').attr('value', guid);
+        //Load Workload:
+        loadWorkload(guid);
+
+        //Fields:
+        $('#WBStartDate').attr("disabled", "disabled");
+        $('#WBEndDate').attr("disabled", "disabled");
+        if (!($('#WBIsWorkload').bootstrapSwitch('disabled'))) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        }
+        $('#WBTitle').attr("disabled", "disabled");
+        $('#WBDescription').attr("disabled", "disabled");
+        $('#WBExpertise').attr("disabled", "disabled");
+        $('#WBActivity').attr("disabled", "disabled");
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1,
+            disable: true
+        });
+        $('.multiselect-container.dropdown-menu li a label input').attr("disabled", "disabled");
+        $('.fileinput').addClass('hidden');
+        //Buttons:
+        $('#btnWorkloadReset').addClass('hidden');
+        $('#btnWorkloadSend').addClass('hidden');
+        $('#btnWorkloadEdit').removeClass('hidden');
+        $('#btnWorkloadDelete').addClass('hidden');
+    }
+
+    function editWorkloadState() {
+        //Modal Title:
+        $('#ModalTitle').text('Editing Workload:');
+        //Fields:
+        $('#WBStartDate').removeAttr("disabled");
+        $('#WBEndDate').removeAttr("disabled");
+        if ($('#WBIsWorkload').bootstrapSwitch('disabled')) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        }
+        $('#WBTitle').removeAttr("disabled");
+        $('#WBDescription').removeAttr("disabled");
+        $('#WBExpertise').removeAttr("disabled");
+        $('#WBActivity').removeAttr("disabled");
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1,
+            disable: false
+        });
+        $('.multiselect-container.dropdown-menu li a label input').removeAttr("disabled");
+        $('.fileinput').removeClass('hidden');
+        //Buttons:
+        $('#btnWorkloadReset').addClass('hidden');
+        $('#btnWorkloadSend').text('Update');
+        $('#btnWorkloadSend').removeClass('hidden');
+        $('#btnWorkloadDelete').removeClass('hidden');
+        $('#btnWorkloadEdit').addClass('hidden');
+    }
+
+    function resetWorkloadForm() {
+        $('#WBStartDate').val('');
+        $('#WBEndDate').val('');
+        if ($('#WBIsWorkload').bootstrapSwitch('disabled')) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+            $('#WBIsWorkload').bootstrapSwitch('state', true);
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        } else {
+            $('#WBIsWorkload').bootstrapSwitch('state', true);
+        }
+
+        $('#WBTitle').val('');
+        $('#WBDescription').val('');
+        $('#WBExpertise').val('-1');
+        $('#WBActivity').val('-1');
+        //Slider:
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1
+        });
+        //Technologies Multiselect:
+        var tech = [];
+        $("#WBTechnologies option").each(function () {
+            tech.push($(this).val());
+        });
+        $('#WBTechnologies').multiselect('deselect', tech);
+        //Metrics Multiselect:
+        var met = [];
+        $("#WBMetrics option").each(function () {
+            met.push($(this).val());
+        });
+        $('#WBMetrics').multiselect('deselect', met);
+        //Users Multiselect:
+        var users = [];
+        $("#WBUsers option").each(function () {
+            users.push($(this).val());
+        });
+        $('#WBUsers').multiselect('deselect', users);
+        //Files:
+        $('.fileinput').fileinput('clear');
+        $('#filesList').html('');
+    }
+
 
     function changeComplexity(e) {
         var value = $(this).val();
@@ -267,7 +419,7 @@
 
     function callbackGetActivities(data) {
         var options = [];
-        options.push('<option selected disabled>Select the activity</option>');
+        options.push('<option selected disabled value="-1">Select the activity</option>');
         for (var i = 0; i < data.length; i++) {
             var text = data[i].ActivityName;
             var key = data[i].ActivityID;
@@ -328,11 +480,9 @@
     }
 
 
-
     function addWorkload(e) {
-        //Fixes bootstrap-switch component value:
-        var botswitch = $('.bootstrap-switch.bootstrap-switch-wrapper.bootstrap-switch-id-WBIsWorkload');
-        var value = botswitch[0].classList.contains('bootstrap-switch-on');
+        //Gets bootstrap-switch component value:
+        var value = $('#WBIsWorkload').bootstrapSwitch('state');
         //Serializes form and append bootstrap-switch value:
         var data = new FormData(this);
         data.append('WBIsWorkload', value)
@@ -354,5 +504,69 @@
         });
         e.preventDefault();
     }
+
+    function loadWorkload(workloadID) {
+        $.ajax({
+            url: 'Workload/GetWorkload?=' + workloadID,
+            type: 'GET',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                $('#WBID').val(data.WBID);
+                $('#WBStartDate').val(data.WBStartDate);
+                $('#WBEndDate').val(data.WBEndDate);
+
+                $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+                $('#WBIsWorkload').bootstrapSwitch('state', data.WBIsWorkload);
+                $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+
+                $('#WBTitle').val(data.WBTitle);
+                $('#WBDescription').val(data.WBDescription);
+                $('#WBExpertise').val(data.WBExpertise);
+                $('#WBActivity').val(data.WBActivity);
+
+                //Complexity
+                var slider = $("#WBComplexity").data("ionRangeSlider");
+                slider.update({
+                    from: data.WBComplexity,
+                    disable: true
+                });
+                var txt = '';
+                switch (data.WBComplexity) {
+                    case 1:
+                        txt = 'Very Low';
+                        break;
+                    case 2:
+                        txt = 'Low';
+                        break;
+                    case 3:
+                        txt = 'Medium';
+                        break;
+                    case 4:
+                        txt = 'High';
+                        break;
+                    case 5:
+                        txt = 'Very High';
+                        break;
+                }
+                $('#ComplexityLevel').text(txt);
+                //Multi-Select:
+                $('#WBTechnologies').multiselect('select', data.WBTechnologies);
+                $('#WBMetrics').multiselect('select', data.WBMetrics);
+                $('#WBUsers').multiselect('select', data.WBUsers);
+
+                //Files:
+                var list = $('#filesList');
+                $(data.WBFilesList).each(function() {
+                    var a = $('<a href=' + this.Item2 + '>');
+                    a.text(this.Item3);
+                    list.append(a);
+                });
+            }
+        });
+
+    }
+
 
 </script>
