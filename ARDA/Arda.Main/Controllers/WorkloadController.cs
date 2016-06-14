@@ -21,12 +21,6 @@ namespace Arda.Main.Controllers
     public class WorkloadController : Controller
     {
         [HttpGet]
-        public JsonResult GetGuid()
-        {
-            return Json(Util.GenerateNewGuid());
-        }
-
-        [HttpGet]
         public async Task<JsonResult> ListWorkloadsByUser()
         {
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
@@ -127,6 +121,29 @@ namespace Arda.Main.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpDelete]
+        public async Task<HttpResponseMessage> Delete(Guid workloadID)
+        {
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            try
+            {
+                await Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/workload/delete?=" + workloadID, uniqueName, "");
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult GetGuid()
+        {
+            return Json(Util.GenerateNewGuid());
         }
     }
 }
