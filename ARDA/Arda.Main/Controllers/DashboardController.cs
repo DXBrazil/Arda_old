@@ -16,7 +16,7 @@ namespace Arda.Main.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ViewBag.Guid = Util.GenerateNewGuid().ToString();
+            //ViewBag.Guid = Util.GenerateNewGuid().ToString();
             return View();
         }
 

@@ -199,10 +199,10 @@ namespace Arda.Kanban.Repositories
                 }
                 //Update workload object:
                 workloadToBeUpdated.WBActivity = activity;
-                workloadToBeUpdated.WBAppointments = null;
+                //workloadToBeUpdated.WBAppointments = null;
                 workloadToBeUpdated.WBComplexity = (Complexity)workload.WBComplexity;
-                workloadToBeUpdated.WBCreatedBy = workload.WBCreatedBy;
-                workloadToBeUpdated.WBCreatedDate = workload.WBCreatedDate;
+                //workloadToBeUpdated.WBCreatedBy = workload.WBCreatedBy;
+                //workloadToBeUpdated.WBCreatedDate = workload.WBCreatedDate;
                 workloadToBeUpdated.WBDescription = workload.WBDescription;
                 workloadToBeUpdated.WBEndDate = workload.WBEndDate;
                 workloadToBeUpdated.WBExpertise = (Expertise)workload.WBExpertise;
