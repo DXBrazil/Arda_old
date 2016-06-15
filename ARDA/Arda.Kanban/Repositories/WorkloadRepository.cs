@@ -27,6 +27,7 @@ namespace Arda.Kanban.Repositories
                 var activity = _context.Activities.First(a => a.ActivityID == workload.WBActivity);
                 //Load related Metrics:
                 var metricList = new List<WorkloadBacklogMetric>();
+                if(workload.WBMetrics != null)
                 foreach (var mId in workload.WBMetrics)
                 {
                     var metric = _context.Metrics.First(m => m.MetricID == mId);
@@ -37,6 +38,7 @@ namespace Arda.Kanban.Repositories
                 }
                 //Load related Technologies:
                 var technologyList = new List<WorkloadBacklogTechnology>();
+                if(workload.WBTechnologies != null)
                 foreach (var tId in workload.WBTechnologies)
                 {
                     var technology = _context.Technologies.First(t => t.TechnologyID == tId);
@@ -47,6 +49,7 @@ namespace Arda.Kanban.Repositories
                 }
                 //Load related Users:
                 var userList = new List<WorkloadBacklogUser>();
+                if(workload.WBUsers!=null)
                 foreach (var uniqueName in workload.WBUsers)
                 {
                     var user = _context.Users.First(u => u.UniqueName == uniqueName);
@@ -57,6 +60,7 @@ namespace Arda.Kanban.Repositories
                 }
                 //Associate related Files:
                 var filesList = new List<File>();
+                if(workload.WBFilesList!=null)
                 foreach (var f in workload.WBFilesList)
                 {
                     filesList.Add(new File()
