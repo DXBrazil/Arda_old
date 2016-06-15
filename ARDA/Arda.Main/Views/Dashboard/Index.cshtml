@@ -521,6 +521,8 @@
         //Serializes form and append bootstrap-switch value:
         var data = new FormData(this);
         data.append('WBIsWorkload', value)
+        
+        var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0 };
 
         $('#msg').text('Wait...');
         $.ajax({
@@ -530,8 +532,12 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                
                 if (response.IsSuccessStatusCode) {
                     $('#msg').text('Success!');
+
+                    // add a task (workload.js)
+                    createTask(workload.id, workload.name, workload.state);
                 } else {
                     $('#msg').text('Error!');
                 }

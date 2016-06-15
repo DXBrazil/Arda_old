@@ -20,11 +20,11 @@ function drop(ev) {
     update(task);
 }
 
-var tasks = $('.task');
-tasks.map(function (i, task) {
-    task.draggable = true;
-    task.addEventListener('dragstart', dragstart);
-});
+//var tasks = $('.task');
+//tasks.map(function (i, task) {
+//    task.draggable = true;
+//    task.addEventListener('dragstart', dragstart);
+//});
 
 var folders = $('.folder');
 folders.map(function (i, folder) {
@@ -32,18 +32,18 @@ folders.map(function (i, folder) {
     folder.addEventListener('drop', drop.bind(folder));
 });
 
-var btnAdd = $('#btnAdd');
-var txtAdd = $('#txtAdd');
+//var btnAdd = $('#btnAdd');
+//var txtAdd = $('#txtAdd');
 
-btnAdd.click(function () {
-    var taskName = txtAdd.val();
+//btnAdd.click(function () {
+//    var taskName = txtAdd.val();
 
-    if (taskName != null && taskName != '') {
-        create(taskName, function (id, name, state) {
-            createTask(id, name, state);
-        });
-    }
-});
+//    if (taskName != null && taskName != '') {
+//        create(taskName, function (id, name, state) {
+//            createTask(id, name, state);
+//        });
+//    }
+//});
 
 gettasklist(function (tasklist) {
     tasklist.map(function (task) {
@@ -75,6 +75,7 @@ function httpCall(action, url, data, callback, error) {
         type: action, // GET POST PUT
         url: url,
         data: JSON.stringify(data),
+        cache: false,
         contentType: 'application/json',
         dataType: 'json',
         success: callback,
@@ -88,19 +89,17 @@ function gettasklist(callback) {
     httpCall('GET', '/Workload/ListWorkloadsByUser', null, callback);
 }
 
-function create(taskname, callback) {
-    alert(2);
-    var task = { Id: null, Name: taskname, State: 0 };
+//function create(taskname, callback) {
+//    alert(2);
+//    var task = { Id: null, Name: taskname, State: 0 };
 
-    httpCall('POST', 'api/tasks', task, function (data) {
-        data && callback(data.Id, data.Name, data.State);
-    })
-
-
-}
+//    httpCall('POST', 'api/tasks', task, function (data) {
+//        data && callback(data.Id, data.Name, data.State);
+//    })
+//}
 
 function update(task) {
-    alert(3);
+    alert(JSON.stringify(task));
     httpCall('PUT', 'api/tasks', task, function (data) {
         alert(1)
     })
