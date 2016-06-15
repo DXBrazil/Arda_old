@@ -339,7 +339,8 @@ namespace Arda.Kanban.Repositories
                                     _WorkloadID = wb.WBID,
                                     _WorkloadTitle = wb.WBTitle,
                                     _WorkloadStartDate = wb.WBStartDate,
-                                    _WorkloadEndDate = wb.WBEndDate
+                                    _WorkloadEndDate = wb.WBEndDate,
+                                    _WorkloadStatus = (int)wb.WBStatus
                                 }).ToList();
 
                 if (response != null)
