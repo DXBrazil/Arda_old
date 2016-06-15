@@ -132,6 +132,15 @@ namespace Arda.Kanban.Repositories
             }
         }
 
+        public bool UpdateWorkloadStatus(Guid id, int status)
+        {
+            var workload = _context.WorkloadBacklogs.First(w => w.WBID == id);
+            workload.WBStatus = (Status)status;
+            _context.SaveChanges();
+
+            return true;
+        }
+
         public bool EditWorkload(WorkloadViewModel workload)
         {
             try

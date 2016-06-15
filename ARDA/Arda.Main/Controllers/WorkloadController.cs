@@ -197,6 +197,25 @@ namespace Arda.Main.Controllers
             }
         }
 
+
+        [HttpPut]
+        public async Task<HttpResponseMessage> UpdateStatus([FromQuery]string Id, [FromQuery]int Status)
+        {
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+            //System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+            //string requestFromPost = reader.ReadToEnd();
+
+            try
+            {
+                await Util.ConnectToRemoteService<string>(HttpMethod.Put, Util.KanbanURL + "api/workload/updatestatus?id=" + Id + "&status=" + Status, uniqueName, "");
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpDelete]
         public async Task<HttpResponseMessage> Delete(Guid workloadID)
         {

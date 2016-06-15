@@ -99,9 +99,8 @@ function gettasklist(callback) {
 //}
 
 function update(task) {
-    alert(JSON.stringify(task));
-    httpCall('PUT', 'api/tasks', task, function (data) {
-        alert(1)
+    httpCall('PUT', '/Workload/UpdateStatus?id=' + task.Id + '&status=' + task.State, task, function (data) {
+        // done
     })
 
 }

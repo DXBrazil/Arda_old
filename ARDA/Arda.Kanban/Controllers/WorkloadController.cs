@@ -113,6 +113,33 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpPut]
+        [Route("updatestatus")]
+        public HttpResponseMessage UpdateStatus([FromQuery]string id, [FromQuery]int status)
+        {
+            System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+            string requestFromPost = reader.ReadToEnd();
+            var statusUpdate = JsonConvert.DeserializeObject(requestFromPost);
+            
+            try
+            {
+                var response = _repository.UpdateWorkloadStatus(Guid.Parse(id), status);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
         [Route("edit")]
         public HttpResponseMessage Edit(WorkloadViewModel w)
         {
