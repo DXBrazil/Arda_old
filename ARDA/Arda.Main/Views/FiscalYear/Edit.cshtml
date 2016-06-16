@@ -46,9 +46,9 @@
                             <input type="text" class="form-control" id="FullNumericFiscalYearMain" name="FullNumericFiscalYearMain" value="@Model.FullNumericFiscalYearMain">
                         </div>
 
-                        <button type="submit" class="btn btn-info" id="btnUpdate">
-                            <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
-                        </button>
+                        <div class="data-sorting-buttons">
+                            <button id="btnUpdate" type="submit" class="ds-button-update"><i class='fa fa-floppy-o' aria-hidden='true'></i> Save</button>
+                        </div>
 
                     </form>
                     
@@ -63,9 +63,10 @@
                     </h3>
                     <p>
                         To add a new Fiscal Year, please click on button bellow. <br />
-                        <div style="margin-bottom:50px;">
-                            <a asp-controller="FiscalYear" asp-action="Add" class="btn btn-success" style="width:100px;">+ Add</a>
+                        <div class="data-sorting-buttons">
+                            <a asp-controller="FiscalYear" asp-action="Add" class="ds-button-update"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
                         </div>
+
                     </p>
                 </div>
             </div>
