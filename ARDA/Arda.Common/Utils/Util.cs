@@ -178,5 +178,11 @@ namespace Arda.Common.Utils
         {
             return Guid.NewGuid();
         }
+
+        public static string GetUserAlias(string uniqueName)
+        {
+            string result = uniqueName.Split('@')[0];
+            return result;
+        }
     }
 }

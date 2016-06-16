@@ -28,5 +28,7 @@ namespace Arda.Kanban.Models
         public DbSet<WorkloadBacklogTechnology> WorkloadBacklogTechnologies { get; set; }
 
         public DbSet<WorkloadBacklogUser> WorkloadBacklogUsers { get; set; }
+
+        public DbSet<Appointment> Appointments { get; set; }
     }
 }

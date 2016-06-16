@@ -1,12 +1,28 @@
 ﻿// Functions with automatic initialization
 $(function ($) {
-
     // Loading datatable to fiscal years.
     $("#table-fiscalyears").DataTable({
         "sAjaxSource": "/FiscalYear/ListAllFiscalYears",
         "columnDefs": [
             {
                 "width": "33%", "targets": 2,
+                "orderable": false
+            }
+        ]
+    });
+
+    //Loading datatable to appointments.
+    $("#table-appointments").DataTable({
+        "sAjaxSource": "/Appointment/ListAllAppointments",
+        "columns": [
+            { "width": "35%" },
+            { "width": "15%" },
+            { "width": "10%" },
+            { "width": "5%" },
+            { "width": "20%" }
+        ],
+        "columnDefs": [
+            {
                 "orderable": false
             }
         ]
@@ -367,6 +383,64 @@ $(function ($) {
         }
     });
 
+    $("#form-add-appointment").validate({
+        rules: {
+            _AppointmentID: "required",
+            _AppointmentUserName: "required",
+            _WorkloadTitle: "required",
+            _AppointmentDate: "required",
+            _AppointmentHoursDispensed: "required"
+        },
+        messages: {
+            _AppointmentID: "Sorry but, we need appointment code.",
+            _AppointmentUserName: "Ops! Who is doind this appointment? Mandatory info.",
+            _WorkloadTitle: "Ops! You must type the workload. The system will find the occurrency in database.",
+            _AppointmentDate: "Ops! Date is mandatory.",
+            _AppointmentHoursDispensed: "Ops! Hours dispensed is mandatory."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            UpdateCKEditor();
+            DisableAppointmentFields();
+            $("#btnAddAppointment").text("Saving appointment...");
+
+            $.ajax({
+                url: "/Appointment/AddAppointment",
+                type: "POST",
+                data: $(form).serialize()
+            }).done(function (data) {
+                if (data.IsSuccessStatusCode) {
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The appointment has been added into Arda.</div>");
+                    $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    RedirectIn(3000, "/Appointment/My");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableAppointmentFields();
+                }
+            }).fail(function (e, f) {
+                $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                EnableAppointmentFields();
+            });
+        }
+    });
+
     // Calling workloads by current user
     GetWorkloadsByUser();
 
@@ -474,6 +548,25 @@ function ModalDelete_Metric(MetricID, MetricCategory, MetricName) {
     $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteMetric('" + MetricID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
 }
 
+function ModalDelete_Appointment(AppointmentID, WorkloadTitle, AppointmentDate, AppointmentHoursDispensed, AppointmentUserName) {
+    //Defining values
+    var ModalTitle = "Deleting appointment to '" + WorkloadTitle + "' workload";
+    var ModalBody = "<p style='margin-bottom:20px; font-weight: 400;' class='p-modal-body'>This operation will be permanent. Are you sure?</p>";
+    ModalBody += "<p><ul>";
+    ModalBody += "<li>Appointment ID: " + AppointmentID + "</li>";
+    ModalBody += "<li>Workload: " + WorkloadTitle + "</li>";
+    ModalBody += "<li>Registered in: " + AppointmentDate + "</li>";
+    ModalBody += "<li>Hours dispensed: " + AppointmentHoursDispensed + "</li>";
+    ModalBody += "<li>User: " + AppointmentUserName + "</li>";
+    ModalBody += "</ul></p>";
+    ModalBody += "<div id='message-panel' style='margin-top: 10px;'></div>"
+
+    //Injecting contents
+    $("#generic-modal .modal-title").html("<strong>" + ModalTitle + "</strong>");
+    $("#generic-modal .modal-body").html(ModalBody);
+    $("#generic-modal .modal-footer").html("<button type='button' class='btn btn-danger' id='btnDelete' onclick=\"DeleteAppointment('" + AppointmentID + "');\"><i class='fa fa-trash' aria-hidden='true'></span>&nbsp;Delete</button>");
+}
+
 
 // Another functions
 
@@ -531,6 +624,15 @@ function DisableMetricFields() {
     $("#btnUpdate").attr("disabled", "disabled");
 }
 
+function DisableAppointmentFields()
+{
+    $("#_WorkloadTitle").attr("readonly", "readonly");
+    $("#_AppointmentDate").attr("readonly", "readonly");
+    $("#_AppointmentHoursDispensed").attr("readonly", "readonly");
+    $("#_AppointmentTE").attr("readonly", "readonly");
+    $("#_AppointmentComment").attr("readonly", "readonly");
+}
+
 function EnableMetricFields() {
     $(".FiscalYearID").removeAttr("readonly");
     $(".MetricCategory").removeAttr("readonly");
@@ -538,6 +640,15 @@ function EnableMetricFields() {
     $(".Description").removeAttr("readonly");
     $("#btnAdd").removeAttr("disabled");
     $("#btnUpdate").removeAttr("disabled");
+}
+
+function EnableAppointmentFields()
+{
+    $("#_WorkloadTitle").removeAttr("readonly", "readonly");
+    $("#_AppointmentDate").removeAttr("readonly", "readonly");
+    $("#_AppointmentHoursDispensed").removeAttr("readonly", "readonly");
+    $("#_AppointmentTE").removeAttr("readonly", "readonly");
+    $("#_AppointmentComment").removeAttr("readonly", "readonly");
 }
 
 function RedirectIn(delay, url)
@@ -558,6 +669,24 @@ function DeleteFiscalYear(fiscalYearID) {
             if (data.Status) {
                 $("#message-panel").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Fiscal year successful deleted.</div>");
                 RedirectIn(4000, "/FiscalYear/Index");
+            } else {
+                $("#message-panel").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> We found an error in this request. Try again in a few minutes.</div>");
+            }
+        }
+    });
+}
+
+function DeleteAppointment(appointmentID) {
+    $("#btnDelete").attr("disabled", "disabled");
+
+    $.ajax({
+        url: "/Appointment/DeleteAppointment",
+        type: "DELETE",
+        data: { id: appointmentID },
+        success: function (data) {
+            if (data.IsSuccessStatusCode) {
+                $("#message-panel").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> Appointment successful deleted.</div>");
+                RedirectIn(3000, "/Appointment/My");
             } else {
                 $("#message-panel").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> We found an error in this request. Try again in a few minutes.</div>");
             }
@@ -630,17 +759,17 @@ function CallbackGetWorkloadsByUser(data) {
     var num = data.length;
 
     if (num > 0) {
-        $('#Workload').autocomplete({
+        $('#_WorkloadTitle').autocomplete({
             lookup: data,
             minLength: 2,
             onSelect: function (suggestion) {
-                $("#WorkloadId").val(suggestion.data);
+                $("#_AppointmentWorkloadWBID").val(suggestion.data);
             }
         });
     }
     else
     {
-        $('#Workload').attr('disabled', 'disabled');
+        $('#_WorkloadTitle').attr('disabled', 'disabled');
         $('#btnAddWorkload').attr('disabled', 'disabled');
     }
 }
@@ -649,22 +778,29 @@ function CallbackGetWorkloadsByUser(data) {
 
 function LoadMaskMoney()
 {
-    $("#TE").maskMoney({ prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false });
+    $("#_AppointmentTE").maskMoney({ prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false });
 }
 
 // CKEditor
 
 function LoadCKEditor()
 {
-    CKEDITOR.replace('Editor');
+    CKEDITOR.replace('_AppointmentComment');
+}
+
+function UpdateCKEditor()
+{
+    for (instance in CKEDITOR.instances) {
+        CKEDITOR.instances[instance].updateElement();
+    }
 }
 
 // Datepicker
 
 function LoadDatePicker()
 {
-    $('#AppointmentDate').datepicker({
-        format: "mm/dd/yyyy",
+    $('#_AppointmentDate').datepicker({
+        format: "dd/mm/yyyy",
         autoclose: true,
         todayHighlight: true
     });

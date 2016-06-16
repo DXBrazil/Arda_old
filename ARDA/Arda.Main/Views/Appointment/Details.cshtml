@@ -1,4 +1,5 @@
-﻿<section class="concontainer-fluid">
+﻿@model Arda.Common.ViewModels.Main.AppointmentViewModel
+<section class="concontainer-fluid">
 
     <div class="col-xs-12">
         <div class="row">
@@ -31,19 +32,17 @@
 
                         <div class="form-group">
                             <label for="_AppointmentID">Code:</label>
-                            <input type="text" class="form-control" id="_AppointmentID" name="_AppointmentID" value="@ViewBag.Guid" readonly>
+                            <input type="text" class="form-control" id="_AppointmentID" name="_AppointmentID" value="@Model._AppointmentID" readonly>
                         </div>
 
                         <div class="form-group">
                             <label for="_AppointmentUserName">Appointment to:</label>
                             <input type="text" class="form-control" id="_AppointmentUserName" name="_AppointmentUserName" value="@User.Claims.First(claim => claim.Type == "name").Value" readonly />
-                            <input type="hidden" id="_AppointmentUserUniqueName" name="_AppointmentUserUniqueName" value="@User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value" />
                         </div>
 
                         <div class="form-group">
                             <label for="_WorkloadTitle">Workload:</label>
-                            <input type="hidden" name="_AppointmentWorkloadWBID" id="_AppointmentWorkloadWBID" />
-                            <input id="_WorkloadTitle" name="_WorkloadTitle" type="search" class="form-control" placeholder="Type part of workload name">
+                            <input id="_WorkloadTitle" name="_WorkloadTitle" type="search" class="form-control" value="@Model._WorkloadTitle" disabled />
                         </div>
 
                         <div class="row">
@@ -51,7 +50,7 @@
                                 <div class="form-group">
                                     <label for="_AppointmentDate">Appointment date:</label>
                                     <div class="input-group date">
-                                        <input type="text" id="_AppointmentDate" name="_AppointmentDate" class="form-control">
+                                        <input type="text" id="_AppointmentDate" name="_AppointmentDate" class="form-control" value="@Model._AppointmentDate.ToString("dd/MM/yyyy")" disabled />
                                         <span class="input-group-addon"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
                                     </div>
                                 </div>
@@ -60,12 +59,8 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="_AppointmentHoursDispensed">Hours dispensed (on refered date):</label>
-                                    <select id="_AppointmentHoursDispensed" name="_AppointmentHoursDispensed" class="form-control">
-                                        <option value="" selected>- SELECT -</option>
-                                        @for (int i = 1; i <= 24; i++)
-                                        {
-                                            <option value="@i">@i</option>
-                                        }
+                                    <select id="_AppointmentHoursDispensed" name="_AppointmentHoursDispensed" class="form-control" disabled>
+                                        <option value="" selected>@Model._AppointmentHoursDispensed</option>
                                     </select>
                                 </div>
                             </div>
@@ -73,19 +68,15 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="_AppointmentTE">T&E (if applyable):</label>
-                                    <input type="text" id="_AppointmentTE" name="_AppointmentTE" class="form-control" placeholder="R$ 0,00" />
+                                    <input type="text" id="_AppointmentTE" name="_AppointmentTE" class="form-control" value="@Model._AppointmentTE" disabled />
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="_AppointmentComment">Any comment about this activity?</label>
-                            <textarea class="form-control" rows="5" id="_AppointmentComment" name="_AppointmentComment"></textarea>
+                            <textarea class="form-control" rows="5" id="_AppointmentComment" name="_AppointmentComment" disabled>@Model._AppointmentComment</textarea>
                         </div>
-
-                        <button type="submit" class="btn btn-info" id="btnAddAppointment">
-                            <i class='fa fa-floppy-o' aria-hidden='true'></i> Save
-                        </button>
 
                     </form>
 
