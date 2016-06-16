@@ -99,6 +99,7 @@
 /// <reference path="js/jquery.autocomplete.min.js" />
 /// <reference path="js/jquery.datatables.min.js" />
 /// <reference path="js/jquery.maskmoney.min.js" />
+/// <reference path="js/workload.js" />
 /// <reference path="Layouts/ModernUI/js/app.js" />
 /// <reference path="Layouts/ModernUI/js/bootstrap/alert.js" />
 /// <reference path="Layouts/ModernUI/js/bootstrap/button.js" />

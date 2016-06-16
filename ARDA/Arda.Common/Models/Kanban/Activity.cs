@@ -18,7 +18,7 @@ namespace Arda.Common.Models.Kanban
         public string ActivityName { get; set; }
 
 
-        public virtual IEnumerable<WorkloadBacklog> WBs { get; set; }
+        public virtual ICollection<WorkloadBacklog> WBs { get; set; }
 
     }
 }

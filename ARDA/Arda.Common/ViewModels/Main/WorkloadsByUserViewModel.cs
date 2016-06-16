@@ -11,5 +11,8 @@ namespace Arda.Common.ViewModels.Main
         public DateTime _WorkloadStartDate { get; set; }
 
         public DateTime _WorkloadEndDate { get; set; }
+
+        public int _WorkloadStatus { get; set; }
+        
     }
 }

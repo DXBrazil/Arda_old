@@ -132,7 +132,13 @@
                         </div>
 
                         <div class="col-xs-12 col-lg-3 col-md-6">
-                            <button id="btnNew" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#newWorkload">New</button>
+                            <label for="_WBID">WBID:</label>
+                            <input id="_WBID" type="text"/>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-3 col-md-6">
+                            <button id="btnNew" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">New</button>
+                            <button id="btnDetails" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">Details</button>
                         </div>
 
                         <div class="clearfix"></div>
@@ -145,6 +151,9 @@
                         </div>
                     </template>
 
+                    <style>
+                        .folder { border: 1px solid black; height: 200px; }
+                    </style>
                     <div class="col-xs-12">
                         <div class="row">
                             <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
@@ -158,7 +167,6 @@
                                     <h3 class="dashboard-panel-title  dashboard-panel-title--doing">doing</h3>
                                 </div>
                                 <div id="divTaskListDoing" class="folder state1" data-state="1"></div>
-
                             </div>
                             <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
                                 <div class="row">
@@ -181,158 +189,9 @@
     }
 }
 
+<!-- Workload Modal -->
+@await Html.PartialAsync("_WorkloadModal")
 
-@*<!-- Workload Modal -->
-<div class="modal fade" id="newWorkload" tabindex="-1" role="dialog" aria-labelledby="newWorkload">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">New workload:</h4>
-            </div>
-            <div class="modal-body">
-
-                <form method="post" asp-action="Index" asp-controller="Dashboard" enctype="multipart/form-data" id="form-add-workload">
-                    <div class="row" hidden>
-                        <div id="#formWBID" class="col-md-9">
-                            <div class="form-group">
-                                <label for="WBID">Code:</label>
-                                <input type="text" class="form-control" id="WBID" name="WBID" value="@ViewBag.Guid" readonly>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBStartDate">Start date:</label>
-                                <div class="input-group date">
-                                    <input type="text" id="WBStartDate" name="WBStartDate" class="form-control" autocomplete="off">
-                                    <span class="input-group-addon"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBEndDate">End date:</label>
-                                <div class="input-group date">
-                                    <input type="text" id="WBEndDate" name="WBEndDate" class="form-control" autocomplete="off">
-                                    <span class="input-group-addon"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label id="lblWBIsWorkload" for="WBIsWorkload">Work Type:</label>
-                                <input type="checkbox" id="WBIsWorkload" data-on-text="Workload" data-off-text="Backlog" data-off-color="info" checked="checked">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="WBTitle">Title:</label>
-                                <input type="text" class="form-control" id="WBTitle" name="WBTitle">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="WBDescription">Description:</label>
-                                <textarea class="form-control" id="WBDescription" name="WBDescription" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBExpertise">Expertise:</label>
-                                <select class="form-control" id="WBExpertise" name="WBExpertise">
-                                    <option disabled selected>Select the expertise</option>
-                                    <option value="0">Dev</option>
-                                    <option value="1">Infra</option>
-                                    <option value="2">DevOps</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBActivity">Activity:</label>
-                                <select class="form-control" id="WBActivity" name="WBActivity">
-                                    <!--Dynamically Content-->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="WBComplexity">Complexity:</label>
-                                <div style="vertical-align: top">
-                                    <input id="WBComplexity" name="WBComplexity" readonly hidden>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <p id="ComplexityLevel">Very Low</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBTechnologies">Technologies:</label>
-                                <select class="form-control" id="WBTechnologies" name="WBTechnologies" multiple="multiple">
-                                    <!--Dynamically Content-->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBMetrics">Metrics:</label>
-                                <select class="form-control" id="WBMetrics" name="WBMetrics" multiple="multiple">
-                                    <!--Dynamically Content-->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="WBUsers">Users:</label>
-                                <select class="form-control" id="WBUsers" name="WBUsers" multiple="multiple">
-                                    <!--Dynamically Content-->
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="WBFiles">Files:</label>
-                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-                                <span class="input-group-addon btn btn-default btn-file">
-                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
-                                    <input id="WBFiles" type="file" name="WBFiles" multiple>
-                                </span>
-                                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="buttonsPanel">
-                        <p id="msg"></p>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>*@
-
-@await Html.PartialAsync("_AddWorkloadModal")
 
 <script>
 
@@ -350,18 +209,28 @@
         //Get User Users:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
 
-        $('#newWorkload').modal();
+        //TODO: Remove this test line:
+        $('#_WBID').val('fd6984f2-6483-4788-87c3-dbeef10a7d4e');
     });
 
     function Initialize() {
         //Click events:
 
+        //New Workload:
+        $('#btnNew').click(newWorkloadState);
+        //Workload Details:
+        $('#btnDetails').click(detailsWorkloadState);
+        //Editing Workload:
+        $('#btnWorkloadEdit').click(editWorkloadState);
+        //Reset Button:
+        $('#btnWorkloadReset').click(resetWorkloadForm);
+        //Delete Button:
+        $('#btnWorkloadDelete').click(deleteWorkload);
+
 
         //Other events:
         $('#WBComplexity').on('change', changeComplexity);
-
-        $('#form-add-workload').submit(addWorkload);
-
+        
         //Components:
         $("#WBIsWorkload").bootstrapSwitch();
 
@@ -382,11 +251,160 @@
             max: 5,
             hide_min_max: true,
             hide_from_to: true,
-            grid: false
+            grid: false,
+            keyboard: true
         });
-
-
     }
+
+
+    function newWorkloadState() {
+        //Clean values:
+        resetWorkloadForm();
+        //Set submit event:
+        $('#form-workload').unbind();
+        $('#form-workload').submit(addWorkload);
+
+        //Modal Title:
+        $('#ModalTitle').text('New Workload:');
+        //Get GUID:
+        getGUID(function (data) {
+            $('#WBID').attr('value', data);
+        });
+        //Fields:
+        $('#WBStartDate').removeAttr("disabled");
+        $('#WBEndDate').removeAttr("disabled");
+        if ($('#WBIsWorkload').bootstrapSwitch('disabled')) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        }
+        $('#WBTitle').removeAttr("disabled");
+        $('#WBDescription').removeAttr("disabled");
+        $('#WBExpertise').removeAttr("disabled");
+        $('#WBActivity').removeAttr("disabled");
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1,
+            disable: false
+        });
+        $('.multiselect-container.dropdown-menu li a label input').removeAttr("disabled");
+        $('.fileinput').removeClass('hidden');
+        //Buttons:
+        $('#btnWorkloadReset').removeClass('hidden');
+        $('#btnWorkloadSend').removeClass('hidden');
+        $('#btnWorkloadSend').text('Add');
+        $('#btnWorkloadEdit').addClass('hidden');
+        $('#btnWorkloadDelete').addClass('hidden');
+    }
+
+    function detailsWorkloadState() {
+        resetWorkloadForm();
+        //Modal Title:
+        $('#ModalTitle').text('Workload Details:');
+        //Set GUID:
+        var guid = $('#_WBID').val();
+        $('#WBID').attr('value', guid);
+        //Load Workload:
+        loadWorkload(guid);
+
+        //Fields:
+        $('#WBStartDate').attr("disabled", "disabled");
+        $('#WBEndDate').attr("disabled", "disabled");
+        if (!($('#WBIsWorkload').bootstrapSwitch('disabled'))) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        }
+        $('#WBTitle').attr("disabled", "disabled");
+        $('#WBDescription').attr("disabled", "disabled");
+        $('#WBExpertise').attr("disabled", "disabled");
+        $('#WBActivity').attr("disabled", "disabled");
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1,
+            disable: true
+        });
+        $('.multiselect-container.dropdown-menu li a label input').attr("disabled", "disabled");
+        $('.fileinput').addClass('hidden');
+        //Buttons:
+        $('#btnWorkloadReset').addClass('hidden');
+        $('#btnWorkloadSend').addClass('hidden');
+        $('#btnWorkloadEdit').removeClass('hidden');
+        $('#btnWorkloadDelete').addClass('hidden');
+    }
+
+    function editWorkloadState() {
+        //Set submit event:
+        $('#form-workload').unbind();
+        $('#form-workload').submit(updateWorkload);
+        //Modal Title:
+        $('#ModalTitle').text('Editing Workload:');
+        //Fields:
+        $('#WBStartDate').removeAttr("disabled");
+        $('#WBEndDate').removeAttr("disabled");
+        if ($('#WBIsWorkload').bootstrapSwitch('disabled')) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        }
+        $('#WBTitle').removeAttr("disabled");
+        $('#WBDescription').removeAttr("disabled");
+        $('#WBExpertise').removeAttr("disabled");
+        $('#WBActivity').removeAttr("disabled");
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            disable: false
+        });
+        $('.multiselect-container.dropdown-menu li a label input').removeAttr("disabled");
+        $('.fileinput').removeClass('hidden');
+        //Events:
+        $('.fileDel').removeClass('hidden');
+        //Buttons:
+        $('#btnWorkloadReset').addClass('hidden');
+        $('#btnWorkloadSend').text('Update');
+        $('#btnWorkloadSend').removeClass('hidden');
+        $('#btnWorkloadDelete').removeClass('hidden');
+        $('#btnWorkloadEdit').addClass('hidden');
+    }
+
+    function resetWorkloadForm() {
+        $('#msg').text('');
+        $('#WBStartDate').val('');
+        $('#WBEndDate').val('');
+        if ($('#WBIsWorkload').bootstrapSwitch('disabled')) {
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+            $('#WBIsWorkload').bootstrapSwitch('state', true);
+            $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
+        } else {
+            $('#WBIsWorkload').bootstrapSwitch('state', true);
+        }
+
+        $('#WBTitle').val('');
+        $('#WBDescription').val('');
+        $('#WBExpertise').val('-1');
+        $('#WBActivity').val('-1');
+        //Slider:
+        var slider = $("#WBComplexity").data("ionRangeSlider");
+        slider.update({
+            from: 1
+        });
+        //Technologies Multiselect:
+        var tech = [];
+        $("#WBTechnologies option").each(function () {
+            tech.push($(this).val());
+        });
+        $('#WBTechnologies').multiselect('deselect', tech);
+        //Metrics Multiselect:
+        var met = [];
+        $("#WBMetrics option").each(function () {
+            met.push($(this).val());
+        });
+        $('#WBMetrics').multiselect('deselect', met);
+        //Users Multiselect:
+        var users = [];
+        $("#WBUsers option").each(function () {
+            users.push($(this).val());
+        });
+        $('#WBUsers').multiselect('deselect', users);
+        //Files:
+        $('.fileinput').fileinput('clear');
+        $('#filesList').html('');
+    }
+
 
     function changeComplexity(e) {
         var value = $(this).val();
@@ -411,10 +429,32 @@
         $('#ComplexityLevel').text(txt);
     }
 
+    function formatDate(dateStr, callback) {
+        var date = new Date(dateStr);
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var str = month + '/' + day + '/' + year;
+        callback(str)
+    }
+
+    function getGUID(callback){ 
+        $.ajax({
+            url: 'Workload/GetGuid',
+            type: 'GET',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                callback(data);
+            }
+        });
+    }
+
 
     function callbackGetActivities(data) {
         var options = [];
-        options.push('<option selected disabled>Select the activity</option>');
+        options.push('<option selected disabled value="-1">Select the activity</option>');
         for (var i = 0; i < data.length; i++) {
             var text = data[i].ActivityName;
             var key = data[i].ActivityID;
@@ -475,19 +515,53 @@
     }
 
 
-
     function addWorkload(e) {
-        //Fixes bootstrap-switch component value:
-        var botswitch = $('.bootstrap-switch.bootstrap-switch-wrapper.bootstrap-switch-id-WBIsWorkload');
-        var value = botswitch[0].classList.contains('bootstrap-switch-on');
+        //Gets bootstrap-switch component value:
+        var value = $('#WBIsWorkload').bootstrapSwitch('state');
         //Serializes form and append bootstrap-switch value:
         var data = new FormData(this);
         data.append('WBIsWorkload', value)
+        
+        var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0 };
 
         $('#msg').text('Wait...');
         $.ajax({
             url: 'Workload/Add',
             type: 'POST',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                
+                if (response.IsSuccessStatusCode) {
+                    $('#msg').text('Success!');
+
+                    // add a task (workload.js)
+                    createTask(workload.id, workload.name, workload.state);
+                } else {
+                    $('#msg').text('Error!');
+                }
+            }
+        });
+        e.preventDefault();
+    }
+
+    function updateWorkload(e) {
+        //Gets bootstrap-switch component value:
+        var value = $('#WBIsWorkload').bootstrapSwitch('state');
+        //Serializes form and append bootstrap-switch value:
+        var data = new FormData(this);
+        data.append('WBIsWorkload', value)
+        //Append previous files:
+        var files = $('#filesList div a.filePrev');
+        for (var i = 0; i < files.length; i++) {
+            data.append('oldFiles', files[i].attributes[2].value + '&' + files[i].href + '&' + files[i].text);
+        }
+
+        $('#msg').text('Wait...');
+        $.ajax({
+            url: 'Workload/Update',
+            type: 'PUT',
             data: data,
             processData: false,
             contentType: false,
@@ -502,4 +576,98 @@
         e.preventDefault();
     }
 
+    function deleteWorkload() {
+        var workloadID = $('#WBID').val();
+        $('#msg').text('Wait...');
+        $.ajax({
+            url: 'Workload/Delete?=' + workloadID,
+            type: 'DELETE',
+            success: function (response) {
+                if (response.IsSuccessStatusCode) {
+                    $('#msg').text('Success!');
+                } else {
+                    $('#msg').text('Error!');
+                }
+            }
+        });
+    }
+
+    function loadWorkload(workloadID) {
+        $.ajax({
+            url: 'Workload/GetWorkload?=' + workloadID,
+            type: 'GET',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                $('#WBID').val(data.WBID);
+                //Dates
+                formatDate(data.WBStartDate, function (str) {
+                    $('#WBStartDate').val(str);
+                });
+                formatDate(data.WBEndDate, function (str) {
+                    $('#WBEndDate').val(str);
+                });
+
+                var isWorkload = $('#WBIsWorkload')
+                isWorkload.bootstrapSwitch('toggleDisabled', true, true);
+                isWorkload.bootstrapSwitch('state', data.WBIsWorkload);
+                isWorkload.bootstrapSwitch('toggleDisabled', true, true);
+
+                $('#WBTitle').val(data.WBTitle);
+                $('#WBDescription').val(data.WBDescription);
+                $('#WBExpertise').val(data.WBExpertise);
+                $('#WBActivity').val(data.WBActivity);
+
+                //Complexity
+                var slider = $("#WBComplexity").data("ionRangeSlider");
+                slider.update({
+                    from: data.WBComplexity,
+                    disable: true
+                });
+                var txt = '';
+                switch (data.WBComplexity) {
+                    case 1:
+                        txt = 'Very Low';
+                        break;
+                    case 2:
+                        txt = 'Low';
+                        break;
+                    case 3:
+                        txt = 'Medium';
+                        break;
+                    case 4:
+                        txt = 'High';
+                        break;
+                    case 5:
+                        txt = 'Very High';
+                        break;
+                }
+                $('#ComplexityLevel').text(txt);
+
+                //Multi-Select:
+                $('#WBTechnologies').multiselect('select', data.WBTechnologies);
+                $('#WBMetrics').multiselect('select', data.WBMetrics);
+                $('#WBUsers').multiselect('select', data.WBUsers);
+
+                //Files:
+                var list = $('#filesList');
+                $(data.WBFilesList).each(function () {
+                    var div = $('<div id="' + this.Item1 + '">');
+                    var a = $('<a class="filePrev" FileID="' + this.Item1 + '" href=' + this.Item2 + '>').text(this.Item3);
+                    var remove = $('<a class="fileDel hidden" style="padding-left: 5px;"/>').text('(remove)');
+                    remove.click(function () {
+                        $(this).parent().remove();
+                    });
+                    div.append(a);
+                    div.append(remove);
+                    list.append(div);
+                });
+            }
+        });
+
+    }
+
+
 </script>
+<script src="/js/workload.js"></script>
