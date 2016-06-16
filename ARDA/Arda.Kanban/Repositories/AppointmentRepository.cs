@@ -23,11 +23,11 @@ namespace Arda.Kanban.Repositories
         {
             try
             {
-                var userKanban = new UserKanbanViewModel();
+                var user = new User();
                 var workload = new WorkloadBacklog();
 
                 // Creating UserKanban object to save.
-                userKanban.UniqueName = appointment._AppointmentUserUniqueName;
+                user.UniqueName = appointment._AppointmentUserUniqueName;
 
                 // Creating Workload object to save.
                 workload.WBID = appointment._AppointmentWorkloadWBID;
@@ -35,7 +35,7 @@ namespace Arda.Kanban.Repositories
                 var appointmentToBeSaved = new Appointment()
                 {
                     AppointmentID = appointment._AppointmentID,
-                    AppointmentUser = userKanban,
+                    AppointmentUser = user,
                     AppointmentWorkload = workload,
                     AppointmentDate = appointment._AppointmentDate,
                     AppointmentHoursDispensed = appointment._AppointmentHoursDispensed,
@@ -100,7 +100,7 @@ namespace Arda.Kanban.Repositories
             {
                 var appointment = (from a in _context.Appointments
                                   join w in _context.WorkloadBacklogs on a.AppointmentWorkload.WBID equals w.WBID
-                                  join u in _context.UsersKanban on a.AppointmentUser.UniqueName equals u.UniqueName
+                                  join u in _context.Users on a.AppointmentUser.UniqueName equals u.UniqueName
                                   where a.AppointmentID == id
                                   select new AppointmentViewModel
                                   {
