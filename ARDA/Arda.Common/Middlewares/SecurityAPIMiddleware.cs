@@ -13,11 +13,11 @@ using Arda.Common.Utils;
 
 namespace Arda.Common.Middlewares
 {
-    public class SecurityMiddleware
+    public class SecurityAPIMiddleware
     {
         RequestDelegate _next;
 
-        public SecurityMiddleware(RequestDelegate next)
+        public SecurityAPIMiddleware(RequestDelegate next)
         {
             _next = next;
         }

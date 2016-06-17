@@ -72,7 +72,7 @@ namespace Arda.Reports
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMiddleware<SecurityMiddleware>();
+            app.UseMiddleware<SecurityAPIMiddleware>();
             
             app.UseIISPlatformHandler();
 

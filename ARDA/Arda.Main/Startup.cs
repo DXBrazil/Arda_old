@@ -82,6 +82,8 @@ namespace Arda.Main
 
             // Configure the OpenIdConnect Auth Pipeline and required services.
             ConfigureAuth(app);
+            //// Configure Security on Main:
+            //app.UseMiddleware<SecurityMainMiddleware>();
 
             app.UseMvc(routes =>
             {
