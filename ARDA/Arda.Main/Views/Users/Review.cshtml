@@ -286,7 +286,7 @@
             permissions += ']}';
 
             var user = $('#mail').text();
-            var url = '/users/Update?user=' + user;
+            var url = '/users/UpdatePermissions?user=' + user;
 
 
             $.ajax({
@@ -316,7 +316,7 @@
     function banUser() {
         var permissions = '{ "permissions" : []}';
         var user = $('#mail').text();
-        var url = '/users/Update?user=' + user;
+        var url = '/users/UpdatePermissions?user=' + user;
 
         $.ajax({
             url: url,

@@ -27,8 +27,13 @@ namespace Arda.Permissions.Migrations
                 columns: table => new
                 {
                     UniqueName = table.Column<string>(nullable: false),
+                    GivenName = table.Column<string>(nullable: true),
+                    JobTitle = table.Column<string>(nullable: true),
+                    ManagerUniqueName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    PhotoBase64 = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Surname = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -16,6 +16,16 @@ namespace Arda.Common.Models.Permissions
         [Required]
         public string Name { get; set; }
 
+        public string GivenName { get; set; }
+
+        public string Surname { get; set; }
+
+        public string JobTitle { get; set; }
+
+        public string ManagerUniqueName { get; set; }
+
+        public string PhotoBase64 { get; set; }
+
         [Required]
         public PermissionStatus Status { get; set; }
 
@@ -27,6 +37,6 @@ namespace Arda.Common.Models.Permissions
     {
         Waiting_Review,
         Permissions_Denied,
-        Permissions_Granted        
+        Permissions_Granted
     }
 }

@@ -52,8 +52,7 @@
 </style>
 
 @{
-    var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-    var userStatus = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuserstatus", user, string.Empty).Result;
+    var userStatus = ViewBag.UserStatus;
     if (userStatus == 0)
     {
         //Message for Situation 0: Waiting_Review
@@ -79,6 +78,7 @@
     else if (userStatus == 2)
     {
         //Page for Situation 2: Permissions_Granted-->
+        var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
         var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/verifyifuseradmin", user, string.Empty).Result;
         if (canApproveUsers)
         {
@@ -211,10 +211,25 @@
 
 <script>
 
+    var user = '@ViewBag.User';
+    var token = '@ViewBag.Token';
+
     $(function () {
+        var b = '@ViewBag.UserStatus';
+
+        @{
+            if (ViewBag.UserStatus==0)
+            {
+                <text>
+        //Get the user info using Microsoft Graph:
+        updateUserInfo();
+                </text>
+            }
+            else if (ViewBag.UserStatus == 2)
+            {
+                <text>
         //Initialize:
         Initialize();
-
         //Load values:
         //Get All Activities:
         $.getJSON('/activity/GetActivities', null, callbackGetActivities);
@@ -224,9 +239,9 @@
         $.getJSON('/metric/GetMetrics', null, callbackGetMetrics);
         //Get User Users:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
-
-        //TODO: Remove this test line:
-        $('#_WBID').val('fd6984f2-6483-4788-87c3-dbeef10a7d4e');
+                </text>
+            }
+        }
     });
 
     function Initialize() {
@@ -246,7 +261,7 @@
 
         //Other events:
         $('#WBComplexity').on('change', changeComplexity);
-        
+
         //Components:
         $("#WBIsWorkload").bootstrapSwitch();
 
@@ -454,7 +469,7 @@
         callback(str)
     }
 
-    function getGUID(callback){ 
+    function getGUID(callback) {
         $.ajax({
             url: 'Workload/GetGuid',
             type: 'GET',
@@ -537,7 +552,7 @@
         //Serializes form and append bootstrap-switch value:
         var data = new FormData(this);
         data.append('WBIsWorkload', value)
-        
+
         var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0 };
 
         $('#msg').text('Wait...');
@@ -548,7 +563,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                
+
                 if (response.IsSuccessStatusCode) {
                     $('#msg').text('Success!');
 
@@ -685,6 +700,54 @@
 
     }
 
+
+    function updateUserInfo() {
+        //Update Photo:
+        GetImage(user, token);
+    }
+
+    function GetImage(user, token) {
+        var url = "https://graph.microsoft.com/v1.0/me/photo/$value";
+        var elem = "userImg";
+        GetImageBase64FromGraph(url, token, elem);
+    }
+
+    function GetImageBase64FromGraph(url, token, element) {
+        var request = new XMLHttpRequest;
+        request.open("GET", url);
+        request.setRequestHeader("Authorization", token);
+        request.responseType = "blob";
+        request.onload = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                var image = document.getElementById(element);
+                var reader = new FileReader();
+                reader.onload = function () {
+                    image.src = reader.result;
+                    updateImgOnDatabase();
+                }
+                reader.readAsDataURL(request.response);
+            }
+        };
+        request.send(null);
+    }
+
+    function updateImgOnDatabase() {
+        var img = $('#userImg').attr('src');
+
+        var data = new FormData(this);
+        data.append('img', img)
+
+        $.ajax({
+            url: 'Users/PhotoUpdate',
+            type: 'PUT',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+            }
+        });
+    }
 
 </script>
 <script src="/js/workload.js"></script>

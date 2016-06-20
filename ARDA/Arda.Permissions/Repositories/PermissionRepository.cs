@@ -137,6 +137,59 @@ namespace Arda.Permissions.Repositories
                 throw;
             }
         }
+        
+        //Updates user photo
+        public bool UpdateUserPhoto(string uniqueName, string photo)
+        {
+            try
+            {
+                var user = _context.Users.First(u => u.UniqueName == uniqueName);
+
+                if (user != null && photo != null)
+                {
+                    user.PhotoBase64 = photo;
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Updates user info
+        public bool UpdateUser(string uniqueName, UserMainViewModel userToBeUpdated)
+        {
+            try
+            {
+                var user = _context.Users.First(u => u.UniqueName == uniqueName);
+
+                if (user != null)
+                {
+                    user.Name = userToBeUpdated.Name;
+                    user.GivenName = userToBeUpdated.GivenName;
+                    user.Surname = userToBeUpdated.Surname;
+                    user.JobTitle = userToBeUpdated.JobTitle;
+                    user.ManagerUniqueName = userToBeUpdated.ManagerUniqueName;
+
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public void DeleteUserPermissions(string uniqueName)
         {
@@ -329,34 +382,41 @@ namespace Arda.Permissions.Repositories
         {
             var menu = new List<Tuple<string, Tuple<string, string, string>>>();
 
-            var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
-
-            var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
-
-            foreach (var p in permissions)
+            try
             {
-                if (!p.Endpoint.Contains("/api"))
+                var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+
+                var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
+
+                foreach (var p in permissions)
                 {
-                    string category = p.Category;
-                    string display = p.DisplayName;
-                    string controller = p.Module;
-                    string action = p.Resource;
-                    //string url = p.Endpoint + "/" + p.Module + "/" + p.Resource;
+                    if (!p.Endpoint.Contains("/api"))
+                    {
+                        string category = p.Category;
+                        string display = p.DisplayName;
+                        string controller = p.Module;
+                        string action = p.Resource;
+                        //string url = p.Endpoint + "/" + p.Module + "/" + p.Resource;
 
-                    menu.Add(Tuple.Create(category, Tuple.Create(display, controller, action)));
+                        menu.Add(Tuple.Create(category, Tuple.Create(display, controller, action)));
+                    }
                 }
+
+                var menuGrouped = (from m in menu
+                                   group m.Item2 by m.Item1 into g
+                                   select new
+                                   {
+                                       Category = g.Key,
+                                       Items = g.ToList()
+                                   }).ToList();
+
+
+                return JsonConvert.SerializeObject(menuGrouped);
             }
-
-            var menuGrouped = (from m in menu
-                               group m.Item2 by m.Item1 into g
-                               select new
-                               {
-                                   Category = g.Key,
-                                   Items = g.ToList()
-                               }).ToList();
-
-
-            return JsonConvert.SerializeObject(menuGrouped);
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
 
         public PermissionStatus GetUserStatus(string uniqueName)
