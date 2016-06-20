@@ -208,7 +208,7 @@ namespace Arda.Main.Controllers
                     var fileNameUpload = string.Concat(fileID, fileExt);
                     //Upload the file:
                     CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileNameUpload);
-                    await blockBlob.UploadFromStreamAsync(fileStream);
+                    blockBlob.UploadFromStream(fileStream);
                     //Retrieve the url:
                     string fileURL = blockBlob.Uri.ToString();
                     //GUID, URL and Name:

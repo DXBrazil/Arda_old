@@ -141,7 +141,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpPut]
         [Route("edit")]
-        public HttpResponseMessage Edit(WorkloadViewModel w)
+        public HttpResponseMessage Edit()
         {
             try
             {

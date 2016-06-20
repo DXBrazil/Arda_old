@@ -98,7 +98,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpPut]
         [Route("editfiscalyearbyid")]
-        public IActionResult EditFiscalYearByID()
+        public HttpResponseMessage EditFiscalYearByID()
         {
             try
             {
@@ -111,16 +111,16 @@ namespace Arda.Kanban.Controllers
 
                 if (fiscalyear)
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 }
             }
             catch (Exception)
             {
-                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
 

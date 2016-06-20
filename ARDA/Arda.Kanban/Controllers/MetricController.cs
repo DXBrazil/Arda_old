@@ -120,7 +120,7 @@ namespace Arda.Kanban.Controllers
 
         [HttpPut]
         [Route("editmetricbyid")]
-        public IActionResult EditMetricByID()
+        public HttpResponseMessage EditMetricByID()
         {
             try
             {
@@ -133,16 +133,16 @@ namespace Arda.Kanban.Controllers
 
                 if (response)
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 }
             }
             catch (Exception)
             {
-                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
 
