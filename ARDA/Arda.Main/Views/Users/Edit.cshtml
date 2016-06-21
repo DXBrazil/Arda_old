@@ -83,7 +83,14 @@
         //Get All Permissions:
         $.getJSON('/users/GetAllResources', '', callbackGetResourceItems);
         //Get User Permissions:
-        $.getJSON('/users/GetUserPermissions?user=' + user, '', callbackGetUserPermissions);
+        $.ajax({
+            url: '/users/GetUserPermissions?user=' + user,
+            type: "GET",
+            cache: false,
+            success: function (data, textStatus, jqXHR) {
+                callbackGetUserPermissions(data);
+            }
+        });
     });
 
     function Initialize() {
@@ -166,7 +173,7 @@
             permissions += ']}';
 
             var user = $('#UserEmail').val();
-            var url = '/users/Update?user=' + user;
+            var url = '/users/UpdatePermissions?user=' + user;
 
 
             $.ajax({
@@ -193,7 +200,7 @@
     function banUser() {
         var permissions = '{ "permissions" : []}';
         var user = $('#UserEmail').val();
-        var url = '/users/Update?user=' + user;
+        var url = '/users/UpdatePermissions?user=' + user;
 
         $.ajax({
             url: url,

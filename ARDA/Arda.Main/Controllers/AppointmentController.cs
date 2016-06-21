@@ -23,13 +23,15 @@ namespace Arda.Main.Controllers
         public async Task<HttpResponseMessage> AddAppointment(AppointmentViewModel appointment)
         {
             if (appointment == null)
-            {
-                
+            { 
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
             // Converting the T&E value to Decimal before save process
-            appointment._AppointmentTE = Decimal.Parse(Request.Form["_AppointmentTE"]);
+            decimal TE = 0;
+            Decimal.TryParse(Request.Form["_AppointmentTE"], out TE);
+            appointment._AppointmentTE = TE;
+
 
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 

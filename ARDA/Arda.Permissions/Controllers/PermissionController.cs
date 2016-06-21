@@ -160,32 +160,6 @@ namespace Arda.Permissions.Controllers
         }
 
         [HttpPut]
-        [Route("updateuserpermissions")]
-        public HttpResponseMessage UpdateUserPermission(string uniqueName)
-        {
-            try
-            {
-                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
-                string requestFromPost = reader.ReadToEnd();
-                var userProfile = JsonConvert.DeserializeObject<UserMainViewModel>(requestFromPost);
-
-                if (uniqueName != null && userProfile != null)
-                {
-                    _permission.UpdateUser(uniqueName, userProfile);
-                    return new HttpResponseMessage(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }
-            }
-            catch (Exception)
-            {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [HttpPut]
         [Route("updateuserphoto")]
         public HttpResponseMessage UpdateUserPhoto(string uniqueName)
         {

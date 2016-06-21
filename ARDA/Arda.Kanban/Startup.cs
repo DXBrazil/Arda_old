@@ -46,12 +46,6 @@ namespace Arda.Kanban
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            //services.AddEntityFramework()
-            //    .AddSqlServer()
-            //    .AddDbContext<TaskDbContext>(options =>
-            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
-            //    ); 
-
             services.AddMvc();
 
             // Registering distributed cache approach to the application.

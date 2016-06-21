@@ -52,8 +52,7 @@
 </style>
 
 @{
-    var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-    var userStatus = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuserstatus", user, string.Empty).Result;
+    var userStatus = ViewBag.UserStatus;
     if (userStatus == 0)
     {
         //Message for Situation 0: Waiting_Review
@@ -79,6 +78,7 @@
     else if (userStatus == 2)
     {
         //Page for Situation 2: Permissions_Granted-->
+        var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
         var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/verifyifuseradmin", user, string.Empty).Result;
         if (canApproveUsers)
         {
@@ -318,22 +318,33 @@
     }
 
     $(function () {
-        //Initialize:
-        Initialize();
-
-        //Load values:
-        //Get All Activities:
-        $.getJSON('/activity/GetActivities', null, callbackGetActivities);
-        //Get User Technologies:
-        $.getJSON('/technology/GetTechnologies', null, callbackGetTechnologies);
-        //Get User Metrics:
-        $.getJSON('/metric/GetMetrics', null, callbackGetMetrics);
-        //Get User Users:
-        $.getJSON('/users/GetUsers', null, callbackGetUsers);
-
-        //TODO: Remove this test line:
-        $('#_WBID').val('fd6984f2-6483-4788-87c3-dbeef10a7d4e');
+        @{
+        if (ViewBag.UserStatus==0)
+        {
+            <text>
+                //Get the user info using Microsoft Graph:
+                updateUserInfo();
+            </text>
+        }
+        else if (ViewBag.UserStatus == 2)
+        {
+            <text>
+                //Initialize:
+                Initialize();
+                //Load values:
+                //Get All Activities:
+                $.getJSON('/activity/GetActivities', null, callbackGetActivities);
+                //Get User Technologies:
+                $.getJSON('/technology/GetTechnologies', null, callbackGetTechnologies);
+                //Get User Metrics:
+                $.getJSON('/metric/GetMetrics', null, callbackGetMetrics);
+                //Get User Users:
+                $.getJSON('/users/GetUsers', null, callbackGetUsers);
+            </text>
+        }
+            }
     });
+
 
     function Initialize() {
         //Click events:
@@ -352,7 +363,7 @@
 
         //Other events:
         $('#WBComplexity').on('change', changeComplexity);
-        
+
         //Components:
         $("#WBIsWorkload").bootstrapSwitch();
 
@@ -635,7 +646,7 @@
         callback(str)
     }
 
-    function getGUID(callback){ 
+    function getGUID(callback) {
         $.ajax({
             url: 'Workload/GetGuid',
             type: 'GET',
@@ -718,7 +729,7 @@
         //Serializes form and append bootstrap-switch value:
         var data = new FormData(this);
         data.append('WBIsWorkload', value)
-        
+
         var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0 };
 
         DisableWorkloadFields();
@@ -730,7 +741,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                
+
                 if (response.IsSuccessStatusCode) {
                     $('#msg').text('Success!');
 

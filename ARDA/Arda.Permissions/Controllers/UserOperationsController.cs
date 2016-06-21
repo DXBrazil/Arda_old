@@ -61,7 +61,7 @@ namespace Arda.Permissions.Controllers
                 }
                 return -1;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return -1;
             }
