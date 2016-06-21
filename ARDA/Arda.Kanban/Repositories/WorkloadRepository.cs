@@ -376,7 +376,7 @@ namespace Arda.Kanban.Repositories
 
             // Mounting parameters and message.
             string FromName = "Arda Team";
-            string FromEmail = "arda@microsoft.com";
+            string FromEmail = "ardaapp@microsoft.com";
             string ToName = Util.GetUserAlias(uniqueName);
             string ToEmail = uniqueName;
             string Subject = "";

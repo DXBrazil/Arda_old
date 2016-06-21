@@ -250,7 +250,7 @@ namespace Arda.Permissions.Repositories
 
             // Mounting parameters and message.
             string FromName = "Arda Team";
-            string FromEmail = "arda@microsoft.com";
+            string FromEmail = "ardaapp@microsoft.com";
             string ToName = "Arda Administrator";
             string ToEmail = "fabsanc@microsoft.com";
             string Subject = "[ARDA] A new user has been logged @ Arda";
