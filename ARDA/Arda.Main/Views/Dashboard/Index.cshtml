@@ -294,6 +294,16 @@
         clearFolder('3');
     }
 
+    function moveTask(id, state) {
+        var task_state = '.state' + state;
+        var folder = document.querySelector(task_state);
+        var taskElem = document.getElementById(id);
+
+        folder.appendChild(taskElem);
+
+        var task = { Id: id, State: state };
+        update(task);
+    }
     function createTask(id, name, state) {
         var task_state = '.state' + state;
         createTaskInFolder(id, name, task_state);
@@ -310,7 +320,7 @@
         clone.querySelector('.task').addEventListener('dragstart', dragstart);
 
         clone.querySelector('.templateEdit').addEventListener('click', function () { taskedit(taskId) });
-        clone.querySelector('.templateDone').addEventListener('change', taskdone);
+        clone.querySelector('.templateDone').addEventListener('change', function () { taskdone(taskId) });
 
         folder.appendChild(clone, true);
     }
@@ -335,8 +345,8 @@
         detailsWorkloadState(this, id);
     }
 
-    function taskdone(ev) {
-        alert(ev);
+    function taskdone(id) {
+        moveTask(id, 2);
     }    
 
     function gettasklist(callback, type, user) {
