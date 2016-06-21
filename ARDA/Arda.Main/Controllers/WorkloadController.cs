@@ -31,7 +31,7 @@ namespace Arda.Main.Controllers
             {
                 var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", uniqueName, "");
 
-                var dados = existentWorkloads.Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", With " + x._WorkloadHours + " hours spent on this.)", status = x._WorkloadStatus })
+                var dados = existentWorkloads.Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", and " + x._WorkloadHours + " hours were spent on this.", status = x._WorkloadStatus, users= x._WorkloadUsers, hours = x._WorkloadHours, start = x._WorkloadStartDate, end = x._WorkloadEndDate})
                                              .Distinct()
                                              .ToList();
 

@@ -765,7 +765,7 @@
         var files = $('#filesList div a.filePrev');
         for (var i = 0; i < files.length; i++) {
 
-            data.append('oldFiles', files[i].attributes[1].value + '&' + files[i].href + '&' + files[i].text);
+            data.append('oldFiles', files[i].getAttribute("fileid") + '&' + files[i].href + '&' + files[i].text);
         }
 
         DisableWorkloadFields();

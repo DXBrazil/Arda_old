@@ -168,7 +168,7 @@ function Initialize() {
 
 function loadWorkload(workloadID) {
     $("#buttonsPanel").hide();
-    //DisableWorkloadFields();
+    $('.fileinput').addClass('hidden');
 
     $.ajax({
         url: '/Workload/GetWorkload?=' + workloadID,
@@ -294,8 +294,6 @@ function detailsWorkloadState() {
     //Set GUID:
     var guid = $('#_WBID').val();
     $('#WBID').attr('value', guid);
-    //Load Workload:
-    loadWorkload(guid);
 
     //Fields:
     $('#WBStartDate').attr("disabled", "disabled");
@@ -319,6 +317,9 @@ function detailsWorkloadState() {
     $('#btnWorkloadSend').addClass('hidden');
     $('#btnWorkloadEdit').removeClass('hidden');
     $('#btnWorkloadDelete').addClass('hidden');
+
+    //Load Workload:
+    loadWorkload(guid);
 }
 
 function editWorkloadState() {

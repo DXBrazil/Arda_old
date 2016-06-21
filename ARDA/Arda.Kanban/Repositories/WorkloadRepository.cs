@@ -342,7 +342,7 @@ namespace Arda.Kanban.Repositories
             try
             {
                 var workloads = (from wb in _context.WorkloadBacklogs
-                                join wbu in _context.WorkloadBacklogUsers on wb.WBUsers.SingleOrDefault().WBUserID equals wbu.WBUserID
+                                join wbu in _context.WorkloadBacklogUsers on wb.WBUsers.Where(u => u.User.UniqueName == uniqueName).First().WBUserID equals wbu.WBUserID
                                 join uk in _context.Users on wbu.User.UniqueName equals uk.UniqueName
                                 where uk.UniqueName.Equals(uniqueName)
                                 orderby wb.WBTitle
@@ -352,7 +352,10 @@ namespace Arda.Kanban.Repositories
                                     _WorkloadTitle = wb.WBTitle,
                                     _WorkloadStartDate = wb.WBStartDate,
                                     _WorkloadEndDate = wb.WBEndDate,
-                                    _WorkloadStatus = (int)wb.WBStatus
+                                    _WorkloadStatus = (int)wb.WBStatus,
+                                    _WorkloadUsers = (from wbusers in _context.WorkloadBacklogUsers
+                                                      where wbusers.WorkloadBacklog.WBID == wb.WBID
+                                                      select new Tuple<string,string>(wbusers.User.UniqueName, wbusers.User.Name)).ToList()
                                 }).ToList();
 
                 foreach (var w in workloads)
