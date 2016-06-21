@@ -228,6 +228,7 @@
 
 
 <script>
+
     function dragstart(ev) {
         ev.dataTransfer.setData('text', ev.target.id);
     }
@@ -398,7 +399,7 @@
         {
             <text>
         //Get the user info using Microsoft Graph:
-        updateUserInfo();
+        GetImage();
         </text>
         }
         else if (ViewBag.UserStatus == 2)
@@ -463,6 +464,7 @@
             keyboard: true
         });
     }
+
 
     function loadWorkload(workloadID) {
         $.ajax({
@@ -686,6 +688,52 @@
         //Files:
         $('.fileinput').fileinput('clear');
         $('#filesList').html('');
+    }
+
+
+    function GetImage(user, token) {
+        var url = "https://graph.microsoft.com/v1.0/me/photo/$value";
+        var elem = "userImg";
+        var token = '@ViewBag.Token';
+        var auth = 'bearer ' + token;
+        GetImageBase64FromGraph(url, elem, auth);
+    }
+
+    function GetImageBase64FromGraph(url, element, token) {
+        var request = new XMLHttpRequest;
+        request.open("GET", url);
+        request.setRequestHeader("Authorization", token);
+        request.responseType = "blob";
+        request.onload = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                var image = document.getElementById(element);
+                var reader = new FileReader();
+                reader.onload = function () {
+                    image.src = reader.result;
+                    updateImgOnDatabase();
+                }
+                reader.readAsDataURL(request.response);
+            }
+        };
+        request.send(null);
+    }
+
+    function updateImgOnDatabase() {
+        var img = $('#userImg').attr('src');
+
+        var data = new FormData(this);
+        data.append('img', img)
+
+        $.ajax({
+            url: 'Users/PhotoUpdate',
+            type: 'PUT',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+            }
+        });
     }
 
 
@@ -929,4 +977,5 @@
             e.preventDefault();
         }
     }
+
 </script>
