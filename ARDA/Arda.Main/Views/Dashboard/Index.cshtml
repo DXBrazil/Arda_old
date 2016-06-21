@@ -49,6 +49,18 @@
         padding-top: 10px;
         border-top: 1px solid #ccc;
     }
+
+    .error {
+        border-color: #a94442;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+
+        .error:focus {
+            border-color: #843534;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+        }
 </style>
 
 @{
@@ -133,7 +145,7 @@
 
                         <div class="col-xs-12 col-lg-3 col-md-6">
                             <label for="_WBID">WBID:</label>
-                            <input id="_WBID" type="text"/>
+                            <input id="_WBID" type="text" />
                         </div>
 
                         <div class="col-xs-12 col-lg-3 col-md-6">
@@ -152,7 +164,10 @@
                     </template>
 
                     <style>
-                        .folder { border: 1px solid black; height: 200px; }
+                        .folder {
+                            border: 1px solid black;
+                            height: 200px;
+                        }
                     </style>
                     <div class="col-xs-12">
                         <div class="row">
@@ -169,10 +184,10 @@
                                         </div>
                                         <div class="folder-footer">
                                             <div>
-                                               <figure>
-                                                   <img src="~/Layouts/ModernUI/img/placeholder-80x80.png" class="folder-user-photo" />
-                                                   <figcaption class="folder-user-name">TE Name</figcaption>
-                                               </figure>
+                                                <figure>
+                                                    <img src="~/Layouts/ModernUI/img/placeholder-80x80.png" class="folder-user-photo" />
+                                                    <figcaption class="folder-user-name">TE Name</figcaption>
+                                                </figure>
                                             </div>
                                         </div>
                                     </div>
@@ -322,25 +337,25 @@
         if (ViewBag.UserStatus==0)
         {
             <text>
-                //Get the user info using Microsoft Graph:
-                updateUserInfo();
-            </text>
+        //Get the user info using Microsoft Graph:
+        updateUserInfo();
+        </text>
         }
         else if (ViewBag.UserStatus == 2)
         {
             <text>
-                //Initialize:
-                Initialize();
-                //Load values:
-                //Get All Activities:
-                $.getJSON('/activity/GetActivities', null, callbackGetActivities);
-                //Get User Technologies:
-                $.getJSON('/technology/GetTechnologies', null, callbackGetTechnologies);
-                //Get User Metrics:
-                $.getJSON('/metric/GetMetrics', null, callbackGetMetrics);
-                //Get User Users:
-                $.getJSON('/users/GetUsers', null, callbackGetUsers);
-            </text>
+        //Initialize:
+        Initialize();
+        //Load values:
+        //Get All Activities:
+        $.getJSON('/activity/GetActivities', null, callbackGetActivities);
+        //Get User Technologies:
+        $.getJSON('/technology/GetTechnologies', null, callbackGetTechnologies);
+        //Get User Metrics:
+        $.getJSON('/metric/GetMetrics', null, callbackGetMetrics);
+        //Get User Users:
+        $.getJSON('/users/GetUsers', null, callbackGetUsers);
+        </text>
         }
             }
     });
@@ -732,27 +747,29 @@
 
         var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0 };
 
-        DisableWorkloadFields();
-        $('#msg').text('Wait...');
-        $.ajax({
-            url: 'Workload/Add',
-            type: 'POST',
-            data: data,
-            processData: false,
-            contentType: false,
-            success: function (response) {
+        validateForm(e, data, function (e, data) {
+            DisableWorkloadFields();
+            $('#msg').text('Wait...');
+            $.ajax({
+                url: 'Workload/Add',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (response) {
 
-                if (response.IsSuccessStatusCode) {
-                    $('#msg').text('Success!');
+                    if (response.IsSuccessStatusCode) {
+                        $('#msg').text('Success!');
 
-                    // add a task (workload.js)
-                    createTask(workload.id, workload.name, workload.state);
-                } else {
-                    $('#msg').text('Error!');
+                        // add a task (workload.js)
+                        createTask(workload.id, workload.name, workload.state);
+                    } else {
+                        $('#msg').text('Error!');
+                    }
                 }
-            }
-        });
-        e.preventDefault();
+            });
+            e.preventDefault();
+        })
     }
 
     function updateWorkload(e) {
@@ -764,32 +781,34 @@
         //Append previous files:
         var files = $('#filesList div a.filePrev');
         for (var i = 0; i < files.length; i++) {
-
             data.append('oldFiles', files[i].getAttribute("fileid") + '&' + files[i].href + '&' + files[i].text);
         }
 
-        DisableWorkloadFields();
-        $('#msg').text('Wait...');
-        $.ajax({
-            url: 'Workload/Update',
-            type: 'PUT',
-            data: data,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if (response.IsSuccessStatusCode) {
-                    $('#msg').text('Success!');
-                } else {
-                    $('#msg').text('Error!');
+        validateForm(e, data, function (e, data) {
+            DisableWorkloadFields();
+            $('#msg').text('Wait...');
+            $.ajax({
+                url: 'Workload/Update',
+                type: 'PUT',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.IsSuccessStatusCode) {
+                        $('#msg').text('Success!');
+                    } else {
+                        $('#msg').text('Error!');
+                    }
                 }
-            }
-        });
-        e.preventDefault();
+            });
+            e.preventDefault();
+        })
     }
 
     function deleteWorkload() {
         var workloadID = $('#WBID').val();
         $('#msg').text('Wait...');
+
         $.ajax({
             url: 'Workload/Delete?=' + workloadID,
             type: 'DELETE',
@@ -801,5 +820,53 @@
                 }
             }
         });
+    }
+
+    function validateForm(e, data, callback) {
+        var ctrl = true;
+
+        var textFields = ['#WBStartDate', '#WBEndDate', '#WBTitle'];
+        for (var i = 0; i < textFields.length; i++) {
+            var field = $(textFields[i]);
+            if (field.val() == "") {
+                ctrl = false;
+                field.addClass('error');
+            } else {
+                field.removeClass('error');
+            }
+        }
+
+        var selectFields = ['#WBExpertise', '#WBActivity'];
+        for (var i = 0; i < selectFields.length; i++) {
+            var field = $(selectFields[i]);
+            if (field.val() == -1 || field.val() == null) {
+                ctrl = false;
+                field.addClass('error');
+            } else {
+                field.removeClass('error');
+            }
+        }
+
+        var multiselectFields = ['#WBTechnologies', '#WBMetrics', '#WBUsers'];
+        for (var i = 0; i < multiselectFields.length; i++) {
+            var field = $(multiselectFields[i]);
+            var selected = $(multiselectFields[i] + ' option:selected');
+            if (selected.length == 0) {
+                ctrl = false;
+                field.siblings().children("button").addClass('error');
+            } else {
+                field.siblings().children("button").removeClass('error');
+            }
+        }
+
+        var msg = $('#msgValidate');
+        if (ctrl) {
+            msg.fadeOut();
+            callback(e, data);
+        } else {
+            msg.fadeIn();
+            msg.text('Please, fill the mandatory fields.');
+            e.preventDefault();
+        }
     }
 </script>
