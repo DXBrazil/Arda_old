@@ -778,7 +778,6 @@ function DeleteMetric(metricID) {
 }
 
 // Search workloads
-
 function GetWorkloadsByUser() {
     var url = '/Workload/ListWorkloadsByUser';
     $.ajax({

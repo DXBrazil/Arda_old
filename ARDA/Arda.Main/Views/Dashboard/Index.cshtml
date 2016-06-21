@@ -121,13 +121,16 @@
 
                         </div>
                         <div class="col-xs-12 col-lg-3 col-md-6">
-                            <select name="filter-assign" class="form-control dashboard-filter-assign">
+                            <select id="filter-assign" name="filter-assign" class="form-control dashboard-filter-assign">
+                                <option value=""></option>
+    <!-- 
                                 <option value="">TE Name 0</option>
                                 <option value="">TE Name 1</option>
                                 <option value="">TE Name 2</option>
                                 <option value="">TE Name 3</option>
                                 <option value="">TE Name 4</option>
                                 <option value="">TE Name 5</option>
+    -->
                             </select>
                         </div>
 
@@ -257,11 +260,20 @@
     //    }
     //});
 
-    gettasklist(function (tasklist) {
-        tasklist.map(function (task) {
-            createTask(task.data, task.value, task.status);
-        });
-    });
+    loadTaskList();
+
+    function clearFolder(state) {
+        var task_state = '.state' + state;
+        var folder = document.querySelector(task_state);
+        $(folder).empty();
+    }
+
+    function clearTasks() {
+        clearFolder('0');
+        clearFolder('1');
+        clearFolder('2');
+        clearFolder('3');
+    }
 
     function createTask(id, name, state) {
         var task_state = '.state' + state;
@@ -297,8 +309,10 @@
 
     }
 
-    function gettasklist(callback) {
-        httpCall('GET', '/Workload/ListWorkloadsByUser', null, callback);
+    function gettasklist(callback, user) {
+
+        var filter_user = (user) ? '?user=' + user : '';
+        httpCall('GET', '/Workload/ListWorkloadsByUser' + filter_user, null, callback);
     }
 
     //function create(taskname, callback) {
@@ -314,8 +328,54 @@
         httpCall('PUT', '/Workload/UpdateStatus?id=' + task.Id + '&status=' + task.State, task, function (data) {
             // done
         })
-
     }
+
+    function GetUserList() {
+        var url = '/Users/ViewRestrictedUserList';
+        $.ajax({
+            url: url,
+            type: "GET",
+            cache: false,
+            success: function (data, textStatus, jqXHR) {
+
+                var userListElem = $('#filter-assign');
+
+                userListElem.change(function (el) {
+                    var selected_user = el.target.selectedOptions;
+                    var filter_user = ( selected_user.length > 0 ) ? el.target.selectedOptions[0].value : null;                    
+
+                    loadTaskList(filter_user);
+                });
+
+                data.map(function (user) {
+                    //alert(JSON.stringify(user));
+                    var name = user.Name;
+                    var id = user.Email;
+                    var opt = new Option(name, id);
+                    userListElem.append(opt);
+                })
+            }
+        });
+    }
+
+    function loadTaskList(filter_user) {
+        //alert(filter_user);
+
+        clearTasks();
+
+        gettasklist(function (tasklist) {
+            tasklist.map(function (task) {
+                createTask(task.data, task.value, task.status);
+                });
+            },
+            filter_user
+        );
+    }
+
+    $(document).ready(function () {
+        GetUserList();
+    })
+
 
     $(function () {
         //Initialize:
