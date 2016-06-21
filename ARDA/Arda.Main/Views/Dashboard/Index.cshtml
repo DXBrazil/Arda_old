@@ -165,9 +165,12 @@
                             <div class="folder-tasks">
                                 <div class="folder-header">
                                     <p><span class="templateText">templateText</span></p>
-                                    <input type="checkbox" class="folder-check-ipt-status" id="_statusFolder" />
-                                    <label class="folder-check-status" for="_statusFolder"></label>
-                                    <button>EDIT</button>
+
+                                    <input type="checkbox" class="templateDone NOT-WORKING-folder-check-ipt-status" />
+                                    <label class="folder-check-status">
+                                    </label>
+
+                                    <button class="templateEdit">EDIT</button>
                                 </div>
                                 <div class="folder-footer">
                                     <div>
@@ -196,23 +199,7 @@
                                 <div class="row">
                                     <h3 class="dashboard-panel-title  dashboard-panel-title--todo">todo</h3>
                                 </div>
-                                <div id="divTaskListTodo" class="folder state0" data-state="0">
-                                    <div class="folder-tasks">
-                                        <div class="folder-header">
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <input type="checkbox" class="folder-check-ipt-status" id="_statusFolder" />
-                                            <label class="folder-check-status" for="_statusFolder"></label>
-                                        </div>
-                                        <div class="folder-footer">
-                                            <div>
-                                                <figure>
-                                                    <img src="~/Layouts/ModernUI/img/placeholder-80x80.png" class="folder-user-photo" />
-                                                    <figcaption class="folder-user-name">TE Name</figcaption>
-                                                </figure>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div id="divTaskListTodo" class="folder state0" data-state="0"></div>
                             </div>
                             <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
                                 <div class="row">
@@ -321,6 +308,8 @@
         clone.querySelector('.task .templateText').textContent = taskName;
 
         clone.querySelector('.task').addEventListener('dragstart', dragstart);
+        clone.querySelector('.templateEdit').addEventListener('click', taskedit);
+        clone.querySelector('.templateDone').addEventListener('change', taskdone);
 
         folder.appendChild(clone, true);
     }
@@ -340,6 +329,14 @@
         });
 
     }
+
+    function taskedit() {
+        alert('edit');
+    }
+
+    function taskdone() {
+        alert('done');
+    }    
 
     function gettasklist(callback, type, user) {
 
@@ -427,7 +424,7 @@
         else {
             $('#filter-assign').css('visibility', 'hidden');
         }
-
+        
     })
 
 
