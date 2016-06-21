@@ -28,5 +28,8 @@ namespace Arda.Common.Interfaces.Kanban
 
         // Update the status
         bool UpdateWorkloadStatus(Guid id, int status);
+
+        // Send a notification about new or updated workloads to signed user.
+        bool SendNotificationAboutNewOrUpdatedWorkload(string uniqueName, int newOrUpdate);
     }
 }

@@ -27,7 +27,6 @@ namespace Arda.Permissions.Repositories
             _cache = cache;
         }
 
-
         public bool SetUserPermissionsAndCode(string uniqueName, string code)
         {
             try

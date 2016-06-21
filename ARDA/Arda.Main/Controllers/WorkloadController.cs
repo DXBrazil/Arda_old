@@ -140,7 +140,6 @@ namespace Arda.Main.Controllers
             }
         }
 
-
         [HttpPut]
         public async Task<HttpResponseMessage> UpdateStatus([FromQuery]string Id, [FromQuery]int Status)
         {
@@ -174,7 +173,6 @@ namespace Arda.Main.Controllers
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
-
 
         [HttpGet]
         public JsonResult GetGuid()
@@ -218,7 +216,5 @@ namespace Arda.Main.Controllers
 
             return fileList;
         }
-
-
     }
 }

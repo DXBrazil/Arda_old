@@ -39,7 +39,7 @@ namespace Arda.Common.Email
             MessageStructure.Append("<th class='small-6 large-6 columns first'>");
             MessageStructure.Append("<table>");
             MessageStructure.Append("<tr>");
-            MessageStructure.Append("<th> <img src = 'http://placehold.it/200x50/663399'></th>");
+            MessageStructure.Append("<th> <h1>ARDA</h1></th>");
             MessageStructure.Append("</tr>");
             MessageStructure.Append("</table>");
             MessageStructure.Append("</th>");
@@ -47,7 +47,7 @@ namespace Arda.Common.Email
             MessageStructure.Append("<table>");
             MessageStructure.Append("<tr>");
             MessageStructure.Append("<th>");
-            MessageStructure.Append("<p class='text-right'>WE HAVE A MESSAGE</p>");
+            MessageStructure.Append("<p class='text-right'>NEW MESSAGE</p>");
             MessageStructure.Append("</th></tr></table></th></tr></tbody></table></td></tr></tbody></table></td></tr></table>");
             MessageStructure.Append("<table class='container float-center'>");
             MessageStructure.Append("<tbody>");

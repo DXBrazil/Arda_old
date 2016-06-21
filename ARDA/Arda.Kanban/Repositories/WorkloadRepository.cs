@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arda.Common.Models.Kanban;
+using Arda.Common.Email;
+using System.Text;
+using Arda.Common.Utils;
 
 namespace Arda.Kanban.Repositories
 {
@@ -367,5 +370,59 @@ namespace Arda.Kanban.Repositories
             }
         }
 
+        public bool SendNotificationAboutNewOrUpdatedWorkload(string uniqueName, int newOrUpdate)
+        {
+            EmailLogic clientEmail = new EmailLogic();
+
+            // Mounting parameters and message.
+            string FromName = "Arda Team";
+            string FromEmail = "arda@microsoft.com";
+            string ToName = Util.GetUserAlias(uniqueName);
+            string ToEmail = uniqueName;
+            string Subject = "";
+
+            StringBuilder StructureModified = new StringBuilder();
+            StructureModified = EmailMessages.GetEmailMessageStructure();
+
+            // Replacing the generic title by the customized.
+            StructureModified.Replace("[MessageTitle]", "Hi " + ToName + ", we have news to you: ");
+
+            if (newOrUpdate == 0) // new workload
+            {
+                Subject += "[ARDA] New workload available to you";
+
+                // Replacing the generic subtitle by the customized.
+                StructureModified.Replace("[MessageSubtitle]", "A new <strong>Workload</strong> was created and signed to you.");
+
+                // Replacing the generic message body by the customized.
+                StructureModified.Replace("[MessageBody]", "To see your new workload, please, click on the link bellow.");
+            }
+            else
+            {
+                Subject += "[ARDA] Existing workload has been updated";
+
+                // Replacing the generic subtitle by the customized.
+                StructureModified.Replace("[MessageSubtitle]", "A existent <strong>Workload</strong> signed to you was updated.");
+
+                // Replacing the generic message body by the customized.
+                StructureModified.Replace("[MessageBody]", "To see your workload updated, please, click on the link bellow.");               
+            }
+
+            // Replacing the generic callout box.
+            StructureModified.Replace("[MessageCallout]", "Dashboard (Kanban): <a href='/Dashboard/Index'>My workloads</a>");
+
+            // Creating a object that will send the message.
+            EmailLogic EmailObject = new EmailLogic();
+
+            try
+            {
+                var EmailTask = EmailObject.SendEmailAsync(FromName, FromEmail, ToName, ToEmail, Subject, StructureModified.ToString());
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

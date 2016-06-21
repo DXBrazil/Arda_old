@@ -24,8 +24,12 @@ namespace Arda.Main.Controllers
         {
             if (appointment == null)
             {
+                
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
+
+            // Converting the T&E value to Decimal before save process
+            appointment._AppointmentTE = Decimal.Parse(Request.Form["_AppointmentTE"]);
 
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
@@ -64,7 +68,7 @@ namespace Arda.Main.Controllers
                     dataRow.Add(m._AppointmentDate.ToString("dd/MM/yyyy"));
                     dataRow.Add(m._AppointmentHoursDispensed.ToString());
                     dataRow.Add(Util.GetUserAlias(m._AppointmentUserUniqueName.ToString()));
-                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{m._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/workload/details/{m._AppointmentWorkloadWBID}' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{m._AppointmentID}','{m._WorkloadTitle}','{m._AppointmentDate.ToString("dd/MM/yyyy")}','{m._AppointmentHoursDispensed}','{m._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{m._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"loadWorkload('{m._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{m._AppointmentID}','{m._WorkloadTitle}','{m._AppointmentDate.ToString("dd/MM/yyyy")}','{m._AppointmentHoursDispensed}','{m._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }

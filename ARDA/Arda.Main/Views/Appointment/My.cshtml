@@ -1,4 +1,52 @@
-﻿<section class="concontainer-fluid">
+﻿<style>
+    .datepicker {
+        z-index: 10000;
+    }
+
+    #lblWBIsWorkload {
+        margin-bottom: 10px;
+    }
+
+    .irs-line, .irs-bar, .irs-bar-edge {
+        top: 17px;
+    }
+
+    .irs-slider {
+        top: 9px;
+    }
+
+    #ComplexityLevel {
+        margin-top: 35px;
+    }
+
+    .multiselect {
+        text-align: left;
+    }
+
+    .multiselect-selected-text {
+        margin-left: 5px;
+    }
+
+    .multiselect-container.dropdown-menu {
+        background-color: white;
+        color: #555;
+    }
+
+    .multiselect.dropdown-toggle.btn.btn-default {
+        background-color: white;
+        color: #555;
+        outline: 1px solid #ccc;
+    }
+
+    #buttonsPanel {
+        text-align: right;
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 1px solid #ccc;
+    }
+</style>
+
+<section class="concontainer-fluid">
 
     <div class="col-xs-12">
         <div class="row">
@@ -40,3 +88,8 @@
         </div>
     </div>
 </section>
+
+<!-- Workload Modal -->
+@await Html.PartialAsync("_WorkloadModal")
+
+<script src="~/js/workload.js"></script>
