@@ -353,6 +353,7 @@ namespace Arda.Kanban.Repositories
                                     _WorkloadStartDate = wb.WBStartDate,
                                     _WorkloadEndDate = wb.WBEndDate,
                                     _WorkloadStatus = (int)wb.WBStatus,
+                                    _WorkloadIsWorkload = wb.WBIsWorkload,
                                     _WorkloadUsers = (from wbusers in _context.WorkloadBacklogUsers
                                                       where wbusers.WorkloadBacklog.WBID == wb.WBID
                                                       select new Tuple<string,string>(wbusers.User.UniqueName, wbusers.User.Name)).ToList()
