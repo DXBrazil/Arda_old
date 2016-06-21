@@ -92,6 +92,12 @@
         //Page for Situation 2: Permissions_Granted-->
         var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
         var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/verifyifuseradmin", user, string.Empty).Result;
+
+        if (canApproveUsers)
+        { 
+            <div id="hackIsAdmin"></div>
+        }
+
         if (canApproveUsers)
         {
             int numberUsersToApprove = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getnumberofuserstoapprove", user, string.Empty).Result;
@@ -113,22 +119,16 @@
                             <h2>Placeholder title</h2>
                         </div>
                         <div class="col-xs-12 col-lg-3 col-md-6">
-                            <input type="radio" value="1" name="type" class="dashboard-filter-field" id="dashboard-filter-type-1" />
+                            <input type="radio" value="1" name="type" class="dashboard-filter-field" id="dashboard-filter-type-1" checked />
 
                             <label class="dashboard-filter" for="dashboard-filter-type-1">
-                                Type 1
+                                Workload
                             </label>
 
                             <input type="radio" value="2" name="type" class="dashboard-filter-field" id="dashboard-filter-type-2" />
 
                             <label class="dashboard-filter" for="dashboard-filter-type-2">
-                                Type 2
-                            </label>
-
-                            <input type="radio" value="3" name="type" class="dashboard-filter-field" id="dashboard-filter-type-3" />
-
-                            <label class="dashboard-filter" for="dashboard-filter-type-3">
-                                Type 3
+                                Backlog
                             </label>
 
                         </div>
@@ -161,9 +161,30 @@
 
                     <template id="templateTask">
                         <div id="templateId" class="task" draggable="true">
-                            <span class="templateText">templateText</span>
-                            <div></div>
+                            
+                            <div class="folder-tasks">
+                                <div class="folder-header">
+                                    <p><span class="templateText">templateText</span></p>
+
+                                    <input type="checkbox" class="templateDone NOT-WORKING-folder-check-ipt-status" />
+                                    <label class="folder-check-status">
+                                    </label>
+
+                                    <button class="templateEdit" data-toggle="modal" data-target="#WorkloadModal">EDIT</button>
+                                </div>
+                                <div class="folder-footer">
+                                    <div>
+                                        <figure>
+                                            <img src="~/Layouts/ModernUI/img/placeholder-80x80.png" class="folder-user-photo" />
+                                            <figcaption class="folder-user-name">TE Name</figcaption>
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
+
                     </template>
 
                     <style>
@@ -178,23 +199,7 @@
                                 <div class="row">
                                     <h3 class="dashboard-panel-title  dashboard-panel-title--todo">todo</h3>
                                 </div>
-                                <div id="divTaskListTodo" class="folder state0" data-state="0">
-                                    <div class="folder-tasks">
-                                        <div class="folder-header">
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <input type="checkbox" class="folder-check-ipt-status" id="_statusFolder" />
-                                            <label class="folder-check-status" for="_statusFolder"></label>
-                                        </div>
-                                        <div class="folder-footer">
-                                            <div>
-                                                <figure>
-                                                    <img src="~/Layouts/ModernUI/img/placeholder-80x80.png" class="folder-user-photo" />
-                                                    <figcaption class="folder-user-name">TE Name</figcaption>
-                                                </figure>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div id="divTaskListTodo" class="folder state0" data-state="0"></div>
                             </div>
                             <div class="col-xs-12 col-lg-3 col-md-6 dashboard-panel">
                                 <div class="row">
@@ -276,8 +281,6 @@
     //    }
     //});
 
-    loadTaskList();
-
     function clearFolder(state) {
         var task_state = '.state' + state;
         var folder = document.querySelector(task_state);
@@ -291,6 +294,16 @@
         clearFolder('3');
     }
 
+    function moveTask(id, state) {
+        var task_state = '.state' + state;
+        var folder = document.querySelector(task_state);
+        var taskElem = document.getElementById(id);
+
+        folder.appendChild(taskElem);
+
+        var task = { Id: id, State: state };
+        update(task);
+    }
     function createTask(id, name, state) {
         var task_state = '.state' + state;
         createTaskInFolder(id, name, task_state);
@@ -305,6 +318,9 @@
         clone.querySelector('.task .templateText').textContent = taskName;
 
         clone.querySelector('.task').addEventListener('dragstart', dragstart);
+
+        clone.querySelector('.templateEdit').addEventListener('click', function () { taskedit(taskId) });
+        clone.querySelector('.templateDone').addEventListener('change', function () { taskdone(taskId) });
 
         folder.appendChild(clone, true);
     }
@@ -325,10 +341,21 @@
 
     }
 
-    function gettasklist(callback, user) {
+    function taskedit(id) {
+        detailsWorkloadState(this, id);
+        editWorkloadState();
+    }
+
+    function taskdone(id) {
+        moveTask(id, 2);
+    }    
+
+    function gettasklist(callback, type, user) {
 
         var filter_user = (user) ? '?user=' + user : '';
-        httpCall('GET', '/Workload/ListWorkloadsByUser' + filter_user, null, callback);
+        var filter_type = (type) ? '/ListBacklogsByUser' : '/ListWorkloadsByUser';
+
+        httpCall('GET', '/Workload' + filter_type + filter_user, null, callback);
     }
 
     //function create(taskname, callback) {
@@ -346,6 +373,17 @@
         })
     }
 
+    function RefreshTaskList() {
+        var selected_user = $('select[name=filter-assign] option:selected').val();
+        var selected_type = $('input[name=type]:checked').val();
+        var filter_user = selected_user; // (selected_user.length > 0) ? el.target.selectedOptions[0].value : null;
+        var filter_type = (selected_type == 2); // is BACKLOG?
+
+        // alert('filter: ' + filter_type + ', user = ' + filter_user);
+
+        loadTaskList(filter_type, filter_user);
+    }
+
     function GetUserList() {
         var url = '/Users/ViewRestrictedUserList';
         $.ajax({
@@ -355,13 +393,6 @@
             success: function (data, textStatus, jqXHR) {
 
                 var userListElem = $('#filter-assign');
-
-                userListElem.change(function (el) {
-                    var selected_user = el.target.selectedOptions;
-                    var filter_user = ( selected_user.length > 0 ) ? el.target.selectedOptions[0].value : null;                    
-
-                    loadTaskList(filter_user);
-                });
 
                 data.map(function (user) {
                     //alert(JSON.stringify(user));
@@ -374,7 +405,7 @@
         });
     }
 
-    function loadTaskList(filter_user) {
+    function loadTaskList(filter_type, filter_user) {
         //alert(filter_user);
 
         clearTasks();
@@ -383,13 +414,29 @@
             tasklist.map(function (task) {
                 createTask(task.data, task.value, task.status);
                 });
-            },
+        },
+            filter_type,
             filter_user
         );
     }
 
     $(document).ready(function () {
-        GetUserList();
+        RefreshTaskList();
+
+        $('.dashboard-filter-field').change(function () {
+            RefreshTaskList();
+        });
+
+        if (window.hackIsAdmin != null) {
+            GetUserList();
+            $('#filter-assign').change(function () {
+                RefreshTaskList();
+            });
+        }
+        else {
+            $('#filter-assign').css('visibility', 'hidden');
+        }
+        
     })
 
 
@@ -580,12 +627,12 @@
         $('#btnWorkloadDelete').addClass('hidden');
     }
 
-    function detailsWorkloadState() {
+    function detailsWorkloadState(ev, openWorkloadGuid) {
         resetWorkloadForm();
         //Modal Title:
         $('#ModalTitle').text('Workload Details:');
         //Set GUID:
-        var guid = $('#_WBID').val();
+        var guid = openWorkloadGuid || $('#_WBID').val();
         $('#WBID').attr('value', guid);
         //Load Workload:
         loadWorkload(guid);

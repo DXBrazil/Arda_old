@@ -19,5 +19,7 @@ namespace Arda.Common.ViewModels.Main
         public IEnumerable<Tuple<string, string>> _WorkloadUsers { get; set; }
 
         public int _WorkloadHours { get; set; }
+
+        public bool _WorkloadIsWorkload { get; set; }
     }
 }
