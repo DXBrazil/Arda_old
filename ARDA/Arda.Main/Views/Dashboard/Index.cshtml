@@ -170,7 +170,7 @@
                                     <label class="folder-check-status">
                                     </label>
 
-                                    <button class="templateEdit">EDIT</button>
+                                    <button class="templateEdit" data-toggle="modal" data-target="#WorkloadModal">EDIT</button>
                                 </div>
                                 <div class="folder-footer">
                                     <div>
@@ -308,7 +308,8 @@
         clone.querySelector('.task .templateText').textContent = taskName;
 
         clone.querySelector('.task').addEventListener('dragstart', dragstart);
-        clone.querySelector('.templateEdit').addEventListener('click', taskedit);
+
+        clone.querySelector('.templateEdit').addEventListener('click', function () { taskedit(taskId) });
         clone.querySelector('.templateDone').addEventListener('change', taskdone);
 
         folder.appendChild(clone, true);
@@ -330,12 +331,12 @@
 
     }
 
-    function taskedit() {
-        alert('edit');
+    function taskedit(id) {
+        detailsWorkloadState(this, id);
     }
 
-    function taskdone() {
-        alert('done');
+    function taskdone(ev) {
+        alert(ev);
     }    
 
     function gettasklist(callback, type, user) {
