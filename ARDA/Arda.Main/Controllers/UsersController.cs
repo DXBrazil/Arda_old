@@ -15,6 +15,7 @@ using Arda.Common.Utils;
 using Newtonsoft.Json;
 using System.Net;
 using Arda.Common.JSON;
+using Microsoft.Extensions.Caching.Distributed;
 
 //TODO: Refactor name Users to User
 namespace Arda.Main.Controllers
@@ -22,39 +23,50 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class UsersController : Controller
     {
+
+        private static IDistributedCache _cache;
+
+        public UsersController(IDistributedCache cache)
+        {
+            _cache = cache;
+        }
+
+
         #region Views
 
-        //All Users
-        public async Task<IActionResult> Index()
+            //All Users
+        public IActionResult Index()
         {
             try
             {
-                var result = await TokenManager.GetAccessToken(HttpContext);
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
 
                 return View();
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
         //Review Permissions:
-        public async Task<IActionResult> Review()
+        public IActionResult Review()
         {
             try
             {
-                var result = await TokenManager.GetAccessToken(HttpContext);
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
 
                 return View();
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
@@ -63,8 +75,11 @@ namespace Arda.Main.Controllers
         {
             try
             {
-                var result = await TokenManager.GetAccessToken(HttpContext);
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
+
+                var photo = Util.GetUserPhoto(userID);
+                ViewBag.Photo = photo;
 
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
                 var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
@@ -72,8 +87,9 @@ namespace Arda.Main.Controllers
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
@@ -82,8 +98,11 @@ namespace Arda.Main.Controllers
         {
             try
             {
-                var result = await TokenManager.GetAccessToken(HttpContext);
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
+
+                var photo = Util.GetUserPhoto(userID);
+                ViewBag.Photo = photo;
 
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
                 var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
@@ -91,8 +110,9 @@ namespace Arda.Main.Controllers
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
@@ -277,6 +297,20 @@ namespace Arda.Main.Controllers
             }else
             {
                 return null;
+            }
+        }
+
+        public string GetUserPhoto(string user)
+        {
+            try
+            {
+                var key = "photo_" + user;
+                var photo = Util.GetString(_cache.Get(key));
+                return photo;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
             }
         }
 

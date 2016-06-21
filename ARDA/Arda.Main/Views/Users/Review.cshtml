@@ -100,7 +100,7 @@
 </div>
 
 <script>
-    var token = '@ViewBag.Token';
+    @*var token = '@ViewBag.Token';*@
 
     $(function () {
         //Initialize:
@@ -187,13 +187,13 @@
     }
 
     function PopulateUserInformations(userData) {
-        var auth = "Bearer " + token;
+        //var auth = "Bearer " + token;
         var userID = userData.data;
         var name = userData.value;
 
         $('#imgBox').prop('src', "/images/Loading_icon.gif");
-        GetImage(userID, auth);
-        //GetProfile(userID, token);
+        GetImage(userID);
+
         $('#mail').text(userID);
         $('#displayName').text(name)
 
@@ -202,10 +202,21 @@
         $('#UserInfoPanel').show();
     }
 
-    function GetImage(user, token) {
-        var url = "https://graph.microsoft.com/v1.0/users/" + user + "/photo/$value";
-        var elem = "imgBox";
-        GetImageBase64FromGraph(url, token, elem);
+    function GetImage(user, callback) {
+        var url = '/users/GetUserPhoto?=' + user;
+        $.ajax({
+            url: url,
+            type: "GET",
+            cache: true,
+            success: function (data) {
+                GetImageCallback(data);
+            }
+        });
+    }
+
+    function GetImageCallback(data) {
+        $('#imgBox').prop('src', data);
+        callbackGetPendingUsers(data);
     }
 
     function GetImageBase64FromGraph(url, token, element) {

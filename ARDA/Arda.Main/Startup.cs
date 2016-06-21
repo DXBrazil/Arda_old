@@ -50,6 +50,13 @@ namespace Arda.Main
             services.AddSession();
 
             services.AddMvc();
+
+            // Registering distributed cache approach to the application.
+            services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,6 +11,7 @@ using Microsoft.AspNet.Authentication.OpenIdConnect;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Arda.Common.ViewModels.Main;
+using Microsoft.Extensions.Caching.Distributed;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,7 +20,7 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
-        // GET: /<controller>/
+
         public async Task<IActionResult> Index()
         {
             try
@@ -32,8 +33,6 @@ namespace Arda.Main.Controllers
                 ViewBag.User = user;
                 ViewBag.UserStatus = userStatus;
                 ViewBag.Token = token;
-
-                //TODO: Save user info:
 
                 if (userStatus == 0)
                 {
@@ -48,6 +47,7 @@ namespace Arda.Main.Controllers
                 return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
+
 
         private async void StoreUserInfo(string user, string token)
         {

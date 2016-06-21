@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,15 +9,49 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Redis;
+using Microsoft.Extensions.Configuration;
 
 namespace Arda.Common.Utils
 {
-    public class Util
+    public static class Util
     {
         public static readonly string KanbanURL = "http://localhost:2768/";
         public static readonly string MainURL = "https://localhost:44304/";
         public static readonly string ReportsURL = "http://localhost:2891/";
         public static readonly string PermissionsURL = "http://localhost:2884/";
+
+        private static IDistributedCache _cache;
+
+        static Util()
+        {
+            // Set up configuration sources.
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("secrets.json");
+
+            var Configuration = builder.Build();
+
+            _cache = new RedisCache(new RedisCacheOptions
+            {
+                Configuration = Configuration["Storage:Redis:Configuration"],
+                InstanceName = Configuration["Storage:Redis:InstanceName"]
+            });
+        }
+
+
+        public static string GetUserPhoto(string user)
+        {
+            try
+            {
+                var key = "photo_" + user;
+                var photo = Util.GetString(_cache.Get(key));
+                return photo;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
 
         public static byte[] GetBytes(string obj)
         {

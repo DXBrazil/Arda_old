@@ -27,7 +27,6 @@ namespace Arda.Permissions.Repositories
             _cache = cache;
         }
 
-
         public bool SetUserPermissionsAndCode(string uniqueName, string code)
         {
             try
@@ -58,7 +57,7 @@ namespace Arda.Permissions.Repositories
             }
         }
 
-        //Updates permissiosn on database and cache
+        //Updates permissions on database and cache
         public bool UpdateUserPermissions(string uniqueName, PermissionsViewModel newUserPermissions)
         {
             try
@@ -147,14 +146,31 @@ namespace Arda.Permissions.Repositories
 
                 if (user != null && photo != null)
                 {
+                    //Save on database:
                     user.PhotoBase64 = photo;
                     _context.SaveChanges();
+                    //Cache it:
+                    CacheUserPhoto(uniqueName, photo);
                     return true;
                 }
                 else
                 {
                     return false;
                 }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //Cache User Photo:
+        public void CacheUserPhoto(string uniqueName, string PhotoBase64)
+        {
+            try
+            {
+                var key = "photo_" + uniqueName;
+                _cache.Set(key, Util.GetBytes(PhotoBase64.ToString()));
             }
             catch (Exception)
             {
@@ -575,5 +591,6 @@ namespace Arda.Permissions.Repositories
                 throw;
             }
         }
+
     }
 }

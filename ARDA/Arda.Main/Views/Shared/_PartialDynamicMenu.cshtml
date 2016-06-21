@@ -45,7 +45,10 @@
             </li>
             <li>
                 <div>
-                    <img class="user" id="userImg" />
+                    @{ 
+                        var photo = Util.GetUserPhoto(user);
+                    }
+                    <img class="user" id="userImg" src="@photo" />
                 </div>
             </li>
             <li class="nav-item--signout nav-item">
