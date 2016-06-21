@@ -42,9 +42,11 @@ namespace Arda.Kanban.Migrations
 
                     b.Property<decimal>("AppointmentTE");
 
-                    b.Property<string>("AppointmentUserUniqueName");
+                    b.Property<string>("AppointmentUserUniqueName")
+                        .IsRequired();
 
-                    b.Property<Guid?>("AppointmentWorkloadWBID");
+                    b.Property<Guid?>("AppointmentWorkloadWBID")
+                        .IsRequired();
 
                     b.HasKey("AppointmentID");
 

@@ -17,40 +17,39 @@
             @{
                 var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
                 var menuItems = Util.ConnectToRemoteService<List<MenuItemViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusermenu", user, string.Empty).Result;
-                foreach (var item in menuItems)
+                if (menuItems != null)
                 {
-                    //break;
-                    @*if (item.Items.Count == 1)
-                        {
-                            var displayLink = item.Items[0].Item1;
-                            var controller = item.Items[0].Item2;
-                            var action = item.Items[0].Item3;
-                            <li class="nav-item">
-                                <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
-                            </li>
-                        }*@
-                    //else
-                    //{
-                    <li class="nav-item dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@item.Category <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            @foreach (var subitem in item.Items)
-                            {
-                                var displayLink = subitem.Item1;
-                                var controller = subitem.Item2;
-                                var action = subitem.Item3;
-                                <li class="nav-item">
-                                    <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
-                                </li>
-                            }
-                        </ul>
-                    </li>
+                    foreach (var item in menuItems)
+                    {
+                        <li class="nav-item dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@item.Category <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @foreach (var subitem in item.Items)
+                                {
+                                    var displayLink = subitem.Item1;
+                                    var controller = subitem.Item2;
+                                    var action = subitem.Item3;
+                                    <li class="nav-item">
+                                        <a asp-controller=@controller asp-action=@action class="nav-link">@displayLink</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
                 }
             }
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item--signout nav-item text-center">
                 Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong>
+            </li>
+            <li>
+                <div>
+                    @{ 
+                        var photo = Util.GetUserPhoto(user);
+                    }
+                    <img class="user" id="userImg" src="@photo" />
+                </div>
             </li>
             <li class="nav-item--signout nav-item">
                 <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>

@@ -30,50 +30,50 @@ namespace Arda.Kanban.Repositories
                 var activity = _context.Activities.First(a => a.ActivityID == workload.WBActivity);
                 //Load related Metrics:
                 var metricList = new List<WorkloadBacklogMetric>();
-                if(workload.WBMetrics != null)
-                foreach (var mId in workload.WBMetrics)
-                {
-                    var metric = _context.Metrics.First(m => m.MetricID == mId);
-                    metricList.Add(new WorkloadBacklogMetric()
+                if (workload.WBMetrics != null)
+                    foreach (var mId in workload.WBMetrics)
                     {
-                        Metric = metric
-                    });
-                }
+                        var metric = _context.Metrics.First(m => m.MetricID == mId);
+                        metricList.Add(new WorkloadBacklogMetric()
+                        {
+                            Metric = metric
+                        });
+                    }
                 //Load related Technologies:
                 var technologyList = new List<WorkloadBacklogTechnology>();
-                if(workload.WBTechnologies != null)
-                foreach (var tId in workload.WBTechnologies)
-                {
-                    var technology = _context.Technologies.First(t => t.TechnologyID == tId);
-                    technologyList.Add(new WorkloadBacklogTechnology()
+                if (workload.WBTechnologies != null)
+                    foreach (var tId in workload.WBTechnologies)
                     {
-                        Technology = technology
-                    });
-                }
+                        var technology = _context.Technologies.First(t => t.TechnologyID == tId);
+                        technologyList.Add(new WorkloadBacklogTechnology()
+                        {
+                            Technology = technology
+                        });
+                    }
                 //Load related Users:
                 var userList = new List<WorkloadBacklogUser>();
-                if(workload.WBUsers!=null)
-                foreach (var uniqueName in workload.WBUsers)
-                {
-                    var user = _context.Users.First(u => u.UniqueName == uniqueName);
-                    userList.Add(new WorkloadBacklogUser()
+                if (workload.WBUsers != null)
+                    foreach (var uniqueName in workload.WBUsers)
                     {
-                        User = user
-                    });
-                }
+                        var user = _context.Users.First(u => u.UniqueName == uniqueName);
+                        userList.Add(new WorkloadBacklogUser()
+                        {
+                            User = user
+                        });
+                    }
                 //Associate related Files:
                 var filesList = new List<File>();
-                if(workload.WBFilesList!=null)
-                foreach (var f in workload.WBFilesList)
-                {
-                    filesList.Add(new File()
+                if (workload.WBFilesList != null)
+                    foreach (var f in workload.WBFilesList)
                     {
-                        FileID = f.Item1,
-                        FileLink = f.Item2,
-                        FileName = f.Item3,
-                        FileDescription = string.Empty,
-                    });
-                }
+                        filesList.Add(new File()
+                        {
+                            FileID = f.Item1,
+                            FileLink = f.Item2,
+                            FileName = f.Item3,
+                            FileDescription = string.Empty,
+                        });
+                    }
                 //Create workload object:
                 var workloadToBeSaved = new WorkloadBacklog()
                 {
@@ -341,8 +341,8 @@ namespace Arda.Kanban.Repositories
         {
             try
             {
-                var response = (from wb in _context.WorkloadBacklogs
-                                join wbu in _context.WorkloadBacklogUsers on wb.WBUsers.SingleOrDefault().WBUserID equals wbu.WBUserID
+                var workloads = (from wb in _context.WorkloadBacklogs
+                                join wbu in _context.WorkloadBacklogUsers on wb.WBUsers.Where(u => u.User.UniqueName == uniqueName).First().WBUserID equals wbu.WBUserID
                                 join uk in _context.Users on wbu.User.UniqueName equals uk.UniqueName
                                 where uk.UniqueName.Equals(uniqueName)
                                 orderby wb.WBTitle
@@ -352,19 +352,30 @@ namespace Arda.Kanban.Repositories
                                     _WorkloadTitle = wb.WBTitle,
                                     _WorkloadStartDate = wb.WBStartDate,
                                     _WorkloadEndDate = wb.WBEndDate,
-                                    _WorkloadStatus = (int)wb.WBStatus
+                                    _WorkloadStatus = (int)wb.WBStatus,
+                                    _WorkloadUsers = (from wbusers in _context.WorkloadBacklogUsers
+                                                      where wbusers.WorkloadBacklog.WBID == wb.WBID
+                                                      select new Tuple<string,string>(wbusers.User.UniqueName, wbusers.User.Name)).ToList()
                                 }).ToList();
 
-                if (response != null)
+                foreach (var w in workloads)
                 {
-                    return response;
+                    var hours = (from a in _context.Appointments
+                                 where a.AppointmentWorkload.WBID == w._WorkloadID
+                                 select a.AppointmentHoursDispensed).ToList();
+                    w._WorkloadHours = hours.Sum();
+                }
+                
+                if (workloads != null)
+                {
+                    return workloads;
                 }
                 else
                 {
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -405,7 +416,7 @@ namespace Arda.Kanban.Repositories
                 StructureModified.Replace("[MessageSubtitle]", "A existent <strong>Workload</strong> signed to you was updated.");
 
                 // Replacing the generic message body by the customized.
-                StructureModified.Replace("[MessageBody]", "To see your workload updated, please, click on the link bellow.");               
+                StructureModified.Replace("[MessageBody]", "To see your workload updated, please, click on the link bellow.");
             }
 
             // Replacing the generic callout box.

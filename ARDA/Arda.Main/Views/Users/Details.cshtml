@@ -32,7 +32,7 @@
                 <div class="col-lg-3 col-md-3 col-xs-12">
                     <div id="userInfo" class="panel-user-info">
                         <form role="form">
-                            <img id="UserPhoto" width="200" height="200" src="~/images/Loading_icon.gif" />
+                            <img id="UserPhoto" width="200" height="200" src="@ViewBag.Photo" />
                             <input type="hidden" class="form-control" id="UserName" value="@Model.Name" disabled>
                             <input type="hidden" class="form-control" id="UserEmail" value="@Model.Email" disabled>
                             <p class="text-center"><strong id="displayName">@Model.Name</strong></p>
@@ -50,45 +50,28 @@
 </section>
 
 <script>
-    var token = '@ViewBag.Token';
+    @*var token = '@ViewBag.Token';*@
 
     $(function () {
         //Initialize:
         Initialize();
-        //Get User Picture:
+
         var user = $('#UserEmail').val();
-        GetImage(user, token);
+
         //Get All Permissions:
         $.getJSON('/users/GetAllResources', '', callbackGetResourceItems);
         //Get User Permissions:
-        $.getJSON('/users/GetUserPermissions?user=' + user, '', callbackGetUserPermissions);
+        $.ajax({
+            url: '/users/GetUserPermissions?user=' + user,
+            type: "GET",
+            cache: false,
+            success: function (data, textStatus, jqXHR) {
+                callbackGetUserPermissions(data);
+            }
+        });
     });
 
     function Initialize() {
-    }
-
-    function GetImage(user, token) {
-        var url = "https://graph.microsoft.com/v1.0/users/" + user + "/photo/$value";
-        var elem = "UserPhoto";
-        GetImageBase64FromGraph(url, token, elem);
-    }
-
-    function GetImageBase64FromGraph(url, token, element) {
-        var request = new XMLHttpRequest;
-        request.open("GET", url);
-        request.setRequestHeader("Authorization", token);
-        request.responseType = "blob";
-        request.onload = function () {
-            if (request.readyState === 4 && request.status === 200) {
-                var image = document.getElementById(element);
-                var reader = new FileReader();
-                reader.onload = function () {
-                    image.src = reader.result;
-                }
-                reader.readAsDataURL(request.response);
-            }
-        };
-        request.send(null);
     }
 
     function callbackGetResourceItems(data) {

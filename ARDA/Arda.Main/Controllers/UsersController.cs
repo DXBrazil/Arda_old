@@ -15,47 +15,58 @@ using Arda.Common.Utils;
 using Newtonsoft.Json;
 using System.Net;
 using Arda.Common.JSON;
+using Microsoft.Extensions.Caching.Distributed;
 
-//TODO: Cynthia, please check users layout (selecting in details screen)
 //TODO: Refactor name Users to User
 namespace Arda.Main.Controllers
 {
     [Authorize]
     public class UsersController : Controller
     {
+
+        private static IDistributedCache _cache;
+
+        public UsersController(IDistributedCache cache)
+        {
+            _cache = cache;
+        }
+
+
         #region Views
 
-        //All Users
-        public async Task<IActionResult> Index()
+            //All Users
+        public IActionResult Index()
         {
             try
             {
-                var result = await getAccessToken();
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
 
                 return View();
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
         //Review Permissions:
-        public async Task<IActionResult> Review()
+        public IActionResult Review()
         {
             try
             {
-                var result = await getAccessToken();
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
 
                 return View();
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
@@ -64,8 +75,11 @@ namespace Arda.Main.Controllers
         {
             try
             {
-                var result = await getAccessToken();
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
+
+                var photo = Util.GetUserPhoto(userID);
+                ViewBag.Photo = photo;
 
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
                 var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
@@ -73,8 +87,9 @@ namespace Arda.Main.Controllers
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
@@ -83,8 +98,11 @@ namespace Arda.Main.Controllers
         {
             try
             {
-                var result = await getAccessToken();
-                ViewBag.Token = result.AccessToken;
+                //var result = await TokenManager.GetAccessToken(HttpContext);
+                //ViewBag.Token = result.AccessToken;
+
+                var photo = Util.GetUserPhoto(userID);
+                ViewBag.Photo = photo;
 
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
                 var user = await Util.ConnectToRemoteService<UserMainViewModel>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getuser?uniqueName=" + userID, uniqueName, "");
@@ -92,8 +110,9 @@ namespace Arda.Main.Controllers
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                throw;
+                ////If get silent token fails:
+                //return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
             }
         }
 
@@ -202,7 +221,7 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPut]
-        public async Task<HttpResponseMessage> Update(string user)
+        public async Task<HttpResponseMessage> UpdatePermissions(string user)
         {
 
             var reader = new StreamReader(HttpContext.Request.Body, System.Text.Encoding.UTF8);
@@ -213,7 +232,27 @@ namespace Arda.Main.Controllers
             if (user != null && obj != null)
             {
                 var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                var response = await Util.ConnectToRemoteService<PermissionsViewModel>(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserpermissions?uniqueName=" + user, uniqueName, "", obj);
+                var response = await Util.ConnectToRemoteService(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserpermissions?uniqueName=" + user, uniqueName, "", obj);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
+
+        [HttpPut]
+        public async Task<HttpResponseMessage> PhotoUpdate(string img)
+        {
+            if (img != null)
+            {
+                var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+                var response = await Util.ConnectToRemoteService(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserphoto?uniqueName=" + uniqueName, uniqueName, string.Empty, img);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -261,67 +300,23 @@ namespace Arda.Main.Controllers
             }
         }
 
-        #endregion
-
-        #region Utils
-
-        private async Task<AuthenticationResult> getAccessToken()
+        public string GetUserPhoto(string user)
         {
-            string userObjectID = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-            AuthenticationContext authContext = new AuthenticationContext(Startup.Authority, new SessionCache(userObjectID, HttpContext));
-            ClientCredential credential = new ClientCredential(Startup.ClientId, Startup.ClientSecret);
-            return await authContext.AcquireTokenSilentAsync(Startup.GraphResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
-        }
-
-        private async Task<IActionResult> callMicrosoftGraph()
-        {
-            AuthenticationResult result = null;
-
             try
             {
-                string userObjectID = HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-                AuthenticationContext authContext = new AuthenticationContext(Startup.Authority, new SessionCache(userObjectID, HttpContext));
-                ClientCredential credential = new ClientCredential(Startup.ClientId, Startup.ClientSecret);
-                result = await authContext.AcquireTokenSilentAsync(Startup.GraphResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
-
-                ViewBag.Token = result.AccessToken;
-                return View();
-                //HttpClient client = new HttpClient();
-                //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/users/maluz@microsoft.com/photo/$value");
-                //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-                //HttpResponseMessage response = await client.SendAsync(request);
-
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var source = await response.Content.ReadAsByteArrayAsync();
-                //    return View();
-                //}
-                //else
-                //{
-                //    //
-                //    // If the call failed with access denied, then drop the current access token from the cache,
-                //    //     and show the user an error indicating they might need to sign-in again.
-                //    //
-                //    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                //    {
-
-                //        //var todoTokens = authContext.TokenCache.ReadItems().Where(a => a.Resource == Startup.TodoListResourceId);
-                //        //foreach (TokenCacheItem tci in todoTokens)
-                //        //    authContext.TokenCache.DeleteItem(tci);
-
-                //        //ViewBag.ErrorMessage = "UnexpectedError";
-                //    }
-                //}
+                var key = "photo_" + user;
+                var photo = Util.GetString(_cache.Get(key));
+                return photo;
             }
             catch (Exception)
             {
-                //If get silent token fails:
-                return new ChallengeResult(OpenIdConnectDefaults.AuthenticationScheme);
+                return string.Empty;
             }
-
-
-            //return View("Error");
         }
+
+        #endregion
+
+        #region Utils
 
         private string getUserSituation(int situation)
         {

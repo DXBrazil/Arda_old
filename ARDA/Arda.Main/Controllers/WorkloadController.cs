@@ -31,7 +31,7 @@ namespace Arda.Main.Controllers
             {
                 var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", uniqueName, "");
 
-                var dados = existentWorkloads.Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ")", status = x._WorkloadStatus })
+                var dados = existentWorkloads.Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", and " + x._WorkloadHours + " hours were spent on this.", status = x._WorkloadStatus, users= x._WorkloadUsers, hours = x._WorkloadHours, start = x._WorkloadStartDate, end = x._WorkloadEndDate})
                                              .Distinct()
                                              .ToList();
 
@@ -56,7 +56,7 @@ namespace Arda.Main.Controllers
             {
                 if (WBFiles.Count > 0)
                 {
-                    List<Tuple<Guid, string, string>> fileList = await UploadNewFiles(WBFiles);
+                    List<Tuple<Guid, string, string>> fileList = UploadNewFiles(WBFiles);
                     //Adds the file lists to the workload object:
                     workload.WBFilesList = fileList;
                 }
@@ -92,7 +92,7 @@ namespace Arda.Main.Controllers
                 var fileList = new List<Tuple<Guid, string, string>>();
                 if (WBFiles.Count > 0)
                 {
-                    fileList = await UploadNewFiles(WBFiles);
+                    fileList = UploadNewFiles(WBFiles);
                 }
                 if (oldFiles != null)
                 {
@@ -180,7 +180,7 @@ namespace Arda.Main.Controllers
             return Json(Util.GenerateNewGuid());
         }
 
-        private static async Task<List<Tuple<Guid, string, string>>> UploadNewFiles(ICollection<IFormFile> WBFiles)
+        private static List<Tuple<Guid, string, string>> UploadNewFiles(ICollection<IFormFile> WBFiles)
         {
             var fileList = new List<Tuple<Guid, string, string>>();
             var Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();

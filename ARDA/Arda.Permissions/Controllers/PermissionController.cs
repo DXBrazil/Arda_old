@@ -20,6 +20,7 @@ namespace Arda.Permissions.Controllers
             _permission = permission;
         }
 
+
         [HttpPost]
         [Route("setuserpermissionsandcode")]
         public IActionResult SetUserPermissionsAndCode(string name)
@@ -158,6 +159,58 @@ namespace Arda.Permissions.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("updateuserphoto")]
+        public HttpResponseMessage UpdateUserPhoto(string uniqueName)
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var userPhoto = JsonConvert.DeserializeObject<string>(requestFromPost);
+
+                if (uniqueName != null && userPhoto != null)
+                {
+                    _permission.UpdateUserPhoto(uniqueName, userPhoto);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("updateuser")]
+        public HttpResponseMessage UpdateUser(string uniqueName)
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var userProfile = JsonConvert.DeserializeObject<UserMainViewModel>(requestFromPost);
+
+                if (uniqueName != null && userProfile != null)
+                {
+                    _permission.UpdateUser(uniqueName, userProfile);
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpGet]
         [Route("verifyuseraccesstoresource")]
         public HttpResponseMessage VerifyUserAccessToResource(string uniqueName, string module, string resource)
@@ -199,12 +252,5 @@ namespace Arda.Permissions.Controllers
                 throw;
             }
         }
-
-        //[HttpGet]
-        //[Route("seed")]
-        //public void Seed()
-        //{
-        //    _permission.Seed();
-        //}
     }
 }

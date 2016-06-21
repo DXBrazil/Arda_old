@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Arda.Common.ViewModels.Main
 {
@@ -13,6 +15,9 @@ namespace Arda.Common.ViewModels.Main
         public DateTime _WorkloadEndDate { get; set; }
 
         public int _WorkloadStatus { get; set; }
-        
+
+        public IEnumerable<Tuple<string, string>> _WorkloadUsers { get; set; }
+
+        public int _WorkloadHours { get; set; }
     }
 }

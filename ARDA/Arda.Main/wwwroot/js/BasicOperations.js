@@ -418,10 +418,14 @@ $(function ($) {
             DisableAppointmentFields();
             $("#btnAddAppointment").text("Saving appointment...");
 
+            var data = $(form).serialize();
+            console.log(data);
+            //data.set('', 123);
+
             $.ajax({
                 url: "/Appointment/AddAppointment",
                 type: "POST",
-                data: $(form).serialize()
+                data: data,
             }).done(function (data) {
                 if (data.IsSuccessStatusCode) {
                     $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The appointment has been added into Arda.</div>");
