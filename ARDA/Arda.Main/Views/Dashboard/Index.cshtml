@@ -92,6 +92,12 @@
         //Page for Situation 2: Permissions_Granted-->
         var user = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
         var canApproveUsers = Util.ConnectToRemoteService<bool>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/verifyifuseradmin", user, string.Empty).Result;
+
+        if (canApproveUsers)
+        { 
+            <div id="2hackIsAdmin"></div>
+        }
+
         if (canApproveUsers)
         {
             int numberUsersToApprove = Util.ConnectToRemoteService<int>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getnumberofuserstoapprove", user, string.Empty).Result;
@@ -222,6 +228,7 @@
 
 
 <script>
+
     function dragstart(ev) {
         ev.dataTransfer.setData('text', ev.target.id);
     }
@@ -387,16 +394,22 @@
     }
 
     $(document).ready(function () {
-        GetUserList();
         RefreshTaskList();
-
-        $('#filter-assign').change(function () {
-            RefreshTaskList();
-        });
 
         $('.dashboard-filter-field').change(function () {
             RefreshTaskList();
         });
+
+        if (window.hackIsAdmin != null) {
+            GetUserList();
+            $('#filter-assign').change(function () {
+                RefreshTaskList();
+            });
+        }
+        else {
+            $('#filter-assign').css('visibility', 'hidden');
+        }
+
     })
 
 
