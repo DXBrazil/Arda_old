@@ -8,7 +8,7 @@ using Arda.Kanban.Models;
 namespace Arda.Permissions.Migrations
 {
     [DbContext(typeof(PermissionsContext))]
-    [Migration("20160608160731_Initial")]
+    [Migration("20160620163613_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,10 +62,20 @@ namespace Arda.Permissions.Migrations
                 {
                     b.Property<string>("UniqueName");
 
+                    b.Property<string>("GivenName");
+
+                    b.Property<string>("JobTitle");
+
+                    b.Property<string>("ManagerUniqueName");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("PhotoBase64");
+
                     b.Property<int>("Status");
+
+                    b.Property<string>("Surname");
 
                     b.HasKey("UniqueName");
 

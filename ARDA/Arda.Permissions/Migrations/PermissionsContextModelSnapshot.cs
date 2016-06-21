@@ -61,10 +61,20 @@ namespace Arda.Permissions.Migrations
                 {
                     b.Property<string>("UniqueName");
 
+                    b.Property<string>("GivenName");
+
+                    b.Property<string>("JobTitle");
+
+                    b.Property<string>("ManagerUniqueName");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("PhotoBase64");
+
                     b.Property<int>("Status");
+
+                    b.Property<string>("Surname");
 
                     b.HasKey("UniqueName");
 

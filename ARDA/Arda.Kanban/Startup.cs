@@ -61,10 +61,9 @@ namespace Arda.Kanban
                 InstanceName = Configuration["Storage:Redis:InstanceName"]
             }));
 
-            ////var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Permissions;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            var Connection = @"Server=DESKTOP-GM6LNGT;Database=Arda_Kanban;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            //var Connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Arda_Kanban;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(Connection));
+            //// Adding database connection by dependency injection.
+            var connectionString = Configuration["Storage:SqlServer:ConnectionString"];
+            services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(connectionString));
 
             //Registering services.
             services.AddScoped<IUserRepository, UserRepository>();
@@ -95,8 +94,6 @@ namespace Arda.Kanban
             app.UseCors("AllowAll");
 
             app.UseMvc();
-
-            //TaskDatabaseSetup.InitSamples(app.ApplicationServices);
         }
 
         // Entry point for the application.

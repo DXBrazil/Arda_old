@@ -12,6 +12,12 @@ namespace Arda.Common.Interfaces.Permissions
         // Update an existing user permissions.
         bool UpdateUserPermissions(string uniqueName, PermissionsViewModel userPermission);
 
+        // Update an existing user photo.
+        bool UpdateUserPhoto(string uniqueName, string photo);
+
+        // Update an existing user permissions.
+        bool UpdateUser(string uniqueName, UserMainViewModel user);
+
         // Delete an existing user permissions from the cache.
         void DeleteUserPermissions(string uniqueName);
 
@@ -47,5 +53,7 @@ namespace Arda.Common.Interfaces.Permissions
         IEnumerable<UserMainViewModel> GetUsers();
 
         UserMainViewModel GetUser(string uniqueName);
+
+        void CacheUserPhoto(string uniqueName, string PhotoBase64);
     }
 }
