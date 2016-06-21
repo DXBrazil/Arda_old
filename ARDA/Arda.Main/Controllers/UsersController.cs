@@ -121,6 +121,23 @@ namespace Arda.Main.Controllers
         #region Actions
 
         //From Permissions:
+        public async Task<JsonResult> ViewRestrictedUserList()
+        {
+            // Getting uniqueName
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            bool isAdmin = true;
+
+            var existentUsers = await Util.ConnectToRemoteService<List<UserMainViewModel>>(HttpMethod.Get, Util.PermissionsURL + "api/useroperations/getusers", uniqueName, "");
+
+            if (!isAdmin)
+            {
+                existentUsers.Clear();
+            }
+
+            return Json(existentUsers);
+        }
+
         public async Task<JsonResult> ListAllUsers()
         {
             // Getting uniqueName

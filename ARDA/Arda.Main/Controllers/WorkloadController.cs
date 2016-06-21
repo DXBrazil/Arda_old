@@ -21,15 +21,17 @@ namespace Arda.Main.Controllers
     public class WorkloadController : Controller
     {
         [HttpGet]
-        public async Task<JsonResult> ListWorkloadsByUser()
+        public async Task<JsonResult> ListWorkloadsByUser([FromQuery] string User)
         {
-            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+            var loggedUser = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
             var workloads = new List<string>();
 
+            string filtered_user = (User == null || User == "") ? loggedUser : User;
+
             try
             {
-                var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", uniqueName, "");
+                var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", filtered_user, "");
 
                 var dados = existentWorkloads.Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", and " + x._WorkloadHours + " hours were spent on this.", status = x._WorkloadStatus, users= x._WorkloadUsers, hours = x._WorkloadHours, start = x._WorkloadStartDate, end = x._WorkloadEndDate})
                                              .Distinct()
