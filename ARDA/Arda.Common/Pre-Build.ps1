@@ -1,25 +1,51 @@
-# bootstrap DNVM into this session.
-&{$Branch='dev';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.ps1'))}
+param(
+	[string]$Path = (Get-Location).ToString()
+)
 
-# load up the global.json so we can find the DNX version
-$globalJson = Get-Content -Path $PSScriptRoot\global.json -Raw -ErrorAction Ignore | ConvertFrom-Json -ErrorAction Ignore
 
-if($globalJson)
+function Get-MyChildItem
 {
-    $dnxVersion = $globalJson.sdk.version
+  param
+  (
+    [Parameter(Mandatory = $true)]
+    $Path,
+    
+    $Filter = '*',
+    
+    [System.Int32]
+    $MaxDepth = 3,
+    
+    [System.Int32]
+    $Depth = 0
+  )
+  
+  $Depth++
+
+  Get-ChildItem -Path $Path -Filter $Filter -File 
+  
+  if ($Depth -le $MaxDepth)
+  {
+    Get-ChildItem -Path $Path -Directory |
+      ForEach-Object { Get-MyChildItem -Path $_.FullName -Filter $Filter -Depth $Depth -MaxDepth $MaxDepth}
+  }
+  
 }
-else
+
+# # run DNU restore on all project.json files in the src folder including 2>1 to redirect stderr to stdout for badly behaved tools
+
+Write-Host "*** Using $Path as the Working Folder" -ForegroundColor Yellow
+
+$projectDefinitions = Get-MyChildItem -Path $Path -Filter 'project.json' -MaxDepth 2
+
+Write-Host "*** The script found the following project.json files:" -ForegroundColor Blue
+
+ForEach ($definition in $projectDefinitions)
 {
-    Write-Warning "Unable to locate global.json to determine using 'latest'"
-    $dnxVersion = "latest"
+	#& dnu restore $definition.FullName 2>1
+	Write-Host "*** $($definition.FullName)"
 }
 
-# install DNX
-# only installs the default (x86, clr) runtime of the framework.
-# If you need additional architectures or runtimes you should add additional calls
-# ex: & $env:USERPROFILE\.dnx\bin\dnvm install $dnxVersion -r coreclr
-& $env:USERPROFILE\.dnx\bin\dnvm install $dnxVersion -Persistent
-
- # run DNU restore on all project.json files in the src folder including 2>1 to redirect stderr to stdout for badly behaved tools
-Get-ChildItem -Path $PSScriptRoot -Filter project.json -Recurse | ForEach-Object { & dnu restore $_.FullName 2>1 }
-Write-Host "DNU restore executed successfuly"
+ForEach ($definition in $projectDefinitions)
+{
+	& dnu restore $definition.FullName 2>1
+}
