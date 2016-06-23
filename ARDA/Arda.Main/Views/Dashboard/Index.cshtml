@@ -116,11 +116,12 @@
                                                     <div class="folder-header">
                                                         <p><span class="templateText">templateText</span></p>
 
-                                                        <input type="checkbox" class="templateDone NOT-WORKING-folder-check-ipt-status" />
-                                                        <label class="folder-check-status">
+                                                        <input type="checkbox" id="templateId" class="templateDone NOT-WORKING-folder-check-ipt-status" />
+                                                        <label class="folder-check-status" for="templateId">
                                                         </label>
-
-                                                        <button class="templateEdit" data-toggle="modal" data-target="#WorkloadModal">EDIT</button>
+                                                        <div class="data-sorting-buttons">
+                                                            <button class="templateEdit ds-button-edit" data-toggle="modal" data-target="#WorkloadModal"><i class='fa fa-pencil-square-o' aria-hidden='true'></i> EDIT</button>
+                                                        </div>
                                                     </div>
                                                     <div class="folder-footer">
                                                         <div>
@@ -257,6 +258,9 @@
                                     var folder = document.querySelector(folderSelector);
 
                                     clone.querySelector('.task').id = taskId;
+                                    clone.querySelector('.templateDone').id = 'iptTask' + taskId;
+                                    clone.querySelector('.folder-check-status').setAttribute('for', 'iptTask' + taskId);
+
                                     clone.querySelector('.task .templateText').textContent = taskName;
 
                                     clone.querySelector('.task').addEventListener('dragstart', dragstart);
