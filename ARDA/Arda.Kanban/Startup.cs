@@ -67,6 +67,7 @@ namespace Arda.Kanban
             services.AddScoped<ITechnologyRepository, TechnologyRepository>();
             services.AddScoped<IWorkloadRepository, WorkloadRepository>();
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

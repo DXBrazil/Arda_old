@@ -16,6 +16,9 @@ namespace Arda.Reports.Controllers
         [Route("getinfo")]
         public IEnumerable<string> GetInfo()
         {
+            var json = @"";
+
+
             return new string[] { "value1", "value2" };
         }
     }

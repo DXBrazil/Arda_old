@@ -1,0 +1,218 @@
+﻿<style>
+    .multiselect {
+        text-align: left;
+    }
+
+    .multiselect-selected-text {
+        margin-left: 5px;
+    }
+
+    .multiselect-container.dropdown-menu {
+        background-color: white;
+        color: #555;
+    }
+
+    .multiselect.dropdown-toggle.btn.btn-default {
+        background-color: white;
+        color: #555;
+        outline: 1px solid #ccc;
+    }
+</style>
+
+
+<h1>Reports</h1>
+<br />
+
+
+
+<div style="margin:20px">
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                <label for="dataRange">Date Range:</label>
+                <input type="text" id="dataRange" value="01/01/2015 - 01/31/2015" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="WBUsers">Users:</label>
+                <select class="form-control" id="WBUsers" name="WBUsers" multiple="multiple">
+                    <!--Dynamically Content-->
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button>Filter</button>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <h3>Activity Consuming</h3>
+            <div class="col-md-3">
+                <div id="chart" class="chart"></div>
+            </div>
+            <div class="col-md-6">
+                <table style="width:300px">
+                    <caption>Time Consuming: Activities</caption>
+                    <tr>
+                        <th>Activity</th>
+                        <th>Hours</th>
+                        <th>%</th>
+                    </tr>
+                    <tr>
+                        <td>Design session</td>
+                        <td>200</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr>
+                        <td>Migration to the cloud</td>
+                        <td>170</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr>
+                        <td>Event organization</td>
+                        <td>70</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr>
+                        <td>Workshop</td>
+                        <td>50</td>
+                        <td>1%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div id="series_chart_div" style="width: 900px; height: 500px;"></div>*@
+
+@*<script type="text/javascript">
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawSeriesChart);
+
+        function drawSeriesChart() {
+
+          var data = google.visualization.arrayToDataTable([
+            ['ID', 'Life Expectancy', 'Fertility Rate', 'Region',     'Population'],
+            ['CAN',    80.66,              1.67,      'North America',  33739900],
+            ['DEU',    79.84,              1.36,      'Europe',         81902307],
+            ['DNK',    78.6,               1.84,      'Europe',         5523095],
+            ['EGY',    72.73,              2.78,      'Middle East',    79716203],
+            ['GBR',    80.05,              2,         'Europe',         61801570],
+            ['IRN',    72.49,              1.7,       'Middle East',    73137148],
+            ['IRQ',    68.09,              4.77,      'Middle East',    31090763],
+            ['ISR',    81.55,              2.96,      'Middle East',    7485600],
+            ['RUS',    68.6,               1.54,      'Europe',         141850000],
+            ['USA',    78.09,              2.05,      'North America',  307007000]
+          ]);
+
+          var options = {
+            title: 'Correlation between life expectancy, fertility rate ' +
+                   'and population of some world countries (2010)',
+            hAxis: { title: 'Region' },
+            vAxis: {title: 'Fertility Rate'},
+            bubble: {textStyle: {fontSize: 11}}
+          };
+
+          var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+          chart.draw(data, options);
+        }
+    </script>*@
+
+
+<script>
+
+    $(function () {
+        $('#dataRange').daterangepicker(
+            {
+                locale: {
+                    format: 'DD-MM-YYYY'
+                },
+                startDate: '01-01-2015',
+                endDate: '01-01-2015',
+                maxDate: "11-08-2015"
+            }, function (start, end, label) {
+                console.log("New date range selected: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ")");
+            });
+
+        //Get User Users:
+        $.getJSON('/users/GetUsers', null, callbackGetUsers);
+    });
+
+    function callbackGetUsers(data) {
+        var options = [];
+        var select = $('#WBUsers');
+        for (var i = 0; i < data.length; i++) {
+            var text = data[i].Name;
+            var key = data[i].UniqueName;
+            options.push('<option value="' + key + '">' + text + '</option>');
+        }
+        select.html(options.join(''));
+
+        select.multiselect({
+            buttonWidth: '100%',
+            numberDisplayed: 2,
+            nonSelectedText: 'Click to select the users'
+        });
+    }
+
+    var diameter = 600,
+        format = d3.format(",d"),
+        color = d3.scale.category20c();
+
+    var bubble = d3.layout.pack()
+        .sort(null)
+        .size([diameter, diameter])
+        .padding(1.5);
+
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", diameter)
+        .attr("height", diameter)
+        .attr("class", "bubble");
+
+    //var url = 'https://gist.githubusercontent.com/mbostock/1093025/raw/490fffd1ae637d3275aa9eaa8b0487147717dd40/flare.json';
+    var url = 'Report/GetJson';
+
+    d3.json(url, function (error, root) {
+        if (error) throw error;
+
+        var node = svg.selectAll(".node")
+            .data(bubble.nodes(classes(root))
+            .filter(function (d) { return !d.children; }))
+          .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+        node.append("title")
+            .text(function (d) { return d.className + ": " + format(d.value); });
+
+        node.append("circle")
+            .attr("r", function (d) { return d.r; })
+            .style("fill", function (d) { return color(d.packageName); });
+
+        node.append("text")
+            .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .text(function (d) { return d.className.substring(0, d.r / 3); });
+    });
+
+    // Returns a flattened hierarchy containing all leaf nodes under the root.
+    function classes(root) {
+        var classes = [];
+
+        function recurse(name, node) {
+            if (node.children) node.children.forEach(function (child) { recurse(node.name, child); });
+            else classes.push({ packageName: name, className: node.name, value: node.size });
+        }
+
+        recurse(null, root);
+        return { children: classes };
+    }
+
+    d3.select(self.frameElement).style("height", diameter + "px");
+
+</script>
