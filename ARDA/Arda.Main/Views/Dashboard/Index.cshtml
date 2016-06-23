@@ -3,100 +3,41 @@
 @using Arda.Common.Utils
 @using Arda.Common.ViewModels.Main
 
-<style>
-    .datepicker {
-        z-index: 10000;
-    }
-
-    #lblWBIsWorkload {
-        margin-bottom: 10px;
-    }
-
-    .irs-line, .irs-bar, .irs-bar-edge {
-        top: 17px;
-    }
-
-    .irs-slider {
-        top: 9px;
-    }
-
-    #ComplexityLevel {
-        margin-top: 35px;
-    }
-
-    .multiselect {
-        text-align: left;
-    }
-
-    .multiselect-selected-text {
-        margin-left: 5px;
-    }
-
-    .multiselect-container.dropdown-menu {
-        background-color: white;
-        color: #555;
-    }
-
-    .multiselect.dropdown-toggle.btn.btn-default {
-        background-color: white;
-        color: #555;
-        outline: 1px solid #ccc;
-    }
-
-    #buttonsPanel {
-        text-align: right;
-        margin-top: 20px;
-        padding-top: 10px;
-        border-top: 1px solid #ccc;
-    }
-
-    .error {
-        border-color: #a94442;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    }
-
-        .error:focus {
-            border-color: #843534;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
-        }
-</style>
 
 @{
     var userStatus = ViewBag.UserStatus;
     if (userStatus == 0)
     {
         //Message for Situation 0: Waiting_Review
-        <section class="concontainer-fluid">
+        <section class="concontainer-fluid jumbotron">
             <div class="col-xs-12">
-                <div class="row">
-                    <div class="jumbotron">
-                        <h1>Welcome!</h1>
-                        <h4><strong>Status: </strong><span style="color:green">Waiting Review</span></h4>
+                    
+                <h1>Welcome!</h1>
+                <h4><strong>Status: </strong><span style="color:green">Waiting Review</span></h4>
 
-                        <p>You can access this tool but unfortunally you don't have any permissions to other modules yet.</p>
-                        <p>An e-mail has been sent to system admin. Watch out your e-mail, as soon you get any aditional permitions you will receive an message.</p>
-                    </div>
-                </div>
+                <p>You can access this tool but unfortunally you don't have any permissions to other modules yet.</p>
+                <p>An e-mail has been sent to system admin. Watch out your e-mail, as soon you get any aditional permitions you will receive an message.</p>
+                  
+                
             </div>
+            <div class="clearfix"></div>
         </section>
     }
     else if (userStatus == 1)
     {
         <!--Message for Situation 1: Banned_User-->
-        <section class="concontainer-fluid">
+        <section class="concontainer-fluid jumbotron">
             <div class="col-xs-12">
-                <div class="row">
-                    <div class="jumbotron">
-                        <h1>Welcome!</h1>
-                        <h4><strong>Status: </strong><span style="color:red">Permissions Denied</span></h4>
-                        <br />
-                        <p>The system admin has reviewed your permissions solicitation and denied it.</p>
-                        <p>Your situation may change, keep your eyes open for any aditional permitions notification on your e-mail.</p>
-                    </div>
-                    </div>
+
+                <h1>Welcome!</h1>
+                <h4><strong>Status: </strong><span style="color:red">Permissions Denied</span></h4>
+                <br />
+                <p>The system admin has reviewed your permissions solicitation and denied it.</p>
+                <p>Your situation may change, keep your eyes open for any aditional permitions notification on your e-mail.</p>
+
+                
             </div>
+            <div class="clearfix"></div>
         </section>
                     
                     }
@@ -149,26 +90,20 @@
                                             </div>
                                             <div class="col-xs-12 col-lg-3 col-md-6">
                                                 <select id="filter-assign" name="filter-assign" class="form-control dashboard-filter-assign">
-                                                    <option value=""></option>
-                                                    <!--
-                                                                                <option value="">TE Name 0</option>
-                                                                                <option value="">TE Name 1</option>
-                                                                                <option value="">TE Name 2</option>
-                                                                                <option value="">TE Name 3</option>
-                                                                                <option value="">TE Name 4</option>
-                                                                                <option value="">TE Name 5</option>
-                                                    -->
+                                                    <option value="">Choose a team member</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-xs-12 col-lg-3 col-md-6">
-                                                <label for="_WBID">WBID:</label>
-                                                <input id="_WBID" type="text" />
+                                                <!-- label for="_WBID">WBID:</!--label>-->
+                                                <input id="_WBID" type="hidden" />
                                             </div>
 
                                             <div class="col-xs-12 col-lg-3 col-md-6">
-                                                <button id="btnNew" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">New</button>
-                                                <button id="btnDetails" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">Details</button>
+                                                <div class="data-sorting-buttons">
+                                                    <button id="btnNew" class="ds-button-update" data-toggle="modal" data-target="#WorkloadModal"><i class="fa fa-plus" aria-hidden="true"></i> New Workload</button>
+                                                </div>
+                                                <!--button id="btnDetails" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#WorkloadModal">Details</!--button-->
                                             </div>
 
                                             <div class="clearfix"></div>

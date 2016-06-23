@@ -25,6 +25,7 @@ namespace Arda.Main.Controllers
     {
 
         private static IDistributedCache _cache;
+        private int buttons;
 
         public UsersController(IDistributedCache cache)
         {
@@ -186,7 +187,7 @@ namespace Arda.Main.Controllers
                     IList<string> dataRow = new List<string>();
                     dataRow.Add(user.Name.ToString());
                     dataRow.Add(user.Email.ToString());
-                    dataRow.Add($"<a onclick=\"ModalSelectUser('{user.Email}','{user.Name}');\" class='btn btn-info'><i class='fa fa-toggle-right' aria-hidden='true'></i></a>");
+                    dataRow.Add($"<div class=\"data-sorting-buttons\"><a onclick=\"ModalSelectUser('{user.Email}','{user.Name}');\" class=\"ds-button-detail\"><i class=\"fa fa-align-justify\" aria-hidden=\"true\"></i>Details</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
