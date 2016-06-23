@@ -22,27 +22,49 @@ namespace Arda.Kanban.Repositories
             try
             {
                 List<ActivityConsumingViewModel> activities;
+
                 if (user == "All")
                 {
-                    activities = (from a in _context.Activities
-                                 join w in _context.WorkloadBacklogs on a.ActivityID equals w.WBActivity.ActivityID
-                                 where w.WBStartDate >= startDate && w.WBEndDate <= endDate
-                                 group 
-                                 select new ActivityConsumingViewModel()
-                                 {
-                                     Activity = a.ActivityName
-                                 }).ToList();
-
+                    activities = (from ap in _context.Appointments
+                                  join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                                  join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
+                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate
+                                  select new ActivityConsumingViewModel()
+                                  {
+                                      Activity = a.ActivityName,
+                                      Hours = ap.AppointmentHoursDispensed
+                                  }).ToList();
                 }
                 else
                 {
-                    activities = new List<ActivityConsumingViewModel>();
+                    activities = (from ap in _context.Appointments
+                                  join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                                  join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
+                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
+                                  select new ActivityConsumingViewModel()
+                                  {
+                                      Activity = a.ActivityName,
+                                      Hours = ap.AppointmentHoursDispensed
+                                  }).ToList();
                 }
-                return activities;
+                var totalHours = (Convert.ToDecimal(activities.Sum(a => a.Hours))) / 100;
+
+                var activityConsuming = activities
+                     .GroupBy(a => a.Activity)
+                     .Select(ac => new ActivityConsumingViewModel
+                     {
+                         Activity = ac.Key,
+                         Hours = ac.Sum(a => a.Hours),
+                         Percent = Math.Round(ac.Sum(a => a.Hours) / totalHours, 2)
+                     })
+                     .OrderByDescending(ac => ac.Hours)
+                     .ToList();
+
+                return activityConsuming;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
     }

@@ -11,6 +11,6 @@ namespace Arda.Common.ViewModels.Reports
 
         public int Hours { get; set; }
 
-        public float Percent { get; set; }
+        public decimal Percent { get; set; }
     }
 }

@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
+using Arda.Common.Utils;
+using Arda.Common.ViewModels.Reports;
+using System.Net.Http;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Arda.Main.Controllers
 {
+    [Authorize]
     public class ReportController : Controller
     {
         public IActionResult Index()
@@ -15,86 +20,16 @@ namespace Arda.Main.Controllers
             return View();
         }
 
-        public JsonResult GetJson()
+        public async Task<JsonResult> GetActivityConsumingBubbleData(DateTime startDate, DateTime endDate, string user = "All")
         {
-            var obj = new Root()
-            {
-                name = "flare",
-                children = new List<Child0>()
-                {
-                    new Child0()
-                    {
-                        name= "Cat1",
-                        children = new List<Child>()
-                        {
-                            new Child()
-                            {
-                                name ="Design session",
-                                size = 200
-                            }
-                        }
-                    },
-                    new Child0()
-                    {
-                        name= "Cat2",
-                        children = new List<Child>()
-                        {
-                            new Child()
-                            {
-                                name ="Workshop",
-                                size = 50
-                            }
-                        }
-                    },
-                    new Child0()
-                    {
-                        name="Cat3",
-                        children = new List<Child>()
-                        {
-                            new Child()
-                            {
-                                name ="Event organization",
-                                size = 70
-                            }
-                        }
-                    },
-                    new Child0()
-                    {
-                        name="Cat4",
-                        children = new List<Child>()
-                        {
-                            new Child()
-                            {
-                                name ="Migration to the cloud",
-                                size = 10
-                            }
-                        }
-                    }
-                }
-            };
-            return Json(obj);
+            var data = await Util.ConnectToRemoteService<D3BubbleViewModel>(HttpMethod.Get, Util.ReportsURL + "api/Activity/bubble?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
+            return Json(data);
         }
-    }
 
-
-
-
-    public class Child
-    {
-        public string name { get; set; }
-        public int size { get; set; }
-    }
-
-    public class Child0
-    {
-        public string name { get; set; }
-        public int? size { get; set; }
-        public List<Child> children { get; set; }
-    }
-
-    public class Root
-    {
-        public string name { get; set; }
-        public List<Child0> children { get; set; }
+        public async Task<JsonResult> GetActivityConsumingTableData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            var data = await Util.ConnectToRemoteService<IEnumerable<ActivityConsumingViewModel>>(HttpMethod.Get, Util.ReportsURL + "api/Activity/tabledata?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
+            return Json(data);
+        }
     }
 }

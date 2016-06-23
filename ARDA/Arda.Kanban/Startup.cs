@@ -76,7 +76,7 @@ namespace Arda.Kanban
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMiddleware<SecurityAPIMiddleware>();
+            //app.UseMiddleware<SecurityAPIMiddleware>();
 
             app.UseIISPlatformHandler();
 
