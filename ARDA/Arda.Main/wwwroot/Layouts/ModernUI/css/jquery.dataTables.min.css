@@ -421,14 +421,13 @@ table.dataTable td {
     *cursor: hand;
     color: #333 !important;
     border: 1px solid transparent;
-    border-radius: 2px
+    border: 1px solid #ccc;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    color: #333 !important;
-    border: 1px solid #979797;
-    background-color: #dcdcdc;
+    color: #fff !important;
+    background-color: #2B2E37;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
@@ -442,9 +441,9 @@ table.dataTable td {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    color: white !important;
-    border: 1px solid #111;
-    background-color: #dcdcdc;
+    color: #fff !important;
+    background-color: #2B2E37;
+    border: 1px solid #2B2E37;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
