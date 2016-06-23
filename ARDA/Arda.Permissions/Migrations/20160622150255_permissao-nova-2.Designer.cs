@@ -8,9 +8,10 @@ using Arda.Kanban.Models;
 namespace Arda.Permissions.Migrations
 {
     [DbContext(typeof(PermissionsContext))]
-    partial class PermissionsContextModelSnapshot : ModelSnapshot
+    [Migration("20160622150255_permissao-nova-2")]
+    partial class permissaonova2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
