@@ -698,39 +698,7 @@ function DeleteAppointment(appointmentID) {
     });
 }
 
-function DisableWorkloadFields()
-{
-    $('#WBStartDate').attr("disabled", "disabled");
-    $('#WBEndDate').attr("disabled", "disabled");
-    if (!($('#WBIsWorkload').bootstrapSwitch('disabled'))) {
-        $('#WBIsWorkload').bootstrapSwitch('toggleDisabled', true, true);
-    }
-    $('#WBTitle').attr("disabled", "disabled");
-    $('#WBDescription').attr("disabled", "disabled");
-    $('#WBExpertise').attr("disabled", "disabled");
-    $('#WBActivity').attr("disabled", "disabled");
-    $('#WBTechnologies').attr("disabled", "disabled");
-    $('#WBMetrics').attr("disabled", "disabled");
-    $('#WBUsers').attr("disabled", "disabled");
 
-    var slider = $("#WBComplexity").data("ionRangeSlider");
-    slider.update({
-        from: 1,
-        disable: true
-    });
-
-    //$('.multiselect-container.dropdown-menu li a label input').attr("disabled", "disabled");
-    $('.multiselect').attr("disabled", "disabled");
-    $('.fileinput').addClass('hidden');
-
-
-
-    $("#btnWorkloadCancel").attr("disabled", "disabled");
-    $("#btnWorkloadReset").attr("disabled", "disabled");
-    $("#btnWorkloadEdit").attr("disabled", "disabled");
-    $("#btnWorkloadDelete").attr("disabled", "disabled");
-    $("#btnWorkloadSend").attr("disabled", "disabled");
-}
 
 $(function () {
     $('a[href*="#"]:not([href="#"])').click(function () {
