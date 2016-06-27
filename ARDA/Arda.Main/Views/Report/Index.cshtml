@@ -19,72 +19,50 @@
     }
 </style>
 
+<section class="concontainer-fluid">
 
-<h1>Reports</h1>
-<br />
+    <div class="col-xs-12">
+        <h1>Reports</h1>
 
+        <br />
+        <div style="margin:20px">
 
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="dataRange">Date Range:</label>
+                        <input class="form-control" type="text" id="dataRange" value="01/01/2015 - 01/31/2015" />
+                    </div>
 
-<div style="margin:20px">
+                    <div class="col-md-2">
+                        <label for="WBUsers">Users:</label>
+                        <select class="form-control" id="WBUsers" name="WBUsers"></select>
+                    </div>
 
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-2">
-                <label for="dataRange">Date Range:</label>
-                <input type="text" id="dataRange" value="01/01/2015 - 01/31/2015" />
-            </div>
+                    <div class="col-md-2" style="margin-top:25px">
+                        <button class="btn btn-default" id="btnFilter">Filter</button>
+                    </div>
 
-            <div class="col-md-2">
-                <label for="WBUsers">Users:</label>
-                <select class="form-control" id="WBUsers" name="WBUsers" multiple="multiple">
-                    <!--Dynamically Content-->
-                </select>
-            </div>
+                </div>
 
-            <div class="col-md-2">
-                <button>Filter</button>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <h3>Activity Consuming</h3>
-            <div class="col-md-3">
-                <div id="chart" class="chart"></div>
-            </div>
-            <div class="col-md-6">
-                <table style="width:300px">
-                    <caption>Time Consuming: Activities</caption>
-                    <tr>
-                        <th>Activity</th>
-                        <th>Hours</th>
-                        <th>%</th>
-                    </tr>
-                    <tr>
-                        <td>Design session</td>
-                        <td>200</td>
-                        <td>1%</td>
-                    </tr>
-                    <tr>
-                        <td>Migration to the cloud</td>
-                        <td>170</td>
-                        <td>1%</td>
-                    </tr>
-                    <tr>
-                        <td>Event organization</td>
-                        <td>70</td>
-                        <td>1%</td>
-                    </tr>
-                    <tr>
-                        <td>Workshop</td>
-                        <td>50</td>
-                        <td>1%</td>
-                    </tr>
-                </table>
+                <br />
+                <br />
+                <div class="row" id="ActivityConsumingRow" hidden>
+                    <h3 style="margin-left:20px">Activity Consuming</h3>
+                    <div class="col-md-4">
+                        <div id="chart" class="chart"></div>
+                    </div>
+                    <div class="col-md-6" >
+                        <table id="ActivityConsuming" style="width:500px; margin-top:200px;" class="table-striped">
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+
 
 
 
@@ -125,94 +103,181 @@
 
 
 <script>
+    var startDate;
+    var endDate;
 
     $(function () {
-        $('#dataRange').daterangepicker(
-            {
-                locale: {
-                    format: 'DD-MM-YYYY'
-                },
-                startDate: '01-01-2015',
-                endDate: '01-01-2015',
-                maxDate: "11-08-2015"
-            }, function (start, end, label) {
-                console.log("New date range selected: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ")");
-            });
+        Initialize()
+        
+        //Initial Params:
+        startDate = '01/01/2016';
+        endDate = '06/23/2016';
+        //endDate = getToday();
+        user = "All"
 
-        //Get User Users:
+        //Get User:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
+        //Get Activity Table:
+        loadActivityConsumingTable(startDate, endDate, user)
+        //Create Activity Bubble Chart:
+        createActivityConsumingBubbleChart(600, startDate, endDate, user);
     });
+
+    function Initialize() {
+        var today = getToday();
+
+        //Components:
+        $('#dataRange').daterangepicker(
+        {
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            startDate: '01/01/2016',
+            endDate: today,
+            maxDate: today,
+        }, function (start, end, label) {
+            startDate = start.format('MM/DD/YYYY');
+            endDate = end.format('MM/DD/YYYY');
+            //startDate = start.format('DD/MM/YYYY');
+            //endDate = end.format('DD/MM/YYYY');
+        });
+
+        $('#btnFilter').click(filterData)
+    }
 
     function callbackGetUsers(data) {
         var options = [];
         var select = $('#WBUsers');
+        options.push('<option value="All">All</option>');
         for (var i = 0; i < data.length; i++) {
             var text = data[i].Name;
             var key = data[i].UniqueName;
             options.push('<option value="' + key + '">' + text + '</option>');
         }
         select.html(options.join(''));
-
-        select.multiselect({
-            buttonWidth: '100%',
-            numberDisplayed: 2,
-            nonSelectedText: 'Click to select the users'
-        });
     }
 
-    var diameter = 600,
-        format = d3.format(",d"),
-        color = d3.scale.category20c();
+    function loadActivityConsumingTable(startDate, endDate, user) {
+        $.getJSON('/report/GetActivityConsumingTableData?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user, null, callbackGetActivityConsumingTableData);
+    }
 
-    var bubble = d3.layout.pack()
-        .sort(null)
-        .size([diameter, diameter])
-        .padding(1.5);
+    function createActivityConsumingBubbleChart(diameter, startDate, endDate, user) {
+        var url = 'Report/GetActivityConsumingBubbleData?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user;
+        //var url = 'https://gist.githubusercontent.com/mbostock/1093025/raw/490fffd1ae637d3275aa9eaa8b0487147717dd40/flare.json';
 
-    var svg = d3.select("#chart").append("svg")
-        .attr("width", diameter)
-        .attr("height", diameter)
-        .attr("class", "bubble");
+        var diameter = diameter,
+            format = d3.format(",d"),
+            color = d3.scale.category20c();
 
-    //var url = 'https://gist.githubusercontent.com/mbostock/1093025/raw/490fffd1ae637d3275aa9eaa8b0487147717dd40/flare.json';
-    var url = 'Report/GetJson';
+        var bubble = d3.layout.pack()
+            .sort(null)
+            .size([diameter, diameter])
+            .padding(1.5);
 
-    d3.json(url, function (error, root) {
-        if (error) throw error;
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .attr("class", "bubble");
 
-        var node = svg.selectAll(".node")
-            .data(bubble.nodes(classes(root))
-            .filter(function (d) { return !d.children; }))
-          .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+        d3.json(url, function (error, root) {
+            if (error) throw error;
 
-        node.append("title")
-            .text(function (d) { return d.className + ": " + format(d.value); });
+            var node = svg.selectAll(".node")
+                .data(bubble.nodes(classes(root))
+                .filter(function (d) { return !d.children; }))
+              .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-        node.append("circle")
-            .attr("r", function (d) { return d.r; })
-            .style("fill", function (d) { return color(d.packageName); });
+            node.append("title")
+                .text(function (d) { return d.className + ": " + format(d.value); });
 
-        node.append("text")
-            .attr("dy", ".3em")
-            .style("text-anchor", "middle")
-            .text(function (d) { return d.className.substring(0, d.r / 3); });
-    });
+            node.append("circle")
+                .attr("r", function (d) { return d.r; })
+                .style("fill", function (d) { return color(d.packageName); });
 
-    // Returns a flattened hierarchy containing all leaf nodes under the root.
-    function classes(root) {
-        var classes = [];
+            node.append("text")
+                .attr("dy", ".3em")
+                .style("text-anchor", "middle")
+                .text(function (d) { return d.className.substring(0, d.r / 3); });
+        });
 
-        function recurse(name, node) {
-            if (node.children) node.children.forEach(function (child) { recurse(node.name, child); });
-            else classes.push({ packageName: name, className: node.name, value: node.size });
+        // Returns a flattened hierarchy containing all leaf nodes under the root.
+        function classes(root) {
+            var classes = [];
+
+            function recurse(name, node) {
+                if (node.children) node.children.forEach(function (child) { recurse(node.name, child); });
+                else classes.push({ packageName: name, className: node.name, value: node.size });
+            }
+
+            recurse(null, root);
+            return { children: classes };
         }
 
-        recurse(null, root);
-        return { children: classes };
+        d3.select(self.frameElement).style("height", diameter + "px");
     }
 
-    d3.select(self.frameElement).style("height", diameter + "px");
+    function callbackGetActivityConsumingTableData(data) {
+        var table = $("#ActivityConsuming");
 
+        var caption = $('<caption/>').text('Time Consuming: Activities');
+        table.append(caption);
+
+        var row = $("<tr/>");
+        row.append($("<th/>").text('Activity'));
+        row.append($("<th/>").text('Hours'));
+        row.append($("<th/>").text('%'));
+        table.append(row);
+
+        $.each(data, function (rowIndex, r) {
+            var row = $("<tr/>");
+            $.each(r, function (colIndex, c) {
+                var text = ''
+                switch (colIndex) {
+                    case 0:
+                        text = data[i].Activity;
+                        break;
+                    case 1:
+                        text = data[i].Hours;
+                        break;
+                    case 2:
+                        text = data[i].Percent;
+                        break;
+                }
+                row.append($("<td/>").text(c));
+            });
+            table.append(row);
+        });
+        $('#ActivityConsumingRow').fadeIn();
+    }
+
+    function filterData() {
+        $('#chart').html('');
+        $('#ActivityConsuming').html('');
+
+        user = $('#WBUsers').val();
+        //Get Activity Table:
+        loadActivityConsumingTable(startDate, endDate, user)
+        //Create Activity Bubble Chart:
+        createActivityConsumingBubbleChart(600, startDate, endDate, user);
+    }
+
+    function getToday() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        today = dd + '/' + mm + '/' + yyyy;
+        return today;
+    }
 </script>
