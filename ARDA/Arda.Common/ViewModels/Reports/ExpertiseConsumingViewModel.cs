@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Arda.Common.ViewModels.Reports
 {
-    public class CategoryConsumingViewModel
+    public class ExpertiseConsumingViewModel
     {
-        public string Category { get; set; }
+        public string Expertise { get; set; }
 
         public int Hours { get; set; }
 

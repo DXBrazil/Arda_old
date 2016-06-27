@@ -15,7 +15,7 @@ namespace Arda.Main.Controllers
     [Authorize]
     public class ReportController : Controller
     {
-        public IActionResult Index()
+        public IActionResult TimeConsuming()
         {
             return View();
         }
@@ -29,6 +29,18 @@ namespace Arda.Main.Controllers
         public async Task<JsonResult> GetActivityConsumingTableData(DateTime startDate, DateTime endDate, string user = "All")
         {
             var data = await Util.ConnectToRemoteService<IEnumerable<ActivityConsumingViewModel>>(HttpMethod.Get, Util.ReportsURL + "api/Activity/tabledata?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
+            return Json(data);
+        }
+
+        public async Task<JsonResult> GetExpertiseConsumingBubbleData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            var data = await Util.ConnectToRemoteService<D3BubbleViewModel>(HttpMethod.Get, Util.ReportsURL + "api/Expertise/bubble?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
+            return Json(data);
+        }
+
+        public async Task<JsonResult> GetExpertiseConsumingTableData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            var data = await Util.ConnectToRemoteService<IEnumerable<ExpertiseConsumingViewModel>>(HttpMethod.Get, Util.ReportsURL + "api/Expertise/tabledata?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
             return Json(data);
         }
     }

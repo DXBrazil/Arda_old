@@ -68,41 +68,41 @@ namespace Arda.Kanban.Repositories
             }
         }
 
-        public IEnumerable<CategoryConsumingViewModel> GetCategoryConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        public IEnumerable<ExpertiseConsumingViewModel> GetExpertiseConsumingData(DateTime startDate, DateTime endDate, string user = "All")
         {
             try
             {
-                List<CategoryConsumingViewModel> categories;
+                List<ExpertiseConsumingViewModel> expertises;
 
                 if (user == "All")
                 {
-                    categories = (from ap in _context.Appointments
+                    expertises = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
                                   where w.WBStartDate >= startDate && w.WBEndDate <= endDate
-                                  select new CategoryConsumingViewModel()
+                                  select new ExpertiseConsumingViewModel()
                                   {
-                                      Category = w.WBActivity.ToString(),
+                                      Expertise = w.WBExpertise.ToString(),
                                       Hours = ap.AppointmentHoursDispensed
                                   }).ToList();
                 }
                 else
                 {
-                    categories = (from ap in _context.Appointments
+                    expertises = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
                                   where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
-                                  select new CategoryConsumingViewModel()
+                                  select new ExpertiseConsumingViewModel()
                                   {
-                                      Category = w.WBActivity.ToString(),
+                                      Expertise = w.WBExpertise.ToString(),
                                       Hours = ap.AppointmentHoursDispensed
                                   }).ToList();
                 }
-                var totalHours = (Convert.ToDecimal(categories.Sum(a => a.Hours))) / 100;
+                var totalHours = (Convert.ToDecimal(expertises.Sum(a => a.Hours))) / 100;
 
-                var categoryConsuming = categories
-                     .GroupBy(c => c.Category)
-                     .Select(cc => new CategoryConsumingViewModel
+                var categoryConsuming = expertises
+                     .GroupBy(c => c.Expertise)
+                     .Select(cc => new ExpertiseConsumingViewModel
                      {
-                         Category = cc.Key,
+                         Expertise = cc.Key,
                          Hours = cc.Sum(a => a.Hours),
                          Percent = Math.Round(cc.Sum(a => a.Hours) / totalHours, 2)
                      })

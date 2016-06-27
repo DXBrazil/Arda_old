@@ -44,12 +44,12 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpGet]
-        [Route("getcategoryconsumingdata")]
-        public IEnumerable<CategoryConsumingViewModel> GetCategoryConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        [Route("getexpertiseconsumingdata")]
+        public IEnumerable<ExpertiseConsumingViewModel> GetExpertiseConsumingData(DateTime startDate, DateTime endDate, string user = "All")
         {
             try
             {
-                var categories = _repository.GetCategoryConsumingData(startDate, endDate, user);
+                var categories = _repository.GetExpertiseConsumingData(startDate, endDate, user);
 
                 if (categories != null)
                 {

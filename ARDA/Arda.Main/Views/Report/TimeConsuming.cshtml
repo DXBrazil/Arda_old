@@ -22,7 +22,7 @@
 <section class="concontainer-fluid">
 
     <div class="col-xs-12">
-        <h1>Reports</h1>
+        <h1>Time Consuming:</h1>
 
         <br />
         <div style="margin:20px">
@@ -50,56 +50,35 @@
                 <div class="row" id="ActivityConsumingRow" hidden>
                     <h3 style="margin-left:20px">Activity Consuming</h3>
                     <div class="col-md-4">
-                        <div id="chart" class="chart"></div>
+                        <div id="activityChart" class="bubbleChart"></div>
                     </div>
                     <div class="col-md-6" >
                         <table id="ActivityConsuming" style="width:500px; margin-top:200px;" class="table-striped">
                         </table>
                     </div>
                 </div>
+
+                <div class="row" id="ExpertiseConsumingRow" hidden>
+                    <h3 style="margin-left:20px">Expertise Consuming</h3>
+                    <div class="col-md-4">
+                        <div id="expertiseChart" class="bubbleChart"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <table id="ExpertiseConsuming" style="width:500px; margin-top:200px;" class="table-striped"></table>
+                    </div>
+                </div>
+
+                <div class="row" id="MetricConsumingRow" hidden>
+                    <h3 style="margin-left:20px">Metric Consuming</h3>
+                    <div class="col-md-4">
+                        <div id="metricChart" style="width: 900px; height: 500px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </section>
-
-
-
-
-
-@*<div id="series_chart_div" style="width: 900px; height: 500px;"></div>*@
-
-@*<script type="text/javascript">
-          google.charts.load('current', {'packages':['corechart']});
-          google.charts.setOnLoadCallback(drawSeriesChart);
-
-        function drawSeriesChart() {
-
-          var data = google.visualization.arrayToDataTable([
-            ['ID', 'Life Expectancy', 'Fertility Rate', 'Region',     'Population'],
-            ['CAN',    80.66,              1.67,      'North America',  33739900],
-            ['DEU',    79.84,              1.36,      'Europe',         81902307],
-            ['DNK',    78.6,               1.84,      'Europe',         5523095],
-            ['EGY',    72.73,              2.78,      'Middle East',    79716203],
-            ['GBR',    80.05,              2,         'Europe',         61801570],
-            ['IRN',    72.49,              1.7,       'Middle East',    73137148],
-            ['IRQ',    68.09,              4.77,      'Middle East',    31090763],
-            ['ISR',    81.55,              2.96,      'Middle East',    7485600],
-            ['RUS',    68.6,               1.54,      'Europe',         141850000],
-            ['USA',    78.09,              2.05,      'North America',  307007000]
-          ]);
-
-          var options = {
-            title: 'Correlation between life expectancy, fertility rate ' +
-                   'and population of some world countries (2010)',
-            hAxis: { title: 'Region' },
-            vAxis: {title: 'Fertility Rate'},
-            bubble: {textStyle: {fontSize: 11}}
-          };
-
-          var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
-          chart.draw(data, options);
-        }
-    </script>*@
 
 
 <script>
@@ -111,16 +90,15 @@
         
         //Initial Params:
         startDate = '01/01/2016';
-        endDate = '06/23/2016';
+        endDate = '06/27/2016';
         //endDate = getToday();
         user = "All"
 
         //Get User:
         $.getJSON('/users/GetUsers', null, callbackGetUsers);
-        //Get Activity Table:
-        loadActivityConsumingTable(startDate, endDate, user)
-        //Create Activity Bubble Chart:
-        createActivityConsumingBubbleChart(600, startDate, endDate, user);
+
+        //Load all charts and tables:
+        loadData(user);
     });
 
     function Initialize() {
@@ -157,13 +135,47 @@
         select.html(options.join(''));
     }
 
-    function loadActivityConsumingTable(startDate, endDate, user) {
-        $.getJSON('/report/GetActivityConsumingTableData?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user, null, callbackGetActivityConsumingTableData);
+    function loadData(user) {
+        //Get Activity Table:
+        loadTimeConsumingDataTable('/Report/GetActivityConsumingTableData', startDate, endDate, user, callbackGetActivityConsumingTableData, '#ActivityConsuming');
+        //Create Activity Bubble Chart:
+        createTimeConsumingBubbleChart(600, 'GetActivityConsumingBubbleData', startDate, endDate, user, '#activityChart');
+
+        //Get Expertise Table:
+        loadTimeConsumingDataTable('/Report/GetExpertiseConsumingTableData', startDate, endDate, user, callbackGetExpertiseConsumingTableData, '#ExpertiseConsuming');
+        //Create Expertise Bubble Chart:
+        createTimeConsumingBubbleChart(600, 'GetExpertiseConsumingBubbleData', startDate, endDate, user, '#expertiseChart');
+
+        //Create Metric Pie Chart:
+        loadTimeConsumingData('/Report/GetMetricConsumingTableData', startDate, endDate, user, createTimeConsumingPieChart, '#metricChart', 'Time Consuming: Metrics')
     }
 
-    function createActivityConsumingBubbleChart(diameter, startDate, endDate, user) {
-        var url = 'Report/GetActivityConsumingBubbleData?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user;
-        //var url = 'https://gist.githubusercontent.com/mbostock/1093025/raw/490fffd1ae637d3275aa9eaa8b0487147717dd40/flare.json';
+
+    function loadTimeConsumingDataTable(url, startDate, endDate, user, callback, selector, title) {
+        url = url + '?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                callback(data, tableSelector)
+            }
+        });
+    }
+
+    function loadTimeConsumingData(url, startDate, endDate, user, callback, selector, title) {
+        url = url + '?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                callback(data, selector, title)
+            }
+        });
+    }
+
+
+    function createTimeConsumingBubbleChart(diameter, url, startDate, endDate, user, chartSelector) {
+        var url = url + '?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user;
 
         var diameter = diameter,
             format = d3.format(",d"),
@@ -174,7 +186,7 @@
             .size([diameter, diameter])
             .padding(1.5);
 
-        var svg = d3.select("#chart").append("svg")
+        var svg = d3.select(chartSelector).append("svg")
             .attr("width", diameter)
             .attr("height", diameter)
             .attr("class", "bubble");
@@ -218,8 +230,26 @@
         d3.select(self.frameElement).style("height", diameter + "px");
     }
 
-    function callbackGetActivityConsumingTableData(data) {
-        var table = $("#ActivityConsuming");
+    function createTimeConsumingPieChart(data, chartSelector, title) {
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable(data);
+
+            var options = {
+                title: title
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById(chartSelector));
+
+            chart.draw(data, options);
+        }
+    }
+
+
+    function callbackGetActivityConsumingTableData(data, tableSelector) {
+        var table = $(tableSelector);
 
         var caption = $('<caption/>').text('Time Consuming: Activities');
         table.append(caption);
@@ -252,15 +282,48 @@
         $('#ActivityConsumingRow').fadeIn();
     }
 
+    function callbackGetExpertiseConsumingTableData(data, tableSelector) {
+        var table = $(tableSelector);
+
+        var caption = $('<caption/>').text('Time Consuming: Expertises');
+        table.append(caption);
+
+        var row = $("<tr/>");
+        row.append($("<th/>").text('Expertise'));
+        row.append($("<th/>").text('Hours'));
+        row.append($("<th/>").text('%'));
+        table.append(row);
+
+        $.each(data, function (rowIndex, r) {
+            var row = $("<tr/>");
+            $.each(r, function (colIndex, c) {
+                var text = ''
+                switch (colIndex) {
+                    case 0:
+                        text = data[i].Expertise;
+                        break;
+                    case 1:
+                        text = data[i].Hours;
+                        break;
+                    case 2:
+                        text = data[i].Percent;
+                        break;
+                }
+                row.append($("<td/>").text(c));
+            });
+            table.append(row);
+        });
+        $('#ExpertiseConsumingRow').fadeIn();
+    }
+
+
     function filterData() {
-        $('#chart').html('');
-        $('#ActivityConsuming').html('');
+        $('.bubbleChart').html('');
+        $('table').html('');
 
         user = $('#WBUsers').val();
-        //Get Activity Table:
-        loadActivityConsumingTable(startDate, endDate, user)
-        //Create Activity Bubble Chart:
-        createActivityConsumingBubbleChart(600, startDate, endDate, user);
+
+        loadData(user);
     }
 
     function getToday() {
@@ -280,4 +343,5 @@
         today = dd + '/' + mm + '/' + yyyy;
         return today;
     }
+
 </script>
