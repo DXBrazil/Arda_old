@@ -42,5 +42,28 @@ namespace Arda.Kanban.Controllers
                 return null;
             }
         }
+
+        [HttpGet]
+        [Route("getcategoryconsumingdata")]
+        public IEnumerable<CategoryConsumingViewModel> GetCategoryConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            try
+            {
+                var categories = _repository.GetCategoryConsumingData(startDate, endDate, user);
+
+                if (categories != null)
+                {
+                    return categories;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

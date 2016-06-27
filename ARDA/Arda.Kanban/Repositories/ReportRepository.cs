@@ -67,5 +67,54 @@ namespace Arda.Kanban.Repositories
                 throw ex;
             }
         }
+
+        public IEnumerable<CategoryConsumingViewModel> GetCategoryConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            try
+            {
+                List<CategoryConsumingViewModel> categories;
+
+                if (user == "All")
+                {
+                    categories = (from ap in _context.Appointments
+                                  join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate
+                                  select new CategoryConsumingViewModel()
+                                  {
+                                      Category = w.WBActivity.ToString(),
+                                      Hours = ap.AppointmentHoursDispensed
+                                  }).ToList();
+                }
+                else
+                {
+                    categories = (from ap in _context.Appointments
+                                  join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
+                                  select new CategoryConsumingViewModel()
+                                  {
+                                      Category = w.WBActivity.ToString(),
+                                      Hours = ap.AppointmentHoursDispensed
+                                  }).ToList();
+                }
+                var totalHours = (Convert.ToDecimal(categories.Sum(a => a.Hours))) / 100;
+
+                var categoryConsuming = categories
+                     .GroupBy(c => c.Category)
+                     .Select(cc => new CategoryConsumingViewModel
+                     {
+                         Category = cc.Key,
+                         Hours = cc.Sum(a => a.Hours),
+                         Percent = Math.Round(cc.Sum(a => a.Hours) / totalHours, 2)
+                     })
+                     .OrderByDescending(ac => ac.Hours)
+                     .ToList();
+
+                return categoryConsuming;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
