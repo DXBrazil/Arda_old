@@ -43,5 +43,11 @@ namespace Arda.Main.Controllers
             var data = await Util.ConnectToRemoteService<IEnumerable<ExpertiseConsumingViewModel>>(HttpMethod.Get, Util.ReportsURL + "api/Expertise/tabledata?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
             return Json(data);
         }
+
+        public async Task<JsonResult> GetMetricConsumingTableData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            var data = await Util.ConnectToRemoteService<IEnumerable<MetricConsumingViewModel>>(HttpMethod.Get, Util.ReportsURL + "api/Metric/tabledata?startDate=" + startDate + "&endDate=" + endDate + "&user=" + user, "", "");
+            return Json(data);
+        }
     }
 }

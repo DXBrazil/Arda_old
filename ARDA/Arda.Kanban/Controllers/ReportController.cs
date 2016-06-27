@@ -49,11 +49,34 @@ namespace Arda.Kanban.Controllers
         {
             try
             {
-                var categories = _repository.GetExpertiseConsumingData(startDate, endDate, user);
+                var expertises = _repository.GetExpertiseConsumingData(startDate, endDate, user);
 
-                if (categories != null)
+                if (expertises != null)
                 {
-                    return categories;
+                    return expertises;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [Route("getmetricconsumingdata")]
+        public IEnumerable<MetricConsumingViewModel> GetMetricConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            try
+            {
+                var metrics = _repository.GetMetricConsumingData(startDate, endDate, user);
+
+                if (metrics != null)
+                {
+                    return metrics;
                 }
                 else
                 {

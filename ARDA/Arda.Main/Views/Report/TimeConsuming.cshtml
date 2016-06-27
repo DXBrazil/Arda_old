@@ -70,8 +70,8 @@
 
                 <div class="row" id="MetricConsumingRow" hidden>
                     <h3 style="margin-left:20px">Metric Consuming</h3>
-                    <div class="col-md-4">
-                        <div id="metricChart" style="width: 900px; height: 500px;"></div>
+                    <div class="col-md-6">
+                        <div id="metricChart" style="width: 1200px; height: 800px;"></div>
                     </div>
                 </div>
             </div>
@@ -102,6 +102,8 @@
     });
 
     function Initialize() {
+        google.charts.load('current', { 'packages': ['corechart'] });
+
         var today = getToday();
 
         //Components:
@@ -120,7 +122,7 @@
             //endDate = end.format('DD/MM/YYYY');
         });
 
-        $('#btnFilter').click(filterData)
+        $('#btnFilter').click(filterData);
     }
 
     function callbackGetUsers(data) {
@@ -147,17 +149,17 @@
         createTimeConsumingBubbleChart(600, 'GetExpertiseConsumingBubbleData', startDate, endDate, user, '#expertiseChart');
 
         //Create Metric Pie Chart:
-        loadTimeConsumingData('/Report/GetMetricConsumingTableData', startDate, endDate, user, createTimeConsumingPieChart, '#metricChart', 'Time Consuming: Metrics')
+        loadTimeConsumingData('/Report/GetMetricConsumingTableData', startDate, endDate, user, createTimeConsumingPieChart, 'metricChart', 'Time Consuming: Metrics')
     }
 
 
-    function loadTimeConsumingDataTable(url, startDate, endDate, user, callback, selector, title) {
+    function loadTimeConsumingDataTable(url, startDate, endDate, user, callback, tableSelector) {
         url = url + '?startDate=' + startDate + '&endDate=' + endDate + '&user=' + user;
         $.ajax({
             url: url,
             type: "GET",
             success: function (data) {
-                callback(data, tableSelector)
+                callback(data, tableSelector);
             }
         });
     }
@@ -231,11 +233,23 @@
     }
 
     function createTimeConsumingPieChart(data, chartSelector, title) {
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
+        google.charts.setOnLoadCallback(drawChart(data));
 
-            var data = google.visualization.arrayToDataTable(data);
+        function drawChart(data) {
+            var dataTable = new google.visualization.DataTable();
+
+            // Declare columns
+            dataTable.addColumn('string', 'Metric');
+            dataTable.addColumn('number', 'Hours');
+
+            var rows = [];
+            for (var i = 0; i < data.length; i++) {
+                var row = [];
+                row[0] = data[i].Metric;
+                row[1] = data[i].Hours;
+                rows.push(row);
+            }
+            dataTable.addRows(rows);
 
             var options = {
                 title: title
@@ -243,7 +257,9 @@
 
             var chart = new google.visualization.PieChart(document.getElementById(chartSelector));
 
-            chart.draw(data, options);
+
+            $('#MetricConsumingRow').fadeIn();
+            chart.draw(dataTable, options);
         }
     }
 

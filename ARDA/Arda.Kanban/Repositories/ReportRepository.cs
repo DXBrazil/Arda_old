@@ -116,5 +116,58 @@ namespace Arda.Kanban.Repositories
                 throw ex;
             }
         }
+
+        public IEnumerable<MetricConsumingViewModel> GetMetricConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            try
+            {
+                List<MetricConsumingViewModel> metrics;
+
+                if (user == "All")
+                {
+                    metrics = (from ap in _context.Appointments
+                             join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                             join wbm in _context.WorkloadBacklogMetrics on w.WBID equals wbm.WorkloadBacklog.WBID
+                             join m in _context.Metrics on wbm.Metric.MetricID equals m.MetricID
+                             where w.WBStartDate >= startDate && w.WBEndDate <= endDate
+                             select new MetricConsumingViewModel {
+                                 Metric = m.MetricName,
+                                 Hours = ap.AppointmentHoursDispensed
+                             }).ToList();
+                }
+                else
+                {
+                    metrics = (from ap in _context.Appointments
+                               join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                               join wbm in _context.WorkloadBacklogMetrics on w.WBID equals wbm.WorkloadBacklog.WBID
+                               join m in _context.Metrics on wbm.Metric.MetricID equals m.MetricID
+                               where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
+                               select new MetricConsumingViewModel
+                               {
+                                   Metric = m.MetricName,
+                                   Hours = ap.AppointmentHoursDispensed
+                               }).ToList();
+
+                }
+                var totalHours = (Convert.ToDecimal(metrics.Sum(a => a.Hours))) / 100;
+
+                var metricConsuming = metrics
+                     .GroupBy(m => m.Metric)
+                     .Select(ac => new MetricConsumingViewModel
+                     {
+                         Metric = ac.Key,
+                         Hours = ac.Sum(a => a.Hours),
+                         //Percent = Math.Round(ac.Sum(a => a.Hours) / totalHours, 2)
+                     })
+                     .OrderByDescending(ac => ac.Hours)
+                     .ToList();
+
+                return metricConsuming;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
