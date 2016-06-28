@@ -18124,3 +18124,22 @@ max-width: 135px !important;
             #MetricDescription {
         resize: none;
     }
+
+    .multiselect {
+        text-align: left;
+    }
+
+    .multiselect-selected-text {
+        margin-left: 5px;
+    }
+
+    .multiselect-container.dropdown-menu {
+        background-color: white;
+        color: #555;
+    }
+
+    .multiselect.dropdown-toggle.btn.btn-default {
+        background-color: white;
+        color: #555;
+        outline: 1px solid #ccc;
+    }
