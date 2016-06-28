@@ -239,12 +239,25 @@ function moveTask(id, state) {
     update(task);
 }
 
-function createTask(id, name, state) {
+function createTask(id, name, state, users) {
     var task_state = '.state' + state;
-    createTaskInFolder(id, name, task_state);
+    createTaskInFolder(id, name, task_state, users);
 }
 
-function createTaskInFolder(taskId, taskName, folderSelector) {
+function getUserImageTask(user) {
+    var url = '/users/GetUserPhoto?=' + user;
+    $.ajax({
+        url: url,
+        type: "GET",
+        cache: true,
+        success: function (data) {
+            img = document.createElement('img').src = data;
+            document.getElementById('folder-user-photo').appendChild(img);
+        }
+    });
+}
+
+function createTaskInFolder(taskId, taskName, folderSelector, users) {
     var content = document.querySelector('#templateTask').content;
     var clone = document.importNode(content, true);
     var folder = document.querySelector(folderSelector);
@@ -252,13 +265,19 @@ function createTaskInFolder(taskId, taskName, folderSelector) {
     clone.querySelector('.task').id = taskId;
     clone.querySelector('.templateDone').id = 'iptTask' + taskId;
     clone.querySelector('.folder-check-status').setAttribute('for', 'iptTask' + taskId);
-
+    
     clone.querySelector('.task .templateText').textContent = taskName;
+
+    $.each(users, function (index, value) {
+        getUserImageTask(value.Item1);
+    });
 
     clone.querySelector('.task').addEventListener('dragstart', dragstart);
 
     clone.querySelector('.templateEdit').addEventListener('click', function () { taskedit(taskId) });
     clone.querySelector('.templateDone').addEventListener('change', function () { taskdone(taskId) });
+    
+    //GetImage(userID); folder-user-photo
 
     folder.appendChild(clone, true);
 }
@@ -340,7 +359,7 @@ function loadTaskList(filter_type, filter_user) {
 
     gettasklist(function (tasklist) {
         tasklist.map(function (task) {
-            createTask(task.data, task.value, task.status);
+            createTask(task.data, task.value, task.status, task.users);
         });
     },
         filter_type,
@@ -791,7 +810,7 @@ function addWorkload(e) {
                         $('#WBID').attr('value', data);
                     });
                     // add a task (workload.js)
-                    createTask(workload.id, workload.name, workload.state);
+                    createTask(workload.id, workload.name, workload.state, workload.users);
                 } else {
                     $('#msg').text('Error!');
                 }

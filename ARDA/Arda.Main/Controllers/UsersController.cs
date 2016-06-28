@@ -25,7 +25,6 @@ namespace Arda.Main.Controllers
     {
 
         private static IDistributedCache _cache;
-        private int buttons;
 
         public UsersController(IDistributedCache cache)
         {

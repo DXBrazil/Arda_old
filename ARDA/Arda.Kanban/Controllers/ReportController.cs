@@ -42,5 +42,51 @@ namespace Arda.Kanban.Controllers
                 return null;
             }
         }
+
+        [HttpGet]
+        [Route("getexpertiseconsumingdata")]
+        public IEnumerable<ExpertiseConsumingViewModel> GetExpertiseConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            try
+            {
+                var expertises = _repository.GetExpertiseConsumingData(startDate, endDate, user);
+
+                if (expertises != null)
+                {
+                    return expertises;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
+        [Route("getmetricconsumingdata")]
+        public IEnumerable<MetricConsumingViewModel> GetMetricConsumingData(DateTime startDate, DateTime endDate, string user = "All")
+        {
+            try
+            {
+                var metrics = _repository.GetMetricConsumingData(startDate, endDate, user);
+
+                if (metrics != null)
+                {
+                    return metrics;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

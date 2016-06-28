@@ -1515,12 +1515,7 @@ pre code {
 table {
     background-color: transparent;
 }
-caption {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    color: #777;
-    text-align: left;
-}
+
 th {
     text-align: left;
 }
@@ -17968,8 +17963,10 @@ welcome-picture {
     display: table;
     width: 100%;
 }
-.folder-user-photo {
+.folder-user-photo img {
     border-radius: 50%;
+    width: 80px;
+    height: 80px;
     float: left;
     margin-right: 15px;
     width: 50px;
@@ -18142,4 +18139,25 @@ max-width: 135px !important;
         background-color: white;
         color: #555;
         outline: 1px solid #ccc;
+    }
+
+    #ActivityConsuming,
+    #ExpertiseConsuming {
+        width: 90%;
+    }
+
+    #ActivityConsuming caption,
+    #ExpertiseConsuming caption {
+        line-height: 35px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .table-striped > tbody > tr {
+        line-height: 35px;
+    }
+
+    .table-striped > tbody > tr > td,
+    .table-striped > tbody > tr > th {
+        padding: 0 10px;
     }
