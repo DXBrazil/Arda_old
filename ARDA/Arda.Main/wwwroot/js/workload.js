@@ -130,13 +130,13 @@ function Initialize() {
     $("#WBIsWorkload").bootstrapSwitch();
 
     $('#WBStartDate').datepicker({
-        format: "dd/mm/yyyy",
+        format: "mm/dd/yyyy",
         autoclose: true,
         todayHighlight: true
     });
 
     $('#WBEndDate').datepicker({
-        format: "dd/mm/yyyy",
+        format: "mm/dd/yyyy",
         autoclose: true,
         todayHighlight: true
     });

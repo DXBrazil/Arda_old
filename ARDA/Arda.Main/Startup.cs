@@ -42,6 +42,8 @@ namespace Arda.Main
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
             
@@ -89,6 +91,8 @@ namespace Arda.Main
             ConfigureAuth(app);
             //// Configure Security on Main:
             //app.UseMiddleware<SecurityMainMiddleware>();
+
+            app.UseCors("AllowAll");
 
             app.UseMvc(routes =>
             {
