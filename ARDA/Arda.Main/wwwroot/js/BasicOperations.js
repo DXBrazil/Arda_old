@@ -805,7 +805,7 @@ function UpdateCKEditor()
 function LoadDatePicker()
 {
     $('#_AppointmentDate').datepicker({
-        format: "dd/mm/yyyy",
+        format: "mm/dd/yyyy",
         autoclose: true,
         todayHighlight: true
     });

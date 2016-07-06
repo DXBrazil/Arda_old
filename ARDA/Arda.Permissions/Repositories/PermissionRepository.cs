@@ -377,7 +377,7 @@ namespace Arda.Permissions.Repositories
                     UniqueName = user.UniqueName,
                     Name = user.Name
                 };
-                var res = Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/user/add", "kanban", "kanban",  kanbanUser).Result;
+                var res = Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/user/add", "kanban", "kanban", kanbanUser).Result;
 
                 if (res.IsSuccessStatusCode)
                 {
