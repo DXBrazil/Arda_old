@@ -28,6 +28,15 @@ namespace Arda.Kanban.Repositories
                     activities = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
                                   join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
+                                  select new ActivityConsumingViewModel()
+                                  {
+                                      Activity = a.ActivityName,
+                                      Hours = ap.AppointmentHoursDispensed
+                                  }).ToList();
+
+                    activities = (from ap in _context.Appointments
+                                  join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                                  join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
                                   where w.WBStartDate >= startDate && w.WBEndDate <= endDate
                                   select new ActivityConsumingViewModel()
                                   {
