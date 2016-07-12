@@ -240,19 +240,20 @@ function moveTask(id, state) {
 }
 
 function createTask(id, name, state, users) {
+    console.log(users);
     var task_state = '.state' + state;
     createTaskInFolder(id, name, task_state, users);
 }
 
-function getUserImageTask(user) {
+function getUserImageTask(user, taskId) {
     var url = '/users/GetUserPhoto?=' + user;
     $.ajax({
         url: url,
         type: "GET",
         cache: true,
         success: function (data) {
-            img = document.createElement('img').src = data;
-            document.getElementById('folder-user-photo').appendChild(img);
+            img = $('<img class="user">').attr('src', data);
+            $('#' + taskId + ' .folder-tasks .folder-footer').append(img);
         }
     });
 }
@@ -269,15 +270,13 @@ function createTaskInFolder(taskId, taskName, folderSelector, users) {
     clone.querySelector('.task .templateText').textContent = taskName;
 
     $.each(users, function (index, value) {
-        getUserImageTask(value.Item1);
+        getUserImageTask(value.Item1, taskId);
     });
 
     clone.querySelector('.task').addEventListener('dragstart', dragstart);
 
     clone.querySelector('.templateEdit').addEventListener('click', function () { taskedit(taskId) });
     clone.querySelector('.templateDone').addEventListener('change', function () { taskdone(taskId) });
-    
-    //GetImage(userID); folder-user-photo
 
     folder.appendChild(clone, true);
 }
@@ -788,9 +787,10 @@ function addWorkload(e) {
     var value = $('#WBIsWorkload').bootstrapSwitch('state');
     //Serializes form and append bootstrap-switch value:
     var data = new FormData(this);
-    data.append('WBIsWorkload', value)
+    data.append('WBIsWorkload', value);
 
-    var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0 };
+    var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0, users: []};
+    console.log(workload);
 
     validateForm(e, data, function (e, data) {
         DisableWorkloadFields();
@@ -810,6 +810,7 @@ function addWorkload(e) {
                         $('#WBID').attr('value', data);
                     });
                     // add a task (workload.js)
+
                     createTask(workload.id, workload.name, workload.state, workload.users);
                 } else {
                     $('#msg').text('Error!');
@@ -862,6 +863,7 @@ function deleteWorkload() {
         type: 'DELETE',
         success: function (response) {
             if (response.IsSuccessStatusCode) {
+                $('#' + workloadID).remove();
                 $('#WorkloadModal').modal('hide');
             } else {
                 $('#msg').text('Error!');
