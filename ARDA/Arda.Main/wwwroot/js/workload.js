@@ -240,7 +240,6 @@ function moveTask(id, state) {
 }
 
 function createTask(id, name, state, users) {
-    console.log(users);
     var task_state = '.state' + state;
     createTaskInFolder(id, name, task_state, users);
 }
@@ -789,8 +788,15 @@ function addWorkload(e) {
     var data = new FormData(this);
     data.append('WBIsWorkload', value);
 
-    var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0, users: []};
-    console.log(workload);
+    var selectedUsers = $('#WBUsers option:selected');
+    var users = [];
+    for (var i = 0; i < selectedUsers.length; i++) {
+        var item = $(selectedUsers[i]);
+        var user = { Item1: item.val(), Item2: item.text() };
+        users.push(user);
+    }
+
+    var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0, users: users};
 
     validateForm(e, data, function (e, data) {
         DisableWorkloadFields();
@@ -810,7 +816,6 @@ function addWorkload(e) {
                         $('#WBID').attr('value', data);
                     });
                     // add a task (workload.js)
-
                     createTask(workload.id, workload.name, workload.state, workload.users);
                 } else {
                     $('#msg').text('Error!');
