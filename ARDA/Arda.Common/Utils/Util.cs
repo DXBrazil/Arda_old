@@ -45,18 +45,35 @@ namespace Arda.Common.Utils
             });
         }
 
-
         public static string GetUserPhoto(string user)
         {
+            var key = "photo_" + user;
             try
             {
-                var key = "photo_" + user;
+                //Try from Cache:
                 var photo = Util.GetString(_cache.Get(key));
                 return photo;
             }
             catch (Exception)
             {
-                return string.Empty;
+                //Try from DB:
+                try
+                {
+                    // Getting the response of remote service
+                    var response = ConnectToRemoteService(HttpMethod.Put, PermissionsURL + "api/permission/saveuserphotooncache?=" + user, user, "").Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var photo = Util.GetString(_cache.Get(key));
+                        return photo;
+                    }else
+                    {
+                        return string.Empty;
+                    }
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
             }
         }
 

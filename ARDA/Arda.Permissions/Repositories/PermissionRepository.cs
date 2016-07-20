@@ -592,5 +592,29 @@ namespace Arda.Permissions.Repositories
             }
         }
 
+        public bool SaveUserPhotoOnCache(string uniqueName)
+        {
+            try
+            {
+                var user = _context.Users.First(u => u.UniqueName == uniqueName);
+
+                if (user != null)
+                {
+                    //Get photo from database:
+                    var photo = user.PhotoBase64;
+                    //Cache it:
+                    CacheUserPhoto(uniqueName, photo);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

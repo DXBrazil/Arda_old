@@ -186,6 +186,34 @@ namespace Arda.Permissions.Controllers
         }
 
         [HttpPut]
+        [Route("saveuserphotooncache")]
+        public HttpResponseMessage SaveUserPhotoOnCache(string uniqueName)
+        {
+            try
+            {
+                if (uniqueName != null)
+                {
+                    if (_permission.SaveUserPhotoOnCache(uniqueName))
+                    {
+                        return new HttpResponseMessage(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    }
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
         [Route("updateuser")]
         public HttpResponseMessage UpdateUser(string uniqueName)
         {

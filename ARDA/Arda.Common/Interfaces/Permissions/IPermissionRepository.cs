@@ -55,5 +55,7 @@ namespace Arda.Common.Interfaces.Permissions
         UserMainViewModel GetUser(string uniqueName);
 
         void CacheUserPhoto(string uniqueName, string PhotoBase64);
+
+        bool SaveUserPhotoOnCache(string uniqueName);
     }
 }
