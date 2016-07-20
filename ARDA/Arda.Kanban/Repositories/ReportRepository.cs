@@ -28,16 +28,7 @@ namespace Arda.Kanban.Repositories
                     activities = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
                                   join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
-                                  select new ActivityConsumingViewModel()
-                                  {
-                                      Activity = a.ActivityName,
-                                      Hours = ap.AppointmentHoursDispensed
-                                  }).ToList();
-
-                    activities = (from ap in _context.Appointments
-                                  join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
-                                  join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
-                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate
+                                  where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate
                                   select new ActivityConsumingViewModel()
                                   {
                                       Activity = a.ActivityName,
@@ -49,7 +40,7 @@ namespace Arda.Kanban.Repositories
                     activities = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
                                   join a in _context.Activities on w.WBActivity.ActivityID equals a.ActivityID
-                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
+                                  where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate && ap.AppointmentUser.UniqueName == user
                                   select new ActivityConsumingViewModel()
                                   {
                                       Activity = a.ActivityName,
@@ -135,14 +126,15 @@ namespace Arda.Kanban.Repositories
                 if (user == "All")
                 {
                     metrics = (from ap in _context.Appointments
-                             join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
-                             join wbm in _context.WorkloadBacklogMetrics on w.WBID equals wbm.WorkloadBacklog.WBID
-                             join m in _context.Metrics on wbm.Metric.MetricID equals m.MetricID
-                             where w.WBStartDate >= startDate && w.WBEndDate <= endDate
-                             select new MetricConsumingViewModel {
-                                 Metric = m.MetricName,
-                                 Hours = ap.AppointmentHoursDispensed
-                             }).ToList();
+                               join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
+                               join wbm in _context.WorkloadBacklogMetrics on w.WBID equals wbm.WorkloadBacklog.WBID
+                               join m in _context.Metrics on wbm.Metric.MetricID equals m.MetricID
+                               where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate
+                               select new MetricConsumingViewModel
+                               {
+                                   Metric = m.MetricName,
+                                   Hours = ap.AppointmentHoursDispensed
+                               }).ToList();
                 }
                 else
                 {
@@ -150,7 +142,7 @@ namespace Arda.Kanban.Repositories
                                join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
                                join wbm in _context.WorkloadBacklogMetrics on w.WBID equals wbm.WorkloadBacklog.WBID
                                join m in _context.Metrics on wbm.Metric.MetricID equals m.MetricID
-                               where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
+                               where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate && ap.AppointmentUser.UniqueName == user
                                select new MetricConsumingViewModel
                                {
                                    Metric = m.MetricName,
