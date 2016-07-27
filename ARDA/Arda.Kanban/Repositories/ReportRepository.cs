@@ -78,7 +78,7 @@ namespace Arda.Kanban.Repositories
                 {
                     expertises = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
-                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate
+                                  where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate
                                   select new ExpertiseConsumingViewModel()
                                   {
                                       Expertise = w.WBExpertise.ToString(),
@@ -89,7 +89,7 @@ namespace Arda.Kanban.Repositories
                 {
                     expertises = (from ap in _context.Appointments
                                   join w in _context.WorkloadBacklogs on ap.AppointmentWorkload.WBID equals w.WBID
-                                  where w.WBStartDate >= startDate && w.WBEndDate <= endDate && ap.AppointmentUser.UniqueName == user
+                                  where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate && ap.AppointmentUser.UniqueName == user
                                   select new ExpertiseConsumingViewModel()
                                   {
                                       Expertise = w.WBExpertise.ToString(),

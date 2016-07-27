@@ -81,7 +81,7 @@
         $('#dataRange').daterangepicker(
         {
             locale: {
-                format: 'DD/MM/YYYY'
+                format: 'MM/DD/YYYY'
             },
             startDate: '01/01/2016',
             endDate: today,
@@ -330,7 +330,7 @@
             mm = '0' + mm
         }
 
-        today = dd + '/' + mm + '/' + yyyy;
+        today = mm + '/' + dd + '/' + yyyy;
         return today;
     }
 
