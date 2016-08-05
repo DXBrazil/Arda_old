@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Arda.Common.ViewModels.Reports;
 using Arda.Kanban.Models;
+using Arda.Common.Models.Kanban;
+using Arda.Common.Utils;
 
 namespace Arda.Kanban.Repositories
 {
@@ -81,7 +83,7 @@ namespace Arda.Kanban.Repositories
                                   where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate
                                   select new ExpertiseConsumingViewModel()
                                   {
-                                      Expertise = w.WBExpertise.ToString(),
+                                      Expertise = Extensions.EnumHelper<Expertise>.GetDisplayValue(w.WBExpertise),
                                       Hours = ap.AppointmentHoursDispensed
                                   }).ToList();
                 }
@@ -92,7 +94,7 @@ namespace Arda.Kanban.Repositories
                                   where ap.AppointmentDate >= startDate && ap.AppointmentDate <= endDate && ap.AppointmentUser.UniqueName == user
                                   select new ExpertiseConsumingViewModel()
                                   {
-                                      Expertise = w.WBExpertise.ToString(),
+                                      Expertise = Extensions.EnumHelper<Expertise>.GetDisplayValue(w.WBExpertise),
                                       Hours = ap.AppointmentHoursDispensed
                                   }).ToList();
                 }
@@ -170,5 +172,6 @@ namespace Arda.Kanban.Repositories
                 throw ex;
             }
         }
+
     }
 }

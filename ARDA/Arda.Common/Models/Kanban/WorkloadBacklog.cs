@@ -70,9 +70,14 @@ namespace Arda.Common.Models.Kanban
 
     public enum Expertise
     {
-        Dev,
-        Infra,
-        DevOps
+        Management,
+        Project,
+        [Display(Name = "Program Management")]
+        ProgramManagement,
+        Architecture,
+        Coding,
+        [Display(Name = "Building Infra")]
+        BuildingInfra
     }
 
     public enum Complexity
