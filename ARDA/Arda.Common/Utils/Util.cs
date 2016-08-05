@@ -17,16 +17,16 @@ namespace Arda.Common.Utils
     public static class Util
     {
         // Local environment
-        public static readonly string KanbanURL = "http://localhost:2768/";
-        public static readonly string MainURL = "https://localhost:44304/";
-        public static readonly string ReportsURL = "http://localhost:2891/";
-        public static readonly string PermissionsURL = "http://localhost:2884/";
+        //public static readonly string KanbanURL = "http://localhost:2768/";
+        //public static readonly string MainURL = "https://localhost:44304/";
+        //public static readonly string ReportsURL = "http://localhost:2891/";
+        //public static readonly string PermissionsURL = "http://localhost:2884/";
 
         // Production environment
-        //public static readonly string KanbanURL = "http://kanban-service.azurewebsites.net/";
-        //public static readonly string MainURL = "https://ardaapp.azurewebsites.net/";
-        //public static readonly string ReportsURL = "http://reports-service.azurewebsites.net/";
-        //public static readonly string PermissionsURL = "http://permissions-service.azurewebsites.net/";
+        public static readonly string KanbanURL = "http://kanban-service.azurewebsites.net/";
+        public static readonly string MainURL = "https://ardaapp.azurewebsites.net/";
+        public static readonly string ReportsURL = "http://reports-service.azurewebsites.net/";
+        public static readonly string PermissionsURL = "http://permissions-service.azurewebsites.net/";
 
         private static IDistributedCache _cache;
 
