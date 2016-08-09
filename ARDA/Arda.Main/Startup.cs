@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
 using System.Net.Http;
@@ -48,7 +48,7 @@ namespace Arda.Main
             services.AddApplicationInsightsTelemetry(Configuration);
             
             //Add Session Middleware
-            services.AddCaching();
+            services.AddMemoryCache();
             services.AddSession();
 
             services.AddMvc();
@@ -71,15 +71,12 @@ namespace Arda.Main
 
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseIISPlatformHandler();
 
             app.UseApplicationInsightsExceptionTelemetry();
 
@@ -103,8 +100,5 @@ namespace Arda.Main
 
 
         }
-
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

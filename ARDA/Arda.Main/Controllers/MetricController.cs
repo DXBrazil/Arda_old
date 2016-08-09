@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Arda.Main.Infra;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.AspNet.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Arda.Common.JSON;
 using Arda.Common.Utils;

@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Arda.Common.Utils;
 using Arda.Main.Utils;
@@ -32,25 +32,25 @@ namespace Arda.Main
             GraphResourceId = Configuration["Authentication:AzureAd:GraphResourceId"];
             PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];
 
-            app.UseCookieAuthentication(options =>
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
-                options.AutomaticAuthenticate = true;
+                AutomaticAuthenticate = true
             });
 
-            app.UseOpenIdConnectAuthentication(options =>
+            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions()
             {
-                options.AutomaticChallenge = true;
-                options.CallbackPath = new PathString(CallbackPath);
-                options.ClientId = ClientId;
-                options.Authority = Authority;
-                options.PostLogoutRedirectUri = PostLogoutRedirectUri;
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                AutomaticChallenge = true,
+                CallbackPath = new PathString(CallbackPath),
+                ClientId = ClientId,
+                Authority = Authority,
+                PostLogoutRedirectUri = PostLogoutRedirectUri,
+                SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme,
 
-                options.Events = new OpenIdConnectEvents()
+                Events = new OpenIdConnectEvents()
                 {
                     OnAuthenticationFailed = OnAuthenticationFailed,
                     OnAuthorizationCodeReceived = OnAuthorizationCodeReceived
-                };
+                }
             });
         }
 
@@ -76,7 +76,7 @@ namespace Arda.Main
             var claims = context.JwtSecurityToken.Claims;
 
             // Getting informations about AD
-            var code = context.Code;
+            var code = context.JwtSecurityToken.Id;
             var validFrom = context.JwtSecurityToken.ValidFrom;
             var validTo = context.JwtSecurityToken.ValidTo;
             var givenName = claims.FirstOrDefault(claim => claim.Type == "given_name").Value;
@@ -89,11 +89,11 @@ namespace Arda.Main
         private async Task AcquireTokenForMicrosoftGraph(AuthorizationCodeReceivedContext context)
         {
             // Acquire a Token for the Graph API and cache it in Session.
-            string userObjectId = context.AuthenticationTicket.Principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            string userObjectId = context.Ticket.Principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
             ClientCredential clientCred = new ClientCredential(ClientId, ClientSecret);
             AuthenticationContext authContext = new AuthenticationContext(Authority, new SessionCache(userObjectId, context.HttpContext));
             AuthenticationResult authResult = await authContext.AcquireTokenByAuthorizationCodeAsync(
-                context.Code, new Uri(context.RedirectUri), clientCred, GraphResourceId);
+                context.JwtSecurityToken.Id, new Uri(context.ProtocolMessage.RedirectUri), clientCred, GraphResourceId);
         }
 
     }

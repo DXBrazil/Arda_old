@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Arda.Main.Utils;
 using System.Net.Http;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.IO;
 using Arda.Common.ViewModels.Main;
 using Arda.Common.ViewModels.Kanban;

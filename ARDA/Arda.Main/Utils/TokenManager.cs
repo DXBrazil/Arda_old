@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
 using System.Collections.Generic;
