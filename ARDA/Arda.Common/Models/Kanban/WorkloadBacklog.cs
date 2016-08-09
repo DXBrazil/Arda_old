@@ -77,7 +77,9 @@ namespace Arda.Common.Models.Kanban
         Architecture,
         Coding,
         [Display(Name = "Building Infra")]
-        BuildingInfra
+        BuildingInfra,
+        [Display(Name = "Internal Processes")]
+        InternalProcesses
     }
 
     public enum Complexity
