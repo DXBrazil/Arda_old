@@ -55,9 +55,13 @@
   },
 
   "publishOptions": {
-    "exclude": [
-      "**.user",
-      "**.vspscc"
+    "include": [
+      "wwwroot",
+      "Views",
+      "Areas/**/Views",
+      "appsettings.json",
+      "secrets.json",
+      "web.config"
     ]
   },
 
