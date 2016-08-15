@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -57,7 +57,7 @@ namespace Arda.Kanban
 
             //// Adding database connection by dependency injection.
             var connectionString = Configuration["Storage:SqlServer:ConnectionString"];
-            services.AddEntityFramework().AddSqlServer().AddDbContext<KanbanContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<KanbanContext>(options => options.UseSqlServer(connectionString));
 
             //Registering services.
             services.AddScoped<IUserRepository, UserRepository>();
@@ -78,8 +78,6 @@ namespace Arda.Kanban
 
             //app.UseMiddleware<SecurityAPIMiddleware>();
 
-            app.UseIISPlatformHandler();
-
             app.UseApplicationInsightsRequestTelemetry();
 
             app.UseApplicationInsightsExceptionTelemetry();
@@ -92,6 +90,6 @@ namespace Arda.Kanban
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        //public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

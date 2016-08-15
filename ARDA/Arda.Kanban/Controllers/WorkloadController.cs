@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Arda.Common.ViewModels.Main;
 using Arda.Common.Interfaces.Kanban;
 using System.Net.Http;
