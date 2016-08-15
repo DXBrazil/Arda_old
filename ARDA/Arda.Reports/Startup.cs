@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ using Arda.Common.Middlewares;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
 using Arda.Common.Models.Reports;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using Arda.Common.Interfaces.Reports;
 using Arda.Reports.Repositories;
 
@@ -71,7 +71,7 @@ namespace Arda.Reports
 
             //app.UseMiddleware<SecurityAPIMiddleware>();
             
-            app.UseIISPlatformHandler();
+            //app.UseIISPlatformHandler();
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -85,6 +85,6 @@ namespace Arda.Reports
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        //public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
