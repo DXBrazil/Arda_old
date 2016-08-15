@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Arda.Authentication.Models;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using Arda.Athentication.Repository.Emails;
 using Arda.Authentication.Repositories.Authentication;
 using Arda.Authentication.Interfaces;
@@ -32,7 +32,7 @@ namespace Arda.Authentication
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build().ReloadOnChanged("appsettings.json");
+            Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -52,7 +52,7 @@ namespace Arda.Authentication
             // Adding database connection by dependency injection.
             //var Connection = @"Server=DESKTOP-JTBG8BF\SQLFABRICIO;Database=Arda_Authentication;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
             var Connection = @"Server=CYZANON1-MS1;Database=Arda_Authentication;User Id=sa;Password=3wuutxsx@;Trusted_Connection=True;";
-            services.AddEntityFramework().AddSqlServer().AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Connection));
+            services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Connection));
 
             // Registering distributed cache approach to the application.
             services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
@@ -72,7 +72,7 @@ namespace Arda.Authentication
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseIISPlatformHandler();
+            //app.UseIISPlatformHandler();
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -86,6 +86,6 @@ namespace Arda.Authentication
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        //public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
