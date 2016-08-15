@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Arda.Kanban.Models;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using Arda.Common.Interfaces.Permissions;
 using Arda.Permissions.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
@@ -56,7 +56,7 @@ namespace Arda.Permissions
 
             //// Adding database connection by dependency injection.
             var connectionString = Configuration["Storage:SqlServer:ConnectionString"];
-            services.AddEntityFramework().AddSqlServer().AddDbContext<PermissionsContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<PermissionsContext>(options => options.UseSqlServer(connectionString));
             
             //// Injecting repository dependencies to permissions.
             services.AddScoped<IPermissionRepository, PermissionRepository>();
@@ -68,7 +68,7 @@ namespace Arda.Permissions
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseIISPlatformHandler();
+            //app.UseIISPlatformHandler();
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -82,6 +82,6 @@ namespace Arda.Permissions
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        //public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

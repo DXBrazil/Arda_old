@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Arda.Common.Interfaces.Permissions;
 using Arda.Common.Models.Permissions;
 using System.Net.Http;
@@ -42,18 +42,18 @@ namespace Arda.Permissions.Controllers
                         responseEmail = _permission.SendNotificationOfNewUserByEmail(uniqueName);
                         if (responseUser == null || responseEmail == false)
                         {
-                            return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                         }
                         else
                         {
                             bool response = _permission.SetUserPermissionsAndCode(uniqueName, code);
                             if (response)
                             {
-                                return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                                return new StatusCodeResult((int)HttpStatusCode.OK);
                             }
                             else
                             {
-                                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                             }
                         }
                     }
@@ -62,22 +62,22 @@ namespace Arda.Permissions.Controllers
                         bool response = _permission.SetUserPermissionsAndCode(uniqueName, code);
                         if (response)
                         {
-                            return new HttpStatusCodeResult((int)HttpStatusCode.OK);
+                            return new StatusCodeResult((int)HttpStatusCode.OK);
                         }
                         else
                         {
-                            return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
                         }
                     }
                 }
                 else
                 {
-                    return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
+                    return new StatusCodeResult((int)HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception)
             {
-                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
 

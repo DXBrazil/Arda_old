@@ -1,5 +1,5 @@
 ﻿using Arda.Common.Models.Permissions;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
