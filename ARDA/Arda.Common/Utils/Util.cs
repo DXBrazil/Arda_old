@@ -16,17 +16,11 @@ namespace Arda.Common.Utils
 {
     public static class Util
     {
-        // Local environment
-        //public static readonly string KanbanURL = "http://localhost:2768/";
-        //public static readonly string MainURL = "https://localhost:44304/";
-        //public static readonly string ReportsURL = "http://localhost:2891/";
-        //public static readonly string PermissionsURL = "http://localhost:2884/";
-
-        // Production environment
-        public static readonly string KanbanURL = "http://kanban-service.azurewebsites.net/";
-        public static readonly string MainURL = "https://ardaapp.azurewebsites.net/";
-        public static readonly string ReportsURL = "http://reports-service.azurewebsites.net/";
-        public static readonly string PermissionsURL = "http://permissions-service.azurewebsites.net/";
+        // Environment
+        public static string KanbanURL;
+        public static string MainURL;
+        public static string ReportsURL;
+        public static string PermissionsURL;
 
         private static IDistributedCache _cache;
 
@@ -34,7 +28,7 @@ namespace Arda.Common.Utils
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("secrets.json");
+                .AddJsonFile("secrets.json", true);
 
             var Configuration = builder.Build();
 
@@ -242,6 +236,14 @@ namespace Arda.Common.Utils
         {
             string result = uniqueName.Split('@')[0];
             return result;
+        }
+
+        public static void SetEnvironmentVariables(IConfiguration config)
+        {
+            MainURL = config["ardaapp"];
+            PermissionsURL = config["permissions-service"];
+            KanbanURL = config["kanban-service"];
+            ReportsURL = config["reports-service"];
         }
     }
 }
