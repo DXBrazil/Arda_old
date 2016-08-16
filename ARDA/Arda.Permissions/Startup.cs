@@ -31,6 +31,7 @@ namespace Arda.Permissions
             {
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
+                builder.AddUserSecrets();
             }
 
             builder.AddEnvironmentVariables();
@@ -59,7 +60,7 @@ namespace Arda.Permissions
             }));
 
             //// Adding database connection by dependency injection.
-            var connectionString = Configuration["Storage:SqlServer:ConnectionString"];
+            var connectionString = Configuration["Storage:SqlServer-Permissions:ConnectionString"];
             services.AddDbContext<PermissionsContext>(options => options.UseSqlServer(connectionString));
             
             //// Injecting repository dependencies to permissions.

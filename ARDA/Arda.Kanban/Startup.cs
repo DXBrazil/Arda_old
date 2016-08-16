@@ -30,6 +30,7 @@ namespace Arda.Kanban
             {
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
+                builder.AddUserSecrets();
             }
 
             builder.AddEnvironmentVariables();
@@ -56,7 +57,7 @@ namespace Arda.Kanban
             }));
 
             //// Adding database connection by dependency injection.
-            var connectionString = Configuration["Storage:SqlServer:ConnectionString"];
+            var connectionString = Configuration["Storage:SqlServer-Kanban:ConnectionString"];
             services.AddDbContext<KanbanContext>(options => options.UseSqlServer(connectionString));
 
             //Registering services.
