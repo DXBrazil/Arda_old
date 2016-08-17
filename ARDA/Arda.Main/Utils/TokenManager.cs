@@ -16,7 +16,12 @@ namespace Arda.Main.Utils
             string userObjectID = context.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
             AuthenticationContext authContext = new AuthenticationContext(Startup.Authority, new SessionCache(userObjectID, context));
             ClientCredential credential = new ClientCredential(Startup.ClientId, Startup.ClientSecret);
-            return await authContext.AcquireTokenSilentAsync(Startup.GraphResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
+
+            return await authContext.AcquireTokenAsync(Startup.GraphResourceId, credential);
+            
+            // Codigo antigo
+            //return await authContext.AcquireTokenSilentAsync(Startup.GraphResourceId, credential, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
+
         }
 
         private static async Task<IActionResult> CallMicrosoftGraph(HttpContext context)
