@@ -9,6 +9,10 @@ namespace Arda.Kanban.Models
 {
     public class KanbanContext : DbContext
     {
+        public KanbanContext(DbContextOptions<KanbanContext> options)
+            : base(options)
+        { }
+
         public DbSet<FiscalYear> FiscalYears { get; set; }
 
         public DbSet<Metric> Metrics { get; set; }
