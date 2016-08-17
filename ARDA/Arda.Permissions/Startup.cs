@@ -24,7 +24,7 @@ namespace Arda.Permissions
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("secrets.json")
+                .AddJsonFile("secrets.json", optional: true)
                 .AddJsonFile("microservices.json");
 
             if (env.IsEnvironment("Development"))
