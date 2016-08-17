@@ -27,15 +27,18 @@ namespace Arda.Common.Utils
         static Util()
         {
             // Set up configuration sources.
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("secrets.json", true);
+            //var builder = new ConfigurationBuilder()
+            //    .AddJsonFile("secrets.json", true);
 
-            var Configuration = builder.Build();
+            //var Configuration = builder.Build();
+
+            string redisConfig = "arda.redis.cache.windows.net:6380,password=66Tw+4fc8tkeHWr1Els4jtGF1pIhCSP0ncIXB4PuyDk=,ssl=True,abortConnect=False";
+            string redisInstance = "arda.redis.cache.windows.net";
 
             _cache = new RedisCache(new RedisCacheOptions
             {
-                Configuration = Configuration["Storage:Redis:Configuration"],
-                InstanceName = Configuration["Storage:Redis:InstanceName"]
+                Configuration = redisConfig, // Configuration["Storage:Redis:Configuration"],
+                InstanceName = redisInstance // Configuration["Storage:Redis:InstanceName"]
             });
         }
 

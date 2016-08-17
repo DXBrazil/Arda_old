@@ -50,7 +50,8 @@
       "wwwroot",
       "appsettings.json",
       "secrets.json",
-      "web.config"
+      "web.config",
+      "microservices.json"
     ]
   },
 
