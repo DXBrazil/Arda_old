@@ -50,7 +50,6 @@
     "include": [
       "wwwroot",
       "appsettings.json",
-      "microservices.json",
       "web.config"
     ]
   },

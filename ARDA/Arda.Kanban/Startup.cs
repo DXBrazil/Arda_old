@@ -25,8 +25,8 @@ namespace Arda.Kanban
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("secrets.json")
-                .AddJsonFile("microservices.json")
+                .AddJsonFile("secrets.json", true)
+                .AddJsonFile("microservices.json", true)
                 .AddEnvironmentVariables();
 
             if (env.IsEnvironment("Development"))
