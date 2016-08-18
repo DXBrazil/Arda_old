@@ -63,7 +63,6 @@
       "Areas/**/Views",
       "appsettings.json",
       "microservices.json",
-      "secrets.json",
       "web.config"
     ]
   },
