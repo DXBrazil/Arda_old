@@ -1,0 +1,8 @@
+﻿{
+  "Endpoints": {
+    "ardaapp": "https://stage-ardaapp.azurewebsites.net/",
+    "permissions-service": "http://stage-permissions-service.azurewebsites.net/",
+    "kanban-service": "http://stage-kanban-service.azurewebsites.net/",
+    "reports-service": "http://stage-reports-service.azurewebsites.net/"
+  }
+}
