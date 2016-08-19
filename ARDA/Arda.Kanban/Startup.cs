@@ -14,6 +14,11 @@ using Arda.Kanban.Models;
 using Arda.Common.Interfaces.Kanban;
 using Arda.Kanban.Repositories;
 using Arda.Common.Middlewares;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using System.Net.Http.Formatting;
 
 namespace Arda.Kanban
 {
@@ -44,7 +49,7 @@ namespace Arda.Kanban
 
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
             Arda.Common.Utils.Util.SetEnvironmentVariables(Configuration.GetSection("Endpoints"));
 
             // Add framework services.
@@ -52,7 +57,10 @@ namespace Arda.Kanban
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opts => {
+                    opts.SerializerSettings.ContractResolver = new System.Net.Http.Formatting.JsonContractResolver(new JsonMediaTypeFormatter());
+                    });
 
             // Registering distributed cache approach to the application.
             services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions

@@ -13,6 +13,7 @@ using Arda.Common.Interfaces.Permissions;
 using Arda.Permissions.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
+using System.Net.Http.Formatting;
 
 namespace Arda.Permissions
 {
@@ -48,9 +49,12 @@ namespace Arda.Permissions
             // Add framework services.
             services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            services.AddApplicationInsightsTelemetry(Configuration);
+            //services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opts => {
+                    opts.SerializerSettings.ContractResolver = new System.Net.Http.Formatting.JsonContractResolver(new JsonMediaTypeFormatter());
+                });
 
             // Registering distributed cache approach to the application.
             services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions
@@ -75,9 +79,9 @@ namespace Arda.Permissions
 
             //app.UseIISPlatformHandler();
 
-            app.UseApplicationInsightsRequestTelemetry();
+            //app.UseApplicationInsightsRequestTelemetry();
 
-            app.UseApplicationInsightsExceptionTelemetry();
+            //app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
 
