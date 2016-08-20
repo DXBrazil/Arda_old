@@ -38,8 +38,15 @@
                     }
                 }
             }
+
         </ul>
         <ul class="nav navbar-nav navbar-right">
+
+            <!-- Feedback button -->
+            <li class="nav-item">
+                <a class="btn btn-primary" href="#">Feedback</a>
+            </li>
+
             <li class="nav-item--signout nav-item text-center">
                 Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong>
             </li>
@@ -54,6 +61,7 @@
             <li class="nav-item--signout nav-item">
                 <a asp-controller="Account" asp-action="SignOut" class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
             </li>
+
         </ul>
     </div>
 
