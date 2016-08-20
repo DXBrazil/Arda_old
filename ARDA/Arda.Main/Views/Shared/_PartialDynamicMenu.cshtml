@@ -47,6 +47,19 @@
             <li class="nav-item">
                 <script src="/js/feedback.js"></script>
                 <a class="btn btn-primary" href="#" onclick="openForm()">Feedback</a>
+                <style>
+                    iframe {
+                        position: fixed;
+                        border: 1px solid black;
+                        top: 0;
+                        right: 0;
+                        width: 40rem;
+                        height: 20rem;
+                    }
+                </style>
+                <div>
+                    <iframe id="feedbackForm" src="" style="display: none" onload="checkForm(this.contentWindow.location.toString())"></iframe>
+                </div>
             </li>
             <!-- Feedback button -->
 
