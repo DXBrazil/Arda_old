@@ -1,9 +1,11 @@
 ﻿var templateUrl;
 
-initForm('fabcatae@microsoft.com');
+initForm('fabcatae@microsoft.com', '/feedback/done.html');
 
-function initForm(user) {
-    templateUrl = '/feedback/template.html?user=' + user + '&redirect=/ok.html';
+function initForm(user, path) {
+    var baseUrl = document.location.protocol + '//' + document.location.host
+    var redirectUrl = baseUrl + path;
+    templateUrl = '/feedback/template.html?user=' + user + '&redirect=' + redirectUrl;
 }
 
 function openForm() {
