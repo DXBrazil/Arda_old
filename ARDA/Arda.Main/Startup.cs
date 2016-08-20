@@ -57,7 +57,12 @@ namespace Arda.Main
             services.AddMemoryCache();
             services.AddSession();
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opts =>
+                {
+                    opts.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+                });
+
 
             // Registering distributed cache approach to the application.
             services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions

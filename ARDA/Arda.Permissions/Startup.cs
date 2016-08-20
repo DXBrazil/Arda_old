@@ -13,7 +13,6 @@ using Arda.Common.Interfaces.Permissions;
 using Arda.Permissions.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
-using System.Net.Http.Formatting;
 
 namespace Arda.Permissions
 {
@@ -52,9 +51,11 @@ namespace Arda.Permissions
             //services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc()
-                .AddJsonOptions(opts => {
-                    opts.SerializerSettings.ContractResolver = new System.Net.Http.Formatting.JsonContractResolver(new JsonMediaTypeFormatter());
+                .AddJsonOptions(opts =>
+                {
+                    opts.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
                 });
+
 
             // Registering distributed cache approach to the application.
             services.AddSingleton<IDistributedCache>(serviceProvider => new RedisCache(new RedisCacheOptions

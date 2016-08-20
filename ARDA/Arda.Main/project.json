@@ -29,7 +29,8 @@
     "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.10.305231913",
     "System.Net.Http": "4.0.0-*",
     "WindowsAzure.Storage": "7.0.0",
-    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0"
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    //"Microsoft.AspNet.WebApi.Client": "5.2.3"
   },
 
   "tools": {
