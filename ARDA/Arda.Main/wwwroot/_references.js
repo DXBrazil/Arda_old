@@ -91,6 +91,7 @@
 /// <reference path="ckeditor/styles.js" />
 /// <reference path="datepicker/js/bootstrap-datepicker.js" />
 /// <reference path="feedback/feedback.js" />
+/// <reference path="feedback/template.js" />
 /// <reference path="js/basicoperations.js" />
 /// <reference path="js/bootstrap-datepicker.js" />
 /// <reference path="js/bootstrap-multiselect.js" />

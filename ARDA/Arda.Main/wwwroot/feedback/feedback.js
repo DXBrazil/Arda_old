@@ -1,4 +1,10 @@
-﻿var templateUrl = '/feedback/template.html?user=fab&redirect=/ok.html';
+﻿var templateUrl;
+
+initForm('fabcatae@microsoft.com');
+
+function initForm(user) {
+    templateUrl = '/feedback/template.html?user=' + user + '&redirect=/ok.html';
+}
 
 function openForm() {
     feedbackForm.src = templateUrl;
@@ -11,8 +17,6 @@ function closeForm() {
 function checkForm(url) {
     var isTemplate = url.indexOf(templateUrl) >= 0;
     var isValidPage = url.startsWith('http');
-
-    alert(url)
 
     if (isValidPage && (!isTemplate)) {
         closeForm();
