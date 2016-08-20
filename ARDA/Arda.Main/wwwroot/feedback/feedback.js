@@ -1,7 +1,5 @@
 ﻿var templateUrl;
 
-initForm('(anonymous)', '/feedback/done.html');
-
 function initForm(user, path) {
     var baseUrl = document.location.protocol + '//' + document.location.host
     var redirectUrl = baseUrl + path;

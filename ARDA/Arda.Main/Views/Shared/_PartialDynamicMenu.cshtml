@@ -61,6 +61,15 @@
                 </style>
                 <div>
                     <iframe id="feedbackForm" src="" style="display: none" onload="checkForm(this.contentWindow.location.toString())"></iframe>
+                    <script>
+                        (function () {
+                            var username = '@User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value';
+                            var redirect = '/feedback/done.html';
+
+                            initForm(username, redirect);
+                        })();
+                    </script>
+
                 </div>
             </li>
             <!-- Feedback button -->
