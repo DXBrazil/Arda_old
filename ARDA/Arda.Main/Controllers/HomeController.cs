@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 namespace Arda.Main.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         public IActionResult Index()
