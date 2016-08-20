@@ -94,6 +94,7 @@
 /// <reference path="js/bootstrap-datepicker.js" />
 /// <reference path="js/bootstrap-multiselect.js" />
 /// <reference path="js/bootstrap-switch.min.js" />
+/// <reference path="js/feedback.js" />
 /// <reference path="js/ion.rangeslider.min.js" />
 /// <reference path="js/jasny-bootstrap.min.js" />
 /// <reference path="js/jquery.autocomplete.min.js" />

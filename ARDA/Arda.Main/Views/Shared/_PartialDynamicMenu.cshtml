@@ -40,12 +40,15 @@
             }
 
         </ul>
+
         <ul class="nav navbar-nav navbar-right">
 
             <!-- Feedback button -->
             <li class="nav-item">
-                <a class="btn btn-primary" href="#">Feedback</a>
+                <script src="/js/feedback.js"></script>
+                <a class="btn btn-primary" href="#" onclick="openForm()">Feedback</a>
             </li>
+            <!-- Feedback button -->
 
             <li class="nav-item--signout nav-item text-center">
                 Welcome, <strong>@User.Claims.First(claim => claim.Type == "name").Value</strong>
