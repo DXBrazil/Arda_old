@@ -1,6 +1,6 @@
 ﻿var templateUrl;
 
-initForm('fabcatae@microsoft.com', '/feedback/done.html');
+initForm('(anonymous)', '/feedback/done.html');
 
 function initForm(user, path) {
     var baseUrl = document.location.protocol + '//' + document.location.host
@@ -21,7 +21,10 @@ function checkForm(url) {
     var isValidPage = url.startsWith('http');
 
     if (isValidPage && (!isTemplate)) {
-        closeForm();
+        setTimeout(function () {
+            closeForm();
+        }, 800)
+        
     }
 }
 
