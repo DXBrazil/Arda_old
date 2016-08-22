@@ -1,0 +1,13 @@
+.ctn-header-dashboard {
+  padding: 50px 0 45px;
+  background-color: #f4f5f7;
+  margin-bottom: 30px; }
+
+.ctn-header-dashboard--board {
+  margin-bottom: 0; }
+
+.ctn-header-dashboard .data-sorting-buttons {
+  width: 100%; }
+
+.ctn-header-dashboard h2 {
+  margin: 0; }

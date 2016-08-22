@@ -1,0 +1,52 @@
+﻿.dataTable {
+    width: 100%;
+
+    thead {
+        th {
+            line-height: 50px;
+            background: #2B2E37;
+            color: #fff;
+        }
+    }
+
+    thead th,
+    tbody td {
+        border: 1px solid #f4f5f7;
+    }
+
+    tbody td{
+        padding-left: 15px;
+    }
+}
+
+.data-sorting-buttons a {
+    display: inline-block;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    float: left;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    height: 40px;
+    border-radius: 4px;
+
+    i {
+        position: relative;
+        background: rgba(0, 0, 0, 0.15);
+        display: inline-block;
+        padding: 6px 12px;
+        left: -12px;
+        border-radius: 3px 0 0 3px;
+        height: 40px;
+    }
+}
+
+.ds-button-detail a {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
