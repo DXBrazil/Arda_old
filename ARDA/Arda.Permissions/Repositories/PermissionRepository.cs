@@ -397,11 +397,20 @@ namespace Arda.Permissions.Repositories
         public string GetUserMenuSerialized(string uniqueName)
         {
             var menu = new List<Tuple<string, Tuple<string, string, string>>>();
+            string propertiesSerializedCached;
 
             try
             {
-                var propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+                propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+            }
+            catch (Exception)
+            {
+                SetUserPermissionsAndCode(uniqueName, string.Empty);
+                propertiesSerializedCached = Util.GetString(_cache.Get(uniqueName));
+            }
 
+            try
+            {
                 var permissions = new CacheViewModel(propertiesSerializedCached).Permissions;
 
                 foreach (var p in permissions)

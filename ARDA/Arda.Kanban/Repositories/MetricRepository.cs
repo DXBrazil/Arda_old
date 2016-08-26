@@ -56,6 +56,7 @@ namespace Arda.Kanban.Repositories
         }
 
         // Return all metrics
+        //TODO: Remove Nullable Casting
         public List<MetricViewModel> GetAllMetrics()
         {
             try
@@ -63,17 +64,17 @@ namespace Arda.Kanban.Repositories
                 var response = (from m in _context.Metrics
                                 join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
                                 orderby f.FullNumericFiscalYear, m.MetricCategory
-                                select new MetricViewModel
-                                {
-                                    MetricID = m.MetricID,
-                                    MetricCategory = m.MetricCategory,
-                                    MetricName = m.MetricName,
-                                    Description = m.Description,
-                                    FiscalYearID = m.FiscalYear.FiscalYearID,
-                                    FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
-                                    TextualFiscalYear = m.FiscalYear.TextualFiscalYear
-                                }).ToList();
-
+                                 select new MetricViewModel
+                                 {
+                                     MetricID = m.MetricID,
+                                     MetricCategory = m.MetricCategory,
+                                     MetricName = m.MetricName,
+                                     Description = m.Description,
+                                     FiscalYearID = (Guid) m.FiscalYear.FiscalYearID,
+                                     FullNumericFiscalYear = (int) m.FiscalYear.FullNumericFiscalYear,
+                                     TextualFiscalYear = (string) m.FiscalYear.TextualFiscalYear
+                                 }).ToList();
+                
                 if (response != null)
                 {
                     return response;
@@ -83,32 +84,33 @@ namespace Arda.Kanban.Repositories
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
         }
 
         // Return all metrics by year
+        //TODO: Remove Nullable Casting
         public List<MetricViewModel> GetAllMetrics(int year)
         {
             try
             {
                 var response = (from m in _context.Metrics
-                                join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
-                                where f.FullNumericFiscalYear == year
-                                orderby f.FullNumericFiscalYear, m.MetricCategory
-                                select new MetricViewModel
-                                {
-                                    MetricID = m.MetricID,
-                                    MetricCategory = m.MetricCategory,
-                                    MetricName = m.MetricName,
-                                    Description = m.Description,
-                                    FiscalYearID = m.FiscalYear.FiscalYearID,
-                                    FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
-                                    TextualFiscalYear = m.FiscalYear.TextualFiscalYear
-                                }).ToList();
-
+                         join f in _context.FiscalYears on m.FiscalYear.FiscalYearID equals f.FiscalYearID
+                            where f.FullNumericFiscalYear == year
+                         orderby f.FullNumericFiscalYear, m.MetricCategory
+                         select new MetricViewModel
+                         {
+                             MetricID = m.MetricID,
+                             MetricCategory = m.MetricCategory,
+                             MetricName = m.MetricName,
+                             Description = m.Description,
+                             FiscalYearID = (Guid) m.FiscalYear.FiscalYearID,
+                             FullNumericFiscalYear = (int) m.FiscalYear.FullNumericFiscalYear,
+                             TextualFiscalYear = (string) m.FiscalYear.TextualFiscalYear
+                         }).ToList();
+                
                 if (response != null)
                 {
                     return response;
@@ -118,7 +120,7 @@ namespace Arda.Kanban.Repositories
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

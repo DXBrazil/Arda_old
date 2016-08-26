@@ -321,8 +321,9 @@ namespace Arda.Main.Controllers
         {
             try
             {
-                var key = "photo_" + user;
-                var photo = Util.GetString(_cache.Get(key));
+                //var key = "photo_" + user;
+                //var photo = Util.GetString(_cache.Get(key));
+                var photo = Util.GetUserPhoto(user);
                 return photo;
             }
             catch (Exception)
