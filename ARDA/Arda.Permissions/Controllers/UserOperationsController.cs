@@ -17,7 +17,6 @@ namespace Arda.Permissions.Controllers
         public UserOperationsController(IPermissionRepository permission)
         {
             _permission = permission;
-
         }
 
 
