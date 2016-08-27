@@ -46,6 +46,9 @@ namespace Arda.Common.Models.Kanban
 
 
         //Foreign Keys:
+        public Guid WBActivityActivityID { get; set; }
+
+        [ForeignKey("WBActivityActivityID")]
         public Activity WBActivity { get; set; }
 
         public ICollection<File> WBFiles { get; set; }

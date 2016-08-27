@@ -14,8 +14,14 @@ namespace Arda.Common.Models.Kanban
         [Required]
         public Guid WBUTechnologyID { get; set; }
 
+        public Guid WorkloadBacklogWBID { get; set; }
+
+        [ForeignKey("WorkloadBacklogWBID")]
         public virtual WorkloadBacklog WorkloadBacklog { get; set; }
 
+        public Guid TechnologyTechnologyId { get; set; }
+
+        [ForeignKey("TechnologyTechnologyId")]
         public virtual Technology Technology { get; set; }
     }
 }

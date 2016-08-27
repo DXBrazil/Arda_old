@@ -15,8 +15,14 @@ namespace Arda.Common.Models.Kanban
         [Required]
         public Guid WBUserID { get; set; }
 
+        public Guid WorkloadBacklogWBID { get; set; }
+
+        [ForeignKey("WorkloadBacklogWBID")]
         public virtual WorkloadBacklog WorkloadBacklog { get; set; }
 
+        public string UserUniqueName { get; set; }
+
+        [ForeignKey("UserUniqueName")]        
         public virtual User User { get; set; }
     }
 }

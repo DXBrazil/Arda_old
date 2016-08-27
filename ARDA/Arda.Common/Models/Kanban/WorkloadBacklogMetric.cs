@@ -14,8 +14,14 @@ namespace Arda.Common.Models.Kanban
         [Required]
         public Guid WBMetricID { get; set; }
 
+        public Guid WorkloadBacklogWBID { get; set; }
+
+        [ForeignKey("WorkloadBacklogWBID")]
         public virtual WorkloadBacklog WorkloadBacklog { get; set; }
 
+        public Guid MetricMetricID { get; set; }
+
+        [ForeignKey("MetricMetricID")]
         public virtual Metric Metric { get; set; }
     }
 }
