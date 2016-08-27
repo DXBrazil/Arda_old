@@ -22,7 +22,9 @@ namespace Arda.Common.Models.Kanban
 
         public string FileDescription { get; set; }
 
+        public Guid WorkloadBacklogWBID { get; set; }
 
+        [ForeignKey("WorkloadBacklogWBID")]
         public virtual WorkloadBacklog WorkloadBacklog { get; set; }
     }
 }

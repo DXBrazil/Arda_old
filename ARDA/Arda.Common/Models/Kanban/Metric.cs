@@ -23,6 +23,9 @@ namespace Arda.Common.Models.Kanban
         [Required]
         public string Description { get; set; }
 
+        public Guid FiscalYearID { get; set; }
+
+        [ForeignKey("FiscalYearID")]
         public virtual FiscalYear FiscalYear { get; set; }
 
         public virtual ICollection<WorkloadBacklogMetric> WBMetrics { get; set; }
