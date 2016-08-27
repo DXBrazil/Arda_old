@@ -15,7 +15,6 @@ namespace Arda.Common.Models.Permissions
         [Key]
         public int ResourceID { get; set; }
 
-        [ForeignKey("ModuleID")]
         public int ModuleID { get; set; }
 
         [Required]
@@ -33,7 +32,7 @@ namespace Arda.Common.Models.Permissions
         [Required]
         public int ResourceSequence { get; set; }
 
-
+        [ForeignKey("ModuleID")]
         public virtual Module Module { get; set; }
 
         public virtual ICollection<UsersPermission> UserPermissions { get; set; }
