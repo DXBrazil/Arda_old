@@ -70,9 +70,9 @@ namespace Arda.Kanban.Repositories
                                      MetricCategory = m.MetricCategory,
                                      MetricName = m.MetricName,
                                      Description = m.Description,
-                                     FiscalYearID = (Guid) m.FiscalYear.FiscalYearID,
-                                     FullNumericFiscalYear = (int) m.FiscalYear.FullNumericFiscalYear,
-                                     TextualFiscalYear = (string) m.FiscalYear.TextualFiscalYear
+                                     FiscalYearID = m.FiscalYear.FiscalYearID,
+                                     FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
+                                     TextualFiscalYear = m.FiscalYear.TextualFiscalYear
                                  }).ToList();
                 
                 if (response != null)
@@ -106,9 +106,9 @@ namespace Arda.Kanban.Repositories
                              MetricCategory = m.MetricCategory,
                              MetricName = m.MetricName,
                              Description = m.Description,
-                             FiscalYearID = (Guid) m.FiscalYear.FiscalYearID,
-                             FullNumericFiscalYear = (int) m.FiscalYear.FullNumericFiscalYear,
-                             TextualFiscalYear = (string) m.FiscalYear.TextualFiscalYear
+                             FiscalYearID = m.FiscalYear.FiscalYearID,
+                             FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
+                             TextualFiscalYear = m.FiscalYear.TextualFiscalYear
                          }).ToList();
                 
                 if (response != null)
