@@ -91,6 +91,39 @@ namespace Arda.Kanban.Repositories
             }
         }
 
+        public List<AppointmentViewModel> GetAllAppointments(string user)
+        {
+            try
+            {
+                var response = (from a in _context.Appointments
+                                join w in _context.WorkloadBacklogs on a.AppointmentWorkload.WBID equals w.WBID
+                                where a.AppointmentUser.UniqueName == user
+                                orderby a.AppointmentDate descending
+                                select new AppointmentViewModel
+                                {
+                                    _AppointmentID = a.AppointmentID,
+                                    _AppointmentWorkloadWBID = a.AppointmentWorkload.WBID,
+                                    _WorkloadTitle = w.WBTitle,
+                                    _AppointmentDate = a.AppointmentDate,
+                                    _AppointmentHoursDispensed = a.AppointmentHoursDispensed,
+                                    _AppointmentUserUniqueName = a.AppointmentUser.UniqueName
+                                }).ToList();
+
+                if (response != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public AppointmentViewModel GetAppointmentByID(Guid id)
         {
             try

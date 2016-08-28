@@ -84,7 +84,7 @@ namespace Arda.Kanban.Repositories
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
