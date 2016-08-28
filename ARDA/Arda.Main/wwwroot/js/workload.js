@@ -694,7 +694,10 @@ function addWorkload(e) {
         users.push(user);
     }
 
-    var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0, users: users};
+
+    var attachments = (this.WBFiles.files != null) ? this.WBFiles.files.length : 0;
+
+    var workload = { id: this.WBID.value, title: this.WBTitle.value, start: this.WBStartDate.value, end: this.WBEndDate.value, hours: 0, attachments: attachments, tag: this.WBExpertise.value, state: 0, users: users };
 
     validateForm(e, data, function (e, data) {
         DisableWorkloadFields();
@@ -713,8 +716,7 @@ function addWorkload(e) {
                     getGUID(function (data) {
                         $('#WBID').attr('value', data);
                     });
-                    // add a task (workload.js)
-                    createTask(workload.id, workload.name, workload.state, workload.users);
+                    createTask(workload.id, workload.title, workload.start, workload.end, workload.hours, workload.attachments, workload.tag, workload.state, workload.users);
                 } else {
                     $('#msg').text('Error!');
                 }
