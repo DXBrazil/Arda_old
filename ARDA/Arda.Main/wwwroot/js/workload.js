@@ -95,7 +95,7 @@ function drop(ev) {
     var elem = document.getElementById(data);
     target.appendChild(elem);
 
-    var state = (target.dataset['state']);
+    var state = target.dataset['state'];
     var numstate = state | 0;
     var task = { Id: elem.id, State: numstate };
 
@@ -132,9 +132,9 @@ function moveTask(id, state) {
     update(task);
 }
 
-function createTask(id, name, state, users) {
+function createTask(id, title, start, end, hours, attachments, tag, state, users) {
     var task_state = '.state' + state;
-    createTaskInFolder(id, name, task_state, users);
+    createTaskInFolder(id, title, start, end, hours, attachments, tag, task_state, users);
 }
 
 function getUserImageTask(user, taskId) {
@@ -150,16 +150,21 @@ function getUserImageTask(user, taskId) {
     });
 }
 
-function createTaskInFolder(taskId, taskName, folderSelector, users) {
+function createTaskInFolder(taskId, taskTitle, start, end, hours, attachments, tag, folderSelector, users) {
     var content = document.querySelector('#templateTask').content;
     var clone = document.importNode(content, true);
     var folder = document.querySelector(folderSelector);
 
     clone.querySelector('.task').id = taskId;
+    clone.querySelector('.task').classList.add(tag);
     clone.querySelector('.templateDone').id = 'iptTask' + taskId;
     clone.querySelector('.folder-check-status').setAttribute('for', 'iptTask' + taskId);
     
-    clone.querySelector('.task .templateText').textContent = taskName;
+    clone.querySelector('.task .templateTitle').textContent = taskTitle;
+    clone.querySelector('.task .templateStart').textContent = start;
+    clone.querySelector('.task .templateEnd').textContent = end;
+    clone.querySelector('.task .templateHours').textContent = hours;
+    clone.querySelector('.task .templateAttachments').textContent = attachments;
 
     $.each(users, function (index, value) {
         getUserImageTask(value.Item1, taskId);
@@ -199,8 +204,8 @@ function taskdone(id) {
 
 function gettasklist(callback, type, user) {
 
-    var filter_user = (user) ? '?user=' + user : '';
-    var filter_type = (type) ? '/ListBacklogsByUser' : '/ListWorkloadsByUser';
+    var filter_user = user ? '?user=' + user : '';
+    var filter_type = type ? '/ListBacklogsByUser' : '/ListWorkloadsByUser';
 
     httpCall('GET', '/Workload' + filter_type + filter_user, null, callback);
 }
@@ -250,7 +255,7 @@ function loadTaskList(filter_type, filter_user) {
 
     gettasklist(function (tasklist) {
         tasklist.map(function (task) {
-            createTask(task.data, task.value, task.status, task.users);
+            createTask(task.id, task.title, task.start, task.end, task.hours, task.attachments, task.tag, task.status, task.users);
         });
     },
         filter_type,
@@ -473,7 +478,7 @@ function GetImageBase64FromGraph(url, element, token) {
             reader.onload = function () {
                 image.src = reader.result;
                 updateImgOnDatabase();
-            }
+            };
             reader.readAsDataURL(request.response);
         }
     };
@@ -614,7 +619,7 @@ function loadWorkload(workloadID) {
                 $('#WBEndDate').val(str);
             });
 
-            var isWorkload = $('#WBIsWorkload')
+            var isWorkload = $('#WBIsWorkload');
             isWorkload.bootstrapSwitch('toggleDisabled', true, true);
             isWorkload.bootstrapSwitch('state', data.WBIsWorkload);
             isWorkload.bootstrapSwitch('toggleDisabled', true, true);
