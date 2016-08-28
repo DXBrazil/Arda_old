@@ -427,7 +427,6 @@ function DisableWorkloadFields() {
 
     var slider = $("#WBComplexity").data("ionRangeSlider");
     slider.update({
-        from: 1,
         disable: true
     });
 
@@ -456,7 +455,6 @@ function EnableWorkloadFields() {
 
     var slider = $("#WBComplexity").data("ionRangeSlider");
     slider.update({
-        from: 1,
         disable: false
     });
 
