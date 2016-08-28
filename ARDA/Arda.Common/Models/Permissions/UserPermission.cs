@@ -12,15 +12,14 @@ namespace Arda.Common.Models.Permissions
         [Key]
         public int PermissionID { get; set; }
 
-        [ForeignKey("UniqueName")]
         public string UniqueName { get; set; }
 
-        [ForeignKey("ResourceID")]
         public int ResourceID { get; set; }
 
-
+        [ForeignKey("ResourceID")]
         public virtual Resource Resource { get; set; }
 
+        [ForeignKey("UniqueName")]
         public virtual User User { get; set; }
     }
 }

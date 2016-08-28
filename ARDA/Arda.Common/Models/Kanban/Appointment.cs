@@ -15,9 +15,15 @@ namespace Arda.Common.Models.Kanban
         public Guid AppointmentID { get; set; }
 
         [Required]
+        public string AppointmentUserUniqueName { get; set; }
+
+        [ForeignKey("AppointmentUserUniqueName")]
         public virtual User AppointmentUser { get; set; }
 
         [Required]
+        public Guid AppointmentWorkloadWBID { get; set; }
+
+        [ForeignKey("AppointmentWorkloadWBID")]
         public virtual WorkloadBacklog AppointmentWorkload { get; set; }
 
         [Required]
