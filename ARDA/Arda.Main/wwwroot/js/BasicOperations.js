@@ -11,14 +11,30 @@ $(function ($) {
         ]
     });
 
-    //Loading datatable to appointments.
-    $("#table-appointments").DataTable({
+    //Loading datatable to all appointments.
+    $("#table-appointments-all").DataTable({
         "sAjaxSource": "/Appointment/ListAllAppointments",
         "columns": [
             { "width": "35%" },
             { "width": "15%" },
             { "width": "10%" },
             { "width": "5%" },
+            { "width": "20%" }
+        ],
+        "columnDefs": [
+            {
+                "orderable": false
+            }
+        ]
+    });
+
+    //Loading datatable to my appointments.
+    $("#table-appointments-my").DataTable({
+        "sAjaxSource": "/Appointment/ListMyAppointments",
+        "columns": [
+            { "width": "35%" },
+            { "width": "15%" },
+            { "width": "15%" },
             { "width": "20%" }
         ],
         "columnDefs": [

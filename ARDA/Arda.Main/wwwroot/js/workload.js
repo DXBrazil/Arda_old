@@ -95,7 +95,7 @@ function drop(ev) {
     var elem = document.getElementById(data);
     target.appendChild(elem);
 
-    var state = (target.dataset['state']);
+    var state = target.dataset['state'];
     var numstate = state | 0;
     var task = { Id: elem.id, State: numstate };
 
@@ -132,9 +132,9 @@ function moveTask(id, state) {
     update(task);
 }
 
-function createTask(id, name, state, users) {
+function createTask(id, title, start, end, hours, attachments, tag, state, users) {
     var task_state = '.state' + state;
-    createTaskInFolder(id, name, task_state, users);
+    createTaskInFolder(id, title, start, end, hours, attachments, tag, task_state, users);
 }
 
 function getUserImageTask(user, taskId) {
@@ -150,16 +150,21 @@ function getUserImageTask(user, taskId) {
     });
 }
 
-function createTaskInFolder(taskId, taskName, folderSelector, users) {
+function createTaskInFolder(taskId, taskTitle, start, end, hours, attachments, tag, folderSelector, users) {
     var content = document.querySelector('#templateTask').content;
     var clone = document.importNode(content, true);
     var folder = document.querySelector(folderSelector);
 
     clone.querySelector('.task').id = taskId;
+    clone.querySelector('.task').classList.add(tag);
     clone.querySelector('.templateDone').id = 'iptTask' + taskId;
     clone.querySelector('.folder-check-status').setAttribute('for', 'iptTask' + taskId);
     
-    clone.querySelector('.task .templateText').textContent = taskName;
+    clone.querySelector('.task .templateTitle').textContent = taskTitle;
+    clone.querySelector('.task .templateStart').textContent = start;
+    clone.querySelector('.task .templateEnd').textContent = end;
+    clone.querySelector('.task .templateHours').textContent = hours;
+    clone.querySelector('.task .templateAttachments').textContent = attachments;
 
     $.each(users, function (index, value) {
         getUserImageTask(value.Item1, taskId);
@@ -171,6 +176,21 @@ function createTaskInFolder(taskId, taskName, folderSelector, users) {
     clone.querySelector('.templateDone').addEventListener('change', function () { taskdone(taskId) });
 
     folder.appendChild(clone, true);
+}
+
+function updateTaskInFolder(taskId, taskTitle, start, end, attachments, tag, users) {
+    var task = $('#' + taskId);
+
+    $('#' + taskId + ' .templateTitle').text(taskTitle);
+    $('#' + taskId + ' .templateStart').text(start);
+    $('#' + taskId + ' .templateEnd').text(end); 
+    $('#' + taskId + ' .templateAttachments').text(attachments);
+
+    $('#' + taskId + ' .folder-tasks .folder-footer img').remove();
+
+    $.each(users, function (index, value) {
+        getUserImageTask(value.Item1, taskId);
+    });
 }
 
 function httpCall(action, url, data, callback, error) {
@@ -199,8 +219,8 @@ function taskdone(id) {
 
 function gettasklist(callback, type, user) {
 
-    var filter_user = (user) ? '?user=' + user : '';
-    var filter_type = (type) ? '/ListBacklogsByUser' : '/ListWorkloadsByUser';
+    var filter_user = user ? '?user=' + user : '';
+    var filter_type = type ? '/ListBacklogsByUser' : '/ListWorkloadsByUser';
 
     httpCall('GET', '/Workload' + filter_type + filter_user, null, callback);
 }
@@ -250,7 +270,7 @@ function loadTaskList(filter_type, filter_user) {
 
     gettasklist(function (tasklist) {
         tasklist.map(function (task) {
-            createTask(task.data, task.value, task.status, task.users);
+            createTask(task.id, task.title, task.start, task.end, task.hours, task.attachments, task.tag, task.status, task.users);
         });
     },
         filter_type,
@@ -407,7 +427,6 @@ function DisableWorkloadFields() {
 
     var slider = $("#WBComplexity").data("ionRangeSlider");
     slider.update({
-        from: 1,
         disable: true
     });
 
@@ -436,7 +455,6 @@ function EnableWorkloadFields() {
 
     var slider = $("#WBComplexity").data("ionRangeSlider");
     slider.update({
-        from: 1,
         disable: false
     });
 
@@ -473,7 +491,7 @@ function GetImageBase64FromGraph(url, element, token) {
             reader.onload = function () {
                 image.src = reader.result;
                 updateImgOnDatabase();
-            }
+            };
             reader.readAsDataURL(request.response);
         }
     };
@@ -614,7 +632,7 @@ function loadWorkload(workloadID) {
                 $('#WBEndDate').val(str);
             });
 
-            var isWorkload = $('#WBIsWorkload')
+            var isWorkload = $('#WBIsWorkload');
             isWorkload.bootstrapSwitch('toggleDisabled', true, true);
             isWorkload.bootstrapSwitch('state', data.WBIsWorkload);
             isWorkload.bootstrapSwitch('toggleDisabled', true, true);
@@ -689,7 +707,11 @@ function addWorkload(e) {
         users.push(user);
     }
 
-    var workload = { id: this.WBID.value, name: this.WBTitle.value, state: 0, users: users};
+
+    var attachments = (this.WBFiles.files != null) ? this.WBFiles.files.length : 0;
+    var tag = this.WBExpertise.options[this.WBExpertise.selectedIndex].text;
+
+    var workload = { id: this.WBID.value, title: this.WBTitle.value, start: this.WBStartDate.value, end: this.WBEndDate.value, hours: 0, attachments: attachments, tag: tag, state: 0, users: users };
 
     validateForm(e, data, function (e, data) {
         DisableWorkloadFields();
@@ -708,8 +730,7 @@ function addWorkload(e) {
                     getGUID(function (data) {
                         $('#WBID').attr('value', data);
                     });
-                    // add a task (workload.js)
-                    createTask(workload.id, workload.name, workload.state, workload.users);
+                    createTask(workload.id, workload.title, workload.start, workload.end, workload.hours, workload.attachments, workload.tag, workload.state, workload.users);
                 } else {
                     $('#msg').text('Error!');
                 }
@@ -720,6 +741,8 @@ function addWorkload(e) {
 }
 
 function updateWorkload(e) {
+    var id = this.WBID.value;
+
     //Gets bootstrap-switch component value:
     var value = $('#WBIsWorkload').bootstrapSwitch('state');
     //Serializes form and append bootstrap-switch value:
@@ -730,6 +753,19 @@ function updateWorkload(e) {
     for (var i = 0; i < files.length; i++) {
         data.append('oldFiles', files[i].getAttribute("fileid") + '&' + files[i].href + '&' + files[i].text);
     }
+    var selectedUsers = $('#WBUsers option:selected');
+    var users = [];
+    for (var i = 0; i < selectedUsers.length; i++) {
+        var item = $(selectedUsers[i]);
+        var user = { Item1: item.val(), Item2: item.text() };
+        users.push(user);
+    }
+    var state = $('#' + id).parent().data('state');
+    data.append('WBStatus', state);
+    var attachments = (this.WBFiles.files != null) ? this.WBFiles.files.length : 0;
+    var tag = this.WBExpertise.options[this.WBExpertise.selectedIndex].text;
+
+    var workload = { id: this.WBID.value, title: this.WBTitle.value, start: this.WBStartDate.value, end: this.WBEndDate.value, attachments: attachments, tag: tag, users: users };
 
     validateForm(e, data, function (e, data) {
         DisableWorkloadFields();
@@ -743,6 +779,7 @@ function updateWorkload(e) {
             success: function (response) {
                 if (response.IsSuccessStatusCode) {
                     $('#WorkloadModal').modal('hide');
+                    updateTaskInFolder(workload.id, workload.title, workload.start, workload.end, workload.attachments, workload.tag, workload.users);
                 } else {
                     $('#msg').text('Error!');
                 }

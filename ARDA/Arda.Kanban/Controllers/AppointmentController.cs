@@ -73,6 +73,29 @@ namespace Arda.Kanban.Controllers
         }
 
         [HttpGet]
+        [Route("listfromuser")]
+        public IEnumerable<AppointmentViewModel> ListFromUser(string user)
+        {
+            try
+            {
+                var appointments = _repository.GetAllAppointments(user);
+
+                if (appointments != null)
+                {
+                    return appointments;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        [HttpGet]
         [Route("getappointmentbyid")]
         public AppointmentViewModel GetAppointmentByID(Guid id)
         {

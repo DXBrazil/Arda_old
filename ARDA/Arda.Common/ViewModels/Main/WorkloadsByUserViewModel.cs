@@ -20,6 +20,10 @@ namespace Arda.Common.ViewModels.Main
 
         public int _WorkloadHours { get; set; }
 
+        public int _WorkloadAttachments { get; set; }
+
+        public string _WorkloadExpertise { get; set; }
+
         public bool _WorkloadIsWorkload { get; set; }
     }
 }
