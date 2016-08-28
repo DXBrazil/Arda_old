@@ -57,6 +57,8 @@
     var startDate;
     var endDate;
 
+    google.charts.load('current', { 'packages': ['corechart'] });
+
     $(function () {
         Initialize()
         
@@ -73,7 +75,6 @@
     });
 
     function Initialize() {
-        google.charts.load('current', { 'packages': ['corechart'] });
 
         var today = getToday();
 
@@ -208,7 +209,7 @@
 
     function createTimeConsumingPieChart(data, chartSelector, title) {
         google.charts.setOnLoadCallback(drawChart(data));
-
+        
         function drawChart(data) {
             var dataTable = new google.visualization.DataTable();
 
