@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "buildOptions": {
+    //    "debugType": "portable",
+    "emitEntryPoint": true,
+    "copyToOutput": [ "appsettings.json"]
+  },
+  "dependencies": {
+    //"System.Runtime.Serialization.Primitives": "4.0.0.0",
+    "xunit": "2.1.0",
+    "dotnet-test-xunit": "1.0.0-rc2-build10025",
+    "Microsoft.AspNetCore.Mvc": "1.0.0",
+    "Microsoft.AspNetCore.TestHost": "1.0.0",
+    "Arda.Kanban": {
+      "target": "project"
+    }
+  },
+  "publishOptions": {
+    "include": [
+      "appsettings.json"
+    ]
+  },
+
+  "testRunner": "xunit",
+  "frameworks": {
+    "net451": {}
+  }
+}
