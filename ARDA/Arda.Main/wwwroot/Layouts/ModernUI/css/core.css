@@ -18002,7 +18002,10 @@ button.close {
 }
 
 .folder-header p {
-    width: 85%;
+  width: 73%;
+margin: 0;
+float: left;
+font-size: 1.1rem;
 }
 .folder-header .folder-check-status {
     width: 10%;
@@ -18011,8 +18014,9 @@ button.close {
     height: 50px;
     right: 15px;
     cursor: pointer;
-.templateDone {
 }
+.templateDone {
+
     display: none;
 }
 .templateDone + label {
@@ -18309,10 +18313,14 @@ max-width: 135px !important;
 }
 
 .task-assigners {
-  width: 70%;
-  float: left;
+  width: 100%;
 }
 
 .folder-body p {
   display: table;
+}
+
+.folder .data-sorting-buttons {
+    float: right;
+    margin: 0;
 }
