@@ -23,18 +23,15 @@ namespace Arda.Kanban.Repositories
         {
             try
             {
+                var fy = _context.FiscalYears.FirstOrDefault(f => f.FiscalYearID == metric.FiscalYearID);
+
                 var metricToBeSaved = new Metric()
                 {
                     MetricID = metric.MetricID,
                     MetricCategory = metric.MetricCategory,
                     MetricName = metric.MetricName,
                     Description = metric.Description,
-                    FiscalYear = new FiscalYear()
-                    {
-                        FiscalYearID = metric.FiscalYearID,
-                        FullNumericFiscalYear = metric.FullNumericFiscalYear,
-                        TextualFiscalYear = metric.TextualFiscalYear
-                    }
+                    FiscalYear = fy
                 };
 
                 _context.Metrics.Add(metricToBeSaved);
