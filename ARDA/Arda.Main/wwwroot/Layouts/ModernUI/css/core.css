@@ -17708,10 +17708,7 @@ button.close {
       float: left;
 }
 
-.templateStart i,
-.templateAttachments i,
-.templateHours i,
-.templateEnd i {
+.fa-task-def {
       margin: 0 5px;
 }
 
