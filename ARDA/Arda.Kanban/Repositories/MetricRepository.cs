@@ -137,9 +137,9 @@ namespace Arda.Kanban.Repositories
                                   MetricCategory = m.MetricCategory,
                                   MetricName = m.MetricName,
                                   Description = m.Description,
-                                  FiscalYearID = m.FiscalYear.FiscalYearID,
-                                  FullNumericFiscalYear = m.FiscalYear.FullNumericFiscalYear,
-                                  TextualFiscalYear = m.FiscalYear.TextualFiscalYear
+                                  FiscalYearID = (Guid)m.FiscalYear.FiscalYearID,
+                                  FullNumericFiscalYear = (int)m.FiscalYear.FullNumericFiscalYear,
+                                  TextualFiscalYear = (string)m.FiscalYear.TextualFiscalYear
                               }).First();
 
                 if (metric != null)
