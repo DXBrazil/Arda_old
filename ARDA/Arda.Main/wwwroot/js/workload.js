@@ -145,7 +145,7 @@ function getUserImageTask(user, taskId) {
         cache: true,
         success: function (data) {
             img = $('<img class="user">').attr('src', data);
-            $('#' + taskId + ' .folder-tasks .folder-footer').append(img);
+            $('#' + taskId + ' .folder-tasks .folder-footer .task-assigners').append(img);
         }
     });
 }
@@ -159,7 +159,7 @@ function createTaskInFolder(taskId, taskTitle, start, end, hours, attachments, t
     clone.querySelector('.task').classList.add(tag);
     clone.querySelector('.templateDone').id = 'iptTask' + taskId;
     clone.querySelector('.folder-check-status').setAttribute('for', 'iptTask' + taskId);
-    
+
     clone.querySelector('.task .templateTitle').textContent = taskTitle;
     clone.querySelector('.task .templateStart').textContent = start;
     clone.querySelector('.task .templateEnd').textContent = end;
@@ -183,7 +183,7 @@ function updateTaskInFolder(taskId, taskTitle, start, end, attachments, tag, use
 
     $('#' + taskId + ' .templateTitle').text(taskTitle);
     $('#' + taskId + ' .templateStart').text(start);
-    $('#' + taskId + ' .templateEnd').text(end); 
+    $('#' + taskId + ' .templateEnd').text(end);
     $('#' + taskId + ' .templateAttachments').text(attachments);
 
     $('#' + taskId + ' .folder-tasks .folder-footer img').remove();
