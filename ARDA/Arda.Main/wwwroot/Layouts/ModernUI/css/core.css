@@ -1818,6 +1818,13 @@ output {
     background-image: none;
     border: 1px solid #ccc;
 }
+
+.form-control--search {
+	height: 60px !important;
+	display: table;
+	width: 100%;
+}
+
 .form-control:focus {
     border-color: #66afe9;
     outline: 0;
@@ -17604,12 +17611,13 @@ button.close {
 .permission-group label.field--disable {
     cursor: default;
 }
+
 .dashboard-filter {
     font-weight: 400;
     line-height: 58px;
     display: inline-block;
     float: left;
-    width: 32.5%;
+    width: 49%;
     cursor: pointer;
     text-align: center;
     text-transform: uppercase;
@@ -18001,9 +18009,7 @@ button.close {
 }
 
 .folder-header p {
-  width: 70%;
 margin: 0;
-float: left;
 font-size: 1.1rem;
 }
 .folder-header .folder-check-status {
@@ -18046,11 +18052,6 @@ font-size: 1.1rem;
 #divTaskListDone .folder-check-status,
 #divTaskListActive .folder-check-status {
     display: none;
-}
-
-#divTaskListDone .folder-header p,
-#divTaskListActive .folder-header p {
-    width: 100%;
 }
 
 .folder-footer .user {
