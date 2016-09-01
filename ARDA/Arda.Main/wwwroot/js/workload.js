@@ -145,7 +145,7 @@ function getUserImageTask(user, taskId) {
         cache: true,
         success: function (data) {
             img = $('<img class="user">').attr('src', data);
-            $('#' + taskId + ' .folder-tasks .folder-footer .task-assigners').append(img);
+            $('#' + taskId + ' .folder-tasks .folder-footer').append(img);
         }
     });
 }
@@ -157,8 +157,6 @@ function createTaskInFolder(taskId, taskTitle, start, end, hours, attachments, t
 
     clone.querySelector('.task').id = taskId;
     clone.querySelector('.task').classList.add(tag);
-    clone.querySelector('.templateDone').id = 'iptTask' + taskId;
-    clone.querySelector('.folder-check-status').setAttribute('for', 'iptTask' + taskId);
 
     clone.querySelector('.task .templateTitle').textContent = taskTitle;
     clone.querySelector('.task .templateStart').textContent = start;
@@ -173,7 +171,6 @@ function createTaskInFolder(taskId, taskTitle, start, end, hours, attachments, t
     clone.querySelector('.task').addEventListener('dragstart', dragstart);
 
     clone.querySelector('.templateEdit').addEventListener('click', function () { taskedit(taskId) });
-    clone.querySelector('.templateDone').addEventListener('change', function () { taskdone(taskId) });
 
     folder.appendChild(clone, true);
 }
