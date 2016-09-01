@@ -18048,11 +18048,6 @@ font-size: 1.1rem;
     display: none;
 }
 
-#divTaskListDone .folder-header p,
-#divTaskListActive .folder-header p {
-    width: 100%;
-}
-
 .folder-footer .user {
     float: left;
 }
