@@ -17690,6 +17690,7 @@ button.close {
     background-color: #2B2E37;
     color: #fff;
 }
+
 .folder > .task {
     border: 2px solid #dfdfdf;
     width: 90%;
@@ -17709,7 +17710,8 @@ button.close {
 }
 
 .fa-task-def {
-      margin: 0 5px;
+   margin: 0 5px;
+   float: left;
 }
 
 
@@ -17999,7 +18001,7 @@ button.close {
 }
 
 .folder-header p {
-  width: 73%;
+  width: 70%;
 margin: 0;
 float: left;
 font-size: 1.1rem;
@@ -18314,7 +18316,8 @@ max-width: 135px !important;
 }
 
 .folder-body p {
-  display: table;
+	display: table;
+	padding-left: 15px;
 }
 
 .folder .data-sorting-buttons {
