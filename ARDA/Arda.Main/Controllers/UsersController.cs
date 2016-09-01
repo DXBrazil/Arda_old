@@ -238,18 +238,12 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPut]
-        public async Task<HttpResponseMessage> UpdatePermissions(string user)
+        public async Task<HttpResponseMessage> UpdatePermissions([FromQuery] string user, [FromBody] PermissionsViewModel permissions)
         {
-
-            var reader = new StreamReader(HttpContext.Request.Body, System.Text.Encoding.UTF8);
-            var requestFromAJAX = reader.ReadToEnd();
-            //Check object integrity:
-            var obj = JsonConvert.DeserializeObject<PermissionsViewModel>(requestFromAJAX);
-
-            if (user != null && obj != null)
+            if (user != null && permissions != null)
             {
                 var uniqueName = User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
-                var response = await Util.ConnectToRemoteService(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserpermissions?uniqueName=" + user, uniqueName, "", obj);
+                var response = await Util.ConnectToRemoteService(HttpMethod.Put, Util.PermissionsURL + "api/permission/updateuserpermissions?uniqueName=" + user, uniqueName, "", permissions);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -321,8 +315,6 @@ namespace Arda.Main.Controllers
         {
             try
             {
-                //var key = "photo_" + user;
-                //var photo = Util.GetString(_cache.Get(key));
                 var photo = Util.GetUserPhoto(user);
                 return photo;
             }
