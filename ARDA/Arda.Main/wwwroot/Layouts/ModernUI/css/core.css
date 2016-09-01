@@ -1818,6 +1818,11 @@ output {
     background-image: none;
     border: 1px solid #ccc;
 }
+
+.form-control--search {
+	height: 60px;
+}
+
 .form-control:focus {
     border-color: #66afe9;
     outline: 0;
