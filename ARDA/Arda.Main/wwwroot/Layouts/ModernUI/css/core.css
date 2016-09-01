@@ -17611,12 +17611,13 @@ button.close {
 .permission-group label.field--disable {
     cursor: default;
 }
+
 .dashboard-filter {
     font-weight: 400;
     line-height: 58px;
     display: inline-block;
     float: left;
-    width: 32.5%;
+    width: 49%;
     cursor: pointer;
     text-align: center;
     text-transform: uppercase;
