@@ -18001,9 +18001,7 @@ button.close {
 }
 
 .folder-header p {
-  width: 70%;
 margin: 0;
-float: left;
 font-size: 1.1rem;
 }
 .folder-header .folder-check-status {
