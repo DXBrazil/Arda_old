@@ -1820,7 +1820,9 @@ output {
 }
 
 .form-control--search {
-	height: 60px;
+	height: 60px !important;
+	display: table;
+	width: 100%;
 }
 
 .form-control:focus {
