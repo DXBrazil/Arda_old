@@ -176,8 +176,7 @@ function createTaskInFolder(taskId, taskTitle, start, end, hours, attachments, t
         getUserImageTask(value.Item1, taskId);
     });
 
-    //clone.querySelector('.task').addEventListener('dragstart', dragstart);
-
+    clone.querySelector('.task').addEventListener('dragstart', dragstart);
     clone.querySelector('.task').addEventListener('click', function () { taskedit(taskId) });
 
     folder.appendChild(clone, true);
