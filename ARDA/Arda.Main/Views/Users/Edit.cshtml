@@ -164,12 +164,14 @@
 
         if (selected.length > 0) {
             var permissions = '{ "permissions" : [';
+            //var permissions = '[';
             for (var i = 0; i < selected.length; i++) {
                 permissions += '{ "category":"' + selected[i][0] + '" , "resource":"' + selected[i][1] + '" }';
                 if (i < selected.length - 1) {
                     permissions += ',';
                 }
             }
+            //permissions += ']';
             permissions += ']}';
 
             var user = $('#UserEmail').val();
@@ -179,14 +181,14 @@
             $.ajax({
                 url: url,
                 type: "PUT",
+                contentType: "application/json",
                 data: permissions,
-                success: function (data, textStatus, jqXHR) {
+                success: function (data, textStatus, jqXHR) { 
+                    $('html,body').scrollTop(0);
                     if (data.IsSuccessStatusCode) {
-                        $('html,body').scrollTop(0);
                         $('#msgSuccess').fadeIn();
                         GoToAllUsers(2500);
                     } else {
-                        $('html,body').scrollTop(0);
                         $('#msgError').fadeIn();
                     }
                 }

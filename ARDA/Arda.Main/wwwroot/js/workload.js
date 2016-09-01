@@ -19,6 +19,14 @@ function Initialize() {
     //Other events:
     $('#WBComplexity').on('change', changeComplexity);
 
+    //Search:
+    $('#search-box').on('keyup', function () {
+        var matcher = new RegExp($(this).val(), 'gi');
+        $('.task').show().not(function () {
+            return matcher.test($(this).find('.templateTitle').text())
+        }).hide();
+    })
+
     //Components:
     $("#WBIsWorkload").bootstrapSwitch();
 
