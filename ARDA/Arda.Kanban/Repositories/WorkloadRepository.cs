@@ -344,6 +344,7 @@ namespace Arda.Kanban.Repositories
                 var workloads = (from wb in _context.WorkloadBacklogs
                                 join wbu in _context.WorkloadBacklogUsers on wb.WBUsers.Where(u => u.User.UniqueName == uniqueName).First().WBUserID equals wbu.WBUserID
                                 join uk in _context.Users on wbu.User.UniqueName equals uk.UniqueName
+                                //join at in _context.Files on wb equals at.WorkloadBacklog
                                 where uk.UniqueName.Equals(uniqueName)
                                 orderby wb.WBTitle
                                 select new WorkloadsByUserViewModel
@@ -354,6 +355,8 @@ namespace Arda.Kanban.Repositories
                                     _WorkloadEndDate = wb.WBEndDate,
                                     _WorkloadStatus = (int)wb.WBStatus,
                                     _WorkloadIsWorkload = wb.WBIsWorkload,
+                                    _WorkloadAttachments = wb.WBFiles.Count,
+                                    _WorkloadExpertise = wb.WBExpertise.ToString(),
                                     _WorkloadUsers = (from wbusers in _context.WorkloadBacklogUsers
                                                       where wbusers.WorkloadBacklog.WBID == wb.WBID
                                                       select new Tuple<string,string>(wbusers.User.UniqueName, wbusers.User.Name)).ToList()

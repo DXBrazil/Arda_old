@@ -33,10 +33,20 @@ namespace Arda.Main.Controllers
             {
                 var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", filtered_user, "");
 
-                var dados = existentWorkloads.Where( x => x._WorkloadIsWorkload == false )
-                                             .Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", and " + x._WorkloadHours + " hours were spent on this.", status = x._WorkloadStatus, users = x._WorkloadUsers, hours = x._WorkloadHours, start = x._WorkloadStartDate, end = x._WorkloadEndDate })
-                                             .Distinct()
-                                             .ToList();
+                var dados = existentWorkloads.Where(x => x._WorkloadIsWorkload == false)
+                             .Select(x => new {
+                                 id = x._WorkloadID,
+                                 title = x._WorkloadTitle,
+                                 start = x._WorkloadStartDate.ToString("dd/MM/yyyy"),
+                                 end = x._WorkloadEndDate.ToString("dd/MM/yyyy"),
+                                 hours = x._WorkloadHours,
+                                 attachments = x._WorkloadAttachments,
+                                 tag = x._WorkloadExpertise,
+                                 status = x._WorkloadStatus,
+                                 users = x._WorkloadUsers
+                             })
+                             .Distinct()
+                             .ToList();
 
                 return Json(dados);
             }
@@ -60,9 +70,17 @@ namespace Arda.Main.Controllers
                 var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", filtered_user, "");
 
                 var dados = existentWorkloads.Where(x => x._WorkloadIsWorkload == true)
-                                             .Select(x => new { data = x._WorkloadID, value = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", and " + x._WorkloadHours + " hours were spent on this.", status = x._WorkloadStatus, users= x._WorkloadUsers, hours = x._WorkloadHours, start = x._WorkloadStartDate, end = x._WorkloadEndDate})
-                                             .Distinct()
-                                             .ToList();
+                             .Select(x => new { id = x._WorkloadID,
+                                                title = x._WorkloadTitle,
+                                                start = x._WorkloadStartDate.ToString("dd/MM/yyyy"),
+                                                end = x._WorkloadEndDate.ToString("dd/MM/yyyy"),
+                                                hours = x._WorkloadHours,
+                                                attachments = x._WorkloadAttachments,
+                                                tag = x._WorkloadExpertise,
+                                                status = x._WorkloadStatus,
+                                                users = x._WorkloadUsers })
+                             .Distinct()
+                             .ToList();
 
                 return Json(dados);
             }
