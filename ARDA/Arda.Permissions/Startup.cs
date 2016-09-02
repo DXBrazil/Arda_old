@@ -16,7 +16,7 @@ using Microsoft.Extensions.Caching.Redis;
 
 namespace Arda.Permissions
 {
-    public class Startup
+    public partial class Startup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -44,6 +44,9 @@ namespace Arda.Permissions
         public void ConfigureServices(IServiceCollection services)
         {
             Arda.Common.Utils.Util.SetEnvironmentVariables(Configuration.GetSection("Endpoints"));
+
+            //services.Configure<AuthenticationOptions>(Configuration.GetSection("Authentication:AzureAd"));
+            services.AddAuthentication();
 
             // Add framework services.
             services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
@@ -85,6 +88,9 @@ namespace Arda.Permissions
             //app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            // Configure the OpenIdConnect Auth Pipeline and required services.
+            ConfigureAuth(app);
 
             app.UseCors("AllowAll");
 

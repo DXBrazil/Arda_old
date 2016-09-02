@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Arda.Common.Interfaces.Permissions;
 using Arda.Common.ViewModels.Main;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Arda.Permissions.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UserOperationsController : Controller
     {

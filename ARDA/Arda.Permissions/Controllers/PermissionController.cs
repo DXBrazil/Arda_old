@@ -7,9 +7,11 @@ using System.Net;
 using Arda.Common.ViewModels.Main;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Arda.Permissions.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class PermissionController : Controller
     {

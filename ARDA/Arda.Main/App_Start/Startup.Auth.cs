@@ -26,11 +26,11 @@ namespace Arda.Main
         {
             // Populate Azure AD Configuration Values
             Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
-            CallbackPath = Configuration["Authentication:AzureAd:CallbackPath"];
-            ClientId = Configuration["Authentication:AzureAd:ClientId"];
-            ClientSecret = Configuration["Authentication:AzureAd:ClientSecret"];
-            GraphResourceId = Configuration["Authentication:AzureAd:GraphResourceId"];
-            PostLogoutRedirectUri = Configuration["Authentication:AzureAd:PostLogoutRedirectUri"];
+            CallbackPath = Configuration["Authentication:AzureAd:Main:CallbackPath"];
+            ClientId = Configuration["Authentication:AzureAd:Main:ClientId"];
+            ClientSecret = Configuration["Authentication:AzureAd:Main:ClientSecret"];
+            GraphResourceId = Configuration["Authentication:AzureAd:Main:GraphResourceId"];
+            PostLogoutRedirectUri = Configuration["Authentication:AzureAd:Main:PostLogoutRedirectUri"];
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
