@@ -775,13 +775,15 @@ function GetWorkloadsByUser() {
 }
 
 function CallbackGetWorkloadsByUser(data) {
+    if (data.length > 0) {
+        var str = JSON.stringify(data);
+        str = str.replace(/id/g, 'data');
+        str = str.replace(/textual/g, 'value');
 
-    //Set number of returned records
-    var num = data.length;
+        object = JSON.parse(str);
 
-    if (num > 0) {
         $('#_WorkloadTitle').autocomplete({
-            lookup: data,
+            lookup: object,
             minLength: 2,
             onSelect: function (suggestion) {
                 $("#_AppointmentWorkloadWBID").val(suggestion.data);

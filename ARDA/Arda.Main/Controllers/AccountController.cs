@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Arda.Common.Utils;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Arda.Main.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private IDistributedCache _cache;

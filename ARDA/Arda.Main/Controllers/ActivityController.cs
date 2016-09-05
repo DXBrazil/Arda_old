@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Arda.Common.Utils;
 using Arda.Common.ViewModels.Main;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Arda.Main.Controllers
 {
+    [Authorize]
     public class ActivityController : Controller
     {
         [HttpGet]
