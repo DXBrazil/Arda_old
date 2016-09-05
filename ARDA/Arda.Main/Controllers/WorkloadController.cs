@@ -43,7 +43,8 @@ namespace Arda.Main.Controllers
                                  attachments = x._WorkloadAttachments,
                                  tag = x._WorkloadExpertise,
                                  status = x._WorkloadStatus,
-                                 users = x._WorkloadUsers
+                                 users = x._WorkloadUsers,
+                                 textual = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", with  " + x._WorkloadHours + " hours spent on this."
                              })
                              .Distinct()
                              .ToList();
@@ -70,15 +71,18 @@ namespace Arda.Main.Controllers
                 var existentWorkloads = await Util.ConnectToRemoteService<List<WorkloadsByUserViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/workload/listworkloadbyuser", filtered_user, "");
 
                 var dados = existentWorkloads.Where(x => x._WorkloadIsWorkload == true)
-                             .Select(x => new { id = x._WorkloadID,
-                                                title = x._WorkloadTitle,
-                                                start = x._WorkloadStartDate.ToString("dd/MM/yyyy"),
-                                                end = x._WorkloadEndDate.ToString("dd/MM/yyyy"),
-                                                hours = x._WorkloadHours,
-                                                attachments = x._WorkloadAttachments,
-                                                tag = x._WorkloadExpertise,
-                                                status = x._WorkloadStatus,
-                                                users = x._WorkloadUsers })
+                             .Select(x => new {
+                                 id = x._WorkloadID,
+                                 title = x._WorkloadTitle,
+                                 start = x._WorkloadStartDate.ToString("dd/MM/yyyy"),
+                                 end = x._WorkloadEndDate.ToString("dd/MM/yyyy"),
+                                 hours = x._WorkloadHours,
+                                 attachments = x._WorkloadAttachments,
+                                 tag = x._WorkloadExpertise,
+                                 status = x._WorkloadStatus,
+                                 users = x._WorkloadUsers,
+                                 textual = x._WorkloadTitle + " (Started in " + x._WorkloadStartDate.ToString("dd/MM/yyyy") + " and Ending in " + x._WorkloadEndDate.ToString("dd/MM/yyyy") + ", with  " + x._WorkloadHours + " hours spent on this."
+                             })
                              .Distinct()
                              .ToList();
 
