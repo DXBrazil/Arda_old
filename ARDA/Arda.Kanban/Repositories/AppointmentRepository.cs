@@ -23,20 +23,20 @@ namespace Arda.Kanban.Repositories
         {
             try
             {
-                //// Load Workload object to save.
-                //var workload = _context.WorkloadBacklogs.FirstOrDefault(wb => wb.WBID == appointment._AppointmentWorkloadWBID);
+                // Load Workload object to save.
+                var workload = _context.WorkloadBacklogs.FirstOrDefault(wb => wb.WBID == appointment._AppointmentWorkloadWBID);
 
-                //// Load UserKanban object to save.
-                //var user = _context.Users.FirstOrDefault(u => u.UniqueName == appointment._AppointmentUserUniqueName);
+                // Load UserKanban object to save.
+                var user = _context.Users.FirstOrDefault(u => u.UniqueName == appointment._AppointmentUserUniqueName);
 
                 var appointmentToBeSaved = new Appointment()
                 {
                     AppointmentID = appointment._AppointmentID,
-                    //AppointmentWorkload = workload,
+                    AppointmentWorkload = workload,
                     AppointmentDate = appointment._AppointmentDate,
                     AppointmentHoursDispensed = appointment._AppointmentHoursDispensed,
                     AppointmentTE = appointment._AppointmentTE,
-                    //AppointmentUser = user,
+                    AppointmentUser = user,
                     AppointmentComment = appointment._AppointmentComment
                 };
 
