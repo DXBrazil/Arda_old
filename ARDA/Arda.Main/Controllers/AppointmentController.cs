@@ -170,29 +170,29 @@ namespace Arda.Main.Controllers
             }
         }
 
-        //[HttpDelete]
-        //public async Task<HttpResponseMessage> DeleteAppointment(Guid id)
-        //{
-        //    try
-        //    {
-        //        var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+        [HttpDelete]
+        public async Task<HttpResponseMessage> DeleteAppointment(Guid id)
+        {
+            try
+            {
+                var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-        //        var appointmentToBeDeleted = await Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/appointment/deleteappointmentbyid?id=" + id, uniqueName, "", id);
+                var appointmentToBeDeleted = await Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/appointment/deleteappointmentbyid?id=" + id, uniqueName, "", id);
 
-        //        if (appointmentToBeDeleted.IsSuccessStatusCode)
-        //        {
-        //            return new HttpResponseMessage(HttpStatusCode.OK);
-        //        }
-        //        else
-        //        {
-        //            return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        //    }
-        //}
+                if (appointmentToBeDeleted.IsSuccessStatusCode)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
 
         [HttpPut]
         public async Task<HttpResponseMessage> EditAppointment(AppointmentViewModel appointment)
