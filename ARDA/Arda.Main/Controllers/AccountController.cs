@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Arda.Main.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private IDistributedCache _cache;
