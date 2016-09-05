@@ -45,7 +45,6 @@ namespace Arda.Permissions
         {
             Arda.Common.Utils.Util.SetEnvironmentVariables(Configuration.GetSection("Endpoints"));
 
-            //services.Configure<AuthenticationOptions>(Configuration.GetSection("Authentication:AzureAd"));
             services.AddAuthentication();
 
             // Add framework services.
