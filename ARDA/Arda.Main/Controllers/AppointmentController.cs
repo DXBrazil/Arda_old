@@ -68,13 +68,13 @@ namespace Arda.Main.Controllers
             {
                 var existentAppointments = await Util.ConnectToRemoteService<List<AppointmentViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/appointment/listfromuser?=" + uniqueName, uniqueName, "");
 
-                foreach (AppointmentViewModel m in existentAppointments)
+                foreach (AppointmentViewModel a in existentAppointments)
                 {
                     IList<string> dataRow = new List<string>();
-                    dataRow.Add(m._WorkloadTitle.ToString());
-                    dataRow.Add(m._AppointmentDate.ToString("dd/MM/yyyy"));
-                    dataRow.Add(m._AppointmentHoursDispensed.ToString());
-                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{m._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{m._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{m._AppointmentID}','{m._WorkloadTitle}','{m._AppointmentDate.ToString("dd/MM/yyyy")}','{m._AppointmentHoursDispensed}','{m._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
+                    dataRow.Add(a._WorkloadTitle.ToString());
+                    dataRow.Add(a._AppointmentDate.ToString("dd/MM/yyyy"));
+                    dataRow.Add(a._AppointmentHoursDispensed.ToString());
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{a._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/appointment/edit/{a._AppointmentID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{a._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{a._AppointmentID}','{a._WorkloadTitle}','{a._AppointmentDate.ToString("dd/MM/yyyy")}','{a._AppointmentHoursDispensed}','{a._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -97,14 +97,14 @@ namespace Arda.Main.Controllers
             {
                 var existentAppointments = await Util.ConnectToRemoteService<List<AppointmentViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/appointment/list", uniqueName, "");
 
-                foreach (AppointmentViewModel m in existentAppointments)
+                foreach (AppointmentViewModel a in existentAppointments)
                 {
                     IList<string> dataRow = new List<string>();
-                    dataRow.Add(m._WorkloadTitle.ToString());
-                    dataRow.Add(m._AppointmentDate.ToString("dd/MM/yyyy"));
-                    dataRow.Add(m._AppointmentHoursDispensed.ToString());
-                    dataRow.Add(Util.GetUserAlias(m._AppointmentUserUniqueName.ToString()));
-                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{m._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{m._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{m._AppointmentID}','{m._WorkloadTitle}','{m._AppointmentDate.ToString("dd/MM/yyyy")}','{m._AppointmentHoursDispensed}','{m._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
+                    dataRow.Add(a._WorkloadTitle.ToString());
+                    dataRow.Add(a._AppointmentDate.ToString("dd/MM/yyyy"));
+                    dataRow.Add(a._AppointmentHoursDispensed.ToString());
+                    dataRow.Add(Util.GetUserAlias(a._AppointmentUserUniqueName.ToString()));
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{a._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/appointment/edit/{a._AppointmentID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{a._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{a._AppointmentID}','{a._WorkloadTitle}','{a._AppointmentDate.ToString("dd/MM/yyyy")}','{a._AppointmentHoursDispensed}','{a._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -123,7 +123,7 @@ namespace Arda.Main.Controllers
                 // Getting uniqueName
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-                // Getting the selected fiscal year
+                // Getting the selected appointment
                 var appointmentToBeViewed = Util.ConnectToRemoteService<AppointmentViewModel>(HttpMethod.Get, Util.KanbanURL + "api/appointment/getappointmentbyid?id=" + id, uniqueName, "").Result;
 
                 if (appointmentToBeViewed != null)
@@ -143,25 +143,74 @@ namespace Arda.Main.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<HttpResponseMessage> DeleteAppointment(Guid id)
+        public IActionResult Edit(Guid id)
         {
             try
             {
+                // Getting uniqueName
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-                var appointmentToBeDeleted = await Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/appointment/deleteappointmentbyid?id=" + id, uniqueName, "", id);
+                // Getting the selected appointment
+                var appointmentToBeViewed = Util.ConnectToRemoteService<AppointmentViewModel>(HttpMethod.Get, Util.KanbanURL + "api/appointment/getappointmentbyid?id=" + id, uniqueName, "").Result;
 
-                if (appointmentToBeDeleted.IsSuccessStatusCode)
+                if (appointmentToBeViewed != null)
                 {
-                    return new HttpResponseMessage(HttpStatusCode.OK);
+                    return View(appointmentToBeViewed);
                 }
                 else
                 {
-                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    ViewBag.Message = "The system has not found the requested appointment.";
+                    return View("Error");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
+        }
+
+        //[HttpDelete]
+        //public async Task<HttpResponseMessage> DeleteAppointment(Guid id)
+        //{
+        //    try
+        //    {
+        //        var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+        //        var appointmentToBeDeleted = await Util.ConnectToRemoteService(HttpMethod.Delete, Util.KanbanURL + "api/appointment/deleteappointmentbyid?id=" + id, uniqueName, "", id);
+
+        //        if (appointmentToBeDeleted.IsSuccessStatusCode)
+        //        {
+        //            return new HttpResponseMessage(HttpStatusCode.OK);
+        //        }
+        //        else
+        //        {
+        //            return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+        //    }
+        //}
+
+        [HttpPut]
+        public async Task<HttpResponseMessage> EditAppointment(AppointmentViewModel appointment)
+        {
+            if (appointment == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            var responseAboutUpdate = await Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/appointment/editappointment", uniqueName, "", appointment);
+
+            if (responseAboutUpdate.IsSuccessStatusCode)
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }

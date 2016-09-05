@@ -10,7 +10,7 @@
                     <h2>
                         Work Appointment
                     </h2>
-                    <p>Adding a new work appointment to specific workload</p>
+                    <p>Details about the "@Model._WorkloadTitle" appointment data</p>
                 </div>
 
                 <!-- Some information -->
@@ -76,6 +76,12 @@
                         <div class="form-group">
                             <label for="_AppointmentComment">Any comment about this activity?</label>
                             <textarea class="form-control" rows="5" id="_AppointmentComment" name="_AppointmentComment" disabled>@Model._AppointmentComment</textarea>
+                        </div>
+
+                        <div class='data-sorting-buttons'>
+                            <a href='/Appointment/Edit/@Model._AppointmentID' class='ds-button-edit'>
+                                <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this Appointment?
+                            </a>
                         </div>
 
                     </form>
