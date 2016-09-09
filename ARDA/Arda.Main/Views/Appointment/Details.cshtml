@@ -1,4 +1,6 @@
-﻿@model Arda.Common.ViewModels.Main.AppointmentViewModel
+﻿@using System.Globalization;
+
+@model Arda.Common.ViewModels.Main.AppointmentViewModel
 <section class="concontainer-fluid">
 
     <div class="col-xs-12">
@@ -68,7 +70,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="_AppointmentTE">T&E (if applyable):</label>
-                                    <input type="text" id="_AppointmentTE" name="_AppointmentTE" class="form-control" value="@Model._AppointmentTE" disabled />
+                                    <input type="text" id="_AppointmentTE" name="_AppointmentTE" class="form-control" value="@Model._AppointmentTE.ToString("C", new CultureInfo("pt-BR"))" disabled />
                                 </div>
                             </div>
                         </div>
