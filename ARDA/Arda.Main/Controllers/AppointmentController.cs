@@ -204,6 +204,11 @@ namespace Arda.Main.Controllers
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
+            // Converting the T&E value to Decimal before save process
+            decimal TE = 0;
+            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
+            appointment._AppointmentTE = TE;
+
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
             var responseAboutUpdate = await Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/appointment/editappointment", uniqueName, "", appointment);
