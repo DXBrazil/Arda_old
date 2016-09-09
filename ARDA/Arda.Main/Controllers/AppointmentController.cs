@@ -9,6 +9,7 @@ using Arda.Common.ViewModels.Main;
 using System.Net;
 using Arda.Common.JSON;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace Arda.Main.Controllers
 {
@@ -22,31 +23,33 @@ namespace Arda.Main.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> AddAppointment(AppointmentViewModel appointment)
+        public async Task<JsonResult> AddAppointment(AppointmentViewModel appointment)
         {
-            if (appointment == null)
-            { 
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
+            //if (appointment == null)
+            //{ 
+            //    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            //}
 
             // Converting the T&E value to Decimal before save process
             decimal TE = 0;
-            Decimal.TryParse(Request.Form["_AppointmentTE"], out TE);
+            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
             appointment._AppointmentTE = TE;
 
+            return new JsonResult("Resultado da conversão: " + TE.ToString());
 
-            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-            var responseAboutAdd = await Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/appointment/add", uniqueName, "", appointment);
+            //var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-            if (responseAboutAdd.IsSuccessStatusCode)
-            {
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            }
-            else
-            {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
-            }
+            //var responseAboutAdd = await Util.ConnectToRemoteService(HttpMethod.Post, Util.KanbanURL + "api/appointment/add", uniqueName, "", appointment);
+
+            //if (responseAboutAdd.IsSuccessStatusCode)
+            //{
+            //    return new HttpResponseMessage(HttpStatusCode.OK);
+            //}
+            //else
+            //{
+            //    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            //}
         }
 
         public IActionResult My()
