@@ -32,7 +32,7 @@ namespace Arda.Main.Controllers
 
             // Converting the T&E value to Decimal before save process
             decimal TE = 0;
-            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
+            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
             appointment._AppointmentTE = TE;
 
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
@@ -206,7 +206,7 @@ namespace Arda.Main.Controllers
 
             // Converting the T&E value to Decimal before save process
             decimal TE = 0;
-            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
+            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
             appointment._AppointmentTE = TE;
 
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
