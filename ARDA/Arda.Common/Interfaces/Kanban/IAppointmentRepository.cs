@@ -17,5 +17,7 @@ namespace Arda.Common.Interfaces.Kanban
         AppointmentViewModel GetAppointmentByID(Guid id);
 
         bool DeleteAppointmentByID(Guid id);
+
+        bool EditAppointment(AppointmentViewModel appointment);
     }
 }

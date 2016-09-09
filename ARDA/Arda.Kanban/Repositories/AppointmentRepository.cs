@@ -32,11 +32,11 @@ namespace Arda.Kanban.Repositories
                 var appointmentToBeSaved = new Appointment()
                 {
                     AppointmentID = appointment._AppointmentID,
-                    AppointmentUser = user,
                     AppointmentWorkload = workload,
                     AppointmentDate = appointment._AppointmentDate,
                     AppointmentHoursDispensed = appointment._AppointmentHoursDispensed,
                     AppointmentTE = appointment._AppointmentTE,
+                    AppointmentUser = user,
                     AppointmentComment = appointment._AppointmentComment
                 };
 
@@ -180,6 +180,47 @@ namespace Arda.Kanban.Repositories
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public bool EditAppointment(AppointmentViewModel appointment)
+        {
+            try
+            {
+                var appointmentToBeUpdated = (from a in _context.Appointments
+                                              where a.AppointmentID == appointment._AppointmentID
+                                              select a).First();
+
+                //var user = (from u in _context.Users
+                //            where u.UniqueName == appointment._AppointmentUserName
+                //            select u).First();
+
+                //var workload = (from wb in _context.WorkloadBacklogs
+                //              where wb.WBID == appointment._AppointmentWorkloadWBID
+                //              select wb).First();
+
+                if (appointmentToBeUpdated != null)
+                {
+                    // Update informations of object
+                    appointmentToBeUpdated.AppointmentComment = appointment._AppointmentComment;
+                    appointmentToBeUpdated.AppointmentDate = appointment._AppointmentDate;
+                    appointmentToBeUpdated.AppointmentHoursDispensed = appointment._AppointmentHoursDispensed;
+                    appointmentToBeUpdated.AppointmentTE = appointment._AppointmentTE;
+                    //appointmentToBeUpdated.AppointmentUser = user;
+                    //appointmentToBeUpdated.AppointmentWorkload = workload;
+                    //appointmentToBeUpdated.AppointmentWorkloadWBID = appointment._AppointmentWorkloadWBID;
+
+                    var response = _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

@@ -17937,6 +17937,11 @@ button.close {
     color: #fff;
     border: 2px solid #80CC28;
 }
+.ds-button-workload {
+    background-color: #4160A2;
+    color: #fff;
+    border: 2px solid #4160A2;
+}
 .ds-button-update:hover {
     background-color: #fff;
     color: #80CC28;
@@ -17944,6 +17949,10 @@ button.close {
 .ds-button-edit:hover {
     background-color: #fff;
     color: #01A4EF;
+}
+.ds-button-workload:hover{
+    background-color: #fff;
+    color: #4160A2;
 }
 .ds-button-warning {
     background-color: #ee1111;

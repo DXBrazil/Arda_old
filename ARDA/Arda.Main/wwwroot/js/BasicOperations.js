@@ -15,11 +15,11 @@ $(function ($) {
     $("#table-appointments-all").DataTable({
         "sAjaxSource": "/Appointment/ListAllAppointments",
         "columns": [
-            { "width": "35%" },
-            { "width": "15%" },
+            { "width": "30%" },
+            { "width": "10%" },
             { "width": "10%" },
             { "width": "5%" },
-            { "width": "20%" }
+            { "width": "30%" }
         ],
         "columnDefs": [
             {
@@ -32,10 +32,10 @@ $(function ($) {
     $("#table-appointments-my").DataTable({
         "sAjaxSource": "/Appointment/ListMyAppointments",
         "columns": [
-            { "width": "35%" },
+            { "width": "30%" },
+            { "width": "20%" },
             { "width": "15%" },
-            { "width": "15%" },
-            { "width": "20%" }
+            { "width": "35%" }
         ],
         "columnDefs": [
             {
@@ -456,6 +456,66 @@ $(function ($) {
             }).fail(function (e, f) {
                 $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
                 $("#btnAddAppointment").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                EnableAppointmentFields();
+            });
+        }
+    });
+
+    $("#form-edit-appointment").validate({
+        rules: {
+            _AppointmentID: "required",
+            _AppointmentUserName: "required",
+            _WorkloadTitle: "required",
+            _AppointmentDate: "required",
+            _AppointmentHoursDispensed: "required"
+        },
+        messages: {
+            _AppointmentID: "Sorry but, we need appointment code.",
+            _AppointmentUserName: "Ops! Who is doind this appointment? Mandatory info.",
+            _WorkloadTitle: "Ops! You must type the workload. The system will find the occurrency in database.",
+            _AppointmentDate: "Ops! Date is mandatory.",
+            _AppointmentHoursDispensed: "Ops! Hours dispensed is mandatory."
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            UpdateCKEditor();
+            DisableAppointmentFields();
+            $("#btnUpdate").text("Updating appointment...");
+
+            var data = $(form).serialize();
+
+            $.ajax({
+                url: "/Appointment/EditAppointment",
+                type: "PUT",
+                data: data,
+            }).done(function (data) {
+                if (data.IsSuccessStatusCode) {
+                    $("#message").html("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> The appointment has been updated in Arda.</div>");
+                    $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    RedirectIn(3000, "/Appointment/My");
+                }
+                else {
+                    $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                    $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
+                    EnableAppointmentFields();
+                }
+            }).fail(function (e, f) {
+                $("#message").html("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Error!</strong> Something wrong happened with your request. Try again in few minutes.</div>");
+                $("#btnUpdate").html("<i class='fa fa-floppy-o' aria-hidden='true'></i> Save");
                 EnableAppointmentFields();
             });
         }

@@ -117,6 +117,34 @@ namespace Arda.Kanban.Controllers
                 return null;
             }
         }
+        
+        [HttpPut]
+        [Route("editappointment")]
+        public HttpResponseMessage EditAppointmentByID()
+        {
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(HttpContext.Request.Body);
+                string requestFromPost = reader.ReadToEnd();
+                var appointment = JsonConvert.DeserializeObject<AppointmentViewModel>(requestFromPost);
+
+
+                var response = _repository.EditAppointment(appointment);
+
+                if (response)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                }
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
 
         [HttpDelete]
         [Route("deleteappointmentbyid")]

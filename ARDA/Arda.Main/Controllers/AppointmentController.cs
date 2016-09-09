@@ -8,9 +8,12 @@ using System.Net.Http;
 using Arda.Common.ViewModels.Main;
 using System.Net;
 using Arda.Common.JSON;
+using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace Arda.Main.Controllers
 {
+    [Authorize]
     public class AppointmentController : Controller
     {
         public IActionResult Add()
@@ -23,15 +26,14 @@ namespace Arda.Main.Controllers
         public async Task<HttpResponseMessage> AddAppointment(AppointmentViewModel appointment)
         {
             if (appointment == null)
-            { 
+            {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
             // Converting the T&E value to Decimal before save process
             decimal TE = 0;
-            Decimal.TryParse(Request.Form["_AppointmentTE"], out TE);
+            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
             appointment._AppointmentTE = TE;
-
 
             var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
@@ -68,13 +70,13 @@ namespace Arda.Main.Controllers
             {
                 var existentAppointments = await Util.ConnectToRemoteService<List<AppointmentViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/appointment/listfromuser?=" + uniqueName, uniqueName, "");
 
-                foreach (AppointmentViewModel m in existentAppointments)
+                foreach (AppointmentViewModel a in existentAppointments)
                 {
                     IList<string> dataRow = new List<string>();
-                    dataRow.Add(m._WorkloadTitle.ToString());
-                    dataRow.Add(m._AppointmentDate.ToString("dd/MM/yyyy"));
-                    dataRow.Add(m._AppointmentHoursDispensed.ToString());
-                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{m._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{m._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{m._AppointmentID}','{m._WorkloadTitle}','{m._AppointmentDate.ToString("dd/MM/yyyy")}','{m._AppointmentHoursDispensed}','{m._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
+                    dataRow.Add(a._WorkloadTitle.ToString());
+                    dataRow.Add(a._AppointmentDate.ToString("dd/MM/yyyy"));
+                    dataRow.Add(a._AppointmentHoursDispensed.ToString());
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{a._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/appointment/edit/{a._AppointmentID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{a._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-workload'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{a._AppointmentID}','{a._WorkloadTitle}','{a._AppointmentDate.ToString("dd/MM/yyyy")}','{a._AppointmentHoursDispensed}','{a._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -97,14 +99,14 @@ namespace Arda.Main.Controllers
             {
                 var existentAppointments = await Util.ConnectToRemoteService<List<AppointmentViewModel>>(HttpMethod.Get, Util.KanbanURL + "api/appointment/list", uniqueName, "");
 
-                foreach (AppointmentViewModel m in existentAppointments)
+                foreach (AppointmentViewModel a in existentAppointments)
                 {
                     IList<string> dataRow = new List<string>();
-                    dataRow.Add(m._WorkloadTitle.ToString());
-                    dataRow.Add(m._AppointmentDate.ToString("dd/MM/yyyy"));
-                    dataRow.Add(m._AppointmentHoursDispensed.ToString());
-                    dataRow.Add(Util.GetUserAlias(m._AppointmentUserUniqueName.ToString()));
-                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{m._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{m._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-edit'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{m._AppointmentID}','{m._WorkloadTitle}','{m._AppointmentDate.ToString("dd/MM/yyyy")}','{m._AppointmentHoursDispensed}','{m._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
+                    dataRow.Add(a._WorkloadTitle.ToString());
+                    dataRow.Add(a._AppointmentDate.ToString("dd/MM/yyyy"));
+                    dataRow.Add(a._AppointmentHoursDispensed.ToString());
+                    dataRow.Add(Util.GetUserAlias(a._AppointmentUserUniqueName.ToString()));
+                    dataRow.Add($"<div class='data-sorting-buttons'><a href='/appointment/details/{a._AppointmentID}' class='ds-button-detail'><i class='fa fa-align-justify' aria-hidden='true'></i> Details</a></div>&nbsp;<div class='data-sorting-buttons'><a href='/appointment/edit/{a._AppointmentID}' class='ds-button-edit'><i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit</a></div>&nbsp;<div class='data-sorting-buttons'><a href='#' onclick=\"detailsWorkloadState(); HideAllButtons(); loadWorkload('{a._AppointmentWorkloadWBID}');\" data-toggle='modal' data-target='#WorkloadModal' class='ds-button-workload'><i class='fa fa-tasks' aria-hidden='true'></i> Workload</a></div>&nbsp;<div class='data-sorting-buttons'><a data-toggle='modal' data-target='#generic-modal' onclick=\"ModalDelete_Appointment('{a._AppointmentID}','{a._WorkloadTitle}','{a._AppointmentDate.ToString("dd/MM/yyyy")}','{a._AppointmentHoursDispensed}','{a._AppointmentUserUniqueName}');\" class='ds-button-delete'><i class='fa fa-trash' aria-hidden='true'></i> Delete</a></div>");
                     dataTablesSource.aaData.Add(dataRow);
                 }
             }
@@ -123,7 +125,34 @@ namespace Arda.Main.Controllers
                 // Getting uniqueName
                 var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
 
-                // Getting the selected fiscal year
+                // Getting the selected appointment
+                var appointmentToBeViewed = Util.ConnectToRemoteService<AppointmentViewModel>(HttpMethod.Get, Util.KanbanURL + "api/appointment/getappointmentbyid?id=" + id, uniqueName, "").Result;
+
+                if (appointmentToBeViewed != null)
+                {
+                    return View(appointmentToBeViewed);
+                }
+                else
+                {
+                    ViewBag.Message = "The system has not found the requested appointment.";
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View("Error");
+            }
+        }
+
+        public IActionResult Edit(Guid id)
+        {
+            try
+            {
+                // Getting uniqueName
+                var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+                // Getting the selected appointment
                 var appointmentToBeViewed = Util.ConnectToRemoteService<AppointmentViewModel>(HttpMethod.Get, Util.KanbanURL + "api/appointment/getappointmentbyid?id=" + id, uniqueName, "").Result;
 
                 if (appointmentToBeViewed != null)
@@ -162,6 +191,33 @@ namespace Arda.Main.Controllers
                 }
             }
             catch (Exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        public async Task<HttpResponseMessage> EditAppointment(AppointmentViewModel appointment)
+        {
+            if (appointment == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            // Converting the T&E value to Decimal before save process
+            decimal TE = 0;
+            Decimal.TryParse(Request.Form["_AppointmentTE"], NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint, new CultureInfo("pt-BR"), out TE);
+            appointment._AppointmentTE = TE;
+
+            var uniqueName = HttpContext.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+            var responseAboutUpdate = await Util.ConnectToRemoteService(HttpMethod.Put, Util.KanbanURL + "api/appointment/editappointment", uniqueName, "", appointment);
+
+            if (responseAboutUpdate.IsSuccessStatusCode)
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
             {
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }

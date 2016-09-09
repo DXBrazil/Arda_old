@@ -1,4 +1,6 @@
-﻿@model Arda.Common.ViewModels.Main.AppointmentViewModel
+﻿@using System.Globalization;
+
+@model Arda.Common.ViewModels.Main.AppointmentViewModel
 <section class="concontainer-fluid">
 
     <div class="col-xs-12">
@@ -10,7 +12,7 @@
                     <h2>
                         Work Appointment
                     </h2>
-                    <p>Adding a new work appointment to specific workload</p>
+                    <p>Details about the "@Model._WorkloadTitle" appointment data</p>
                 </div>
 
                 <!-- Some information -->
@@ -68,7 +70,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="_AppointmentTE">T&E (if applyable):</label>
-                                    <input type="text" id="_AppointmentTE" name="_AppointmentTE" class="form-control" value="@Model._AppointmentTE" disabled />
+                                    <input type="text" id="_AppointmentTE" name="_AppointmentTE" class="form-control" value="@Model._AppointmentTE.ToString("C", new CultureInfo("pt-BR"))" disabled />
                                 </div>
                             </div>
                         </div>
@@ -76,6 +78,12 @@
                         <div class="form-group">
                             <label for="_AppointmentComment">Any comment about this activity?</label>
                             <textarea class="form-control" rows="5" id="_AppointmentComment" name="_AppointmentComment" disabled>@Model._AppointmentComment</textarea>
+                        </div>
+
+                        <div class='data-sorting-buttons'>
+                            <a href='/Appointment/Edit/@Model._AppointmentID' class='ds-button-edit'>
+                                <i class='fa fa-pencil-square-o' aria-hidden='true'></i> Edit this Appointment?
+                            </a>
                         </div>
 
                     </form>
