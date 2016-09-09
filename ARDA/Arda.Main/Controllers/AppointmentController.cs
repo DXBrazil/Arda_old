@@ -8,9 +8,11 @@ using System.Net.Http;
 using Arda.Common.ViewModels.Main;
 using System.Net;
 using Arda.Common.JSON;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Arda.Main.Controllers
 {
+    [Authorize]
     public class AppointmentController : Controller
     {
         public IActionResult Add()
