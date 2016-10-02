@@ -1,8 +1,8 @@
 {
   "Endpoints": {
     "ardaapp": "https://ardaapp.azurewebsites.net/",
-    "permissions-service": "http://permissions-service.azurewebsites.net/",
-    "kanban-service": "http://kanban-service.azurewebsites.net/",
-    "reports-service": "http://reports-service.azurewebsites.net/"
+    "permissions-service": "https://permissions-service.azurewebsites.net/",
+    "kanban-service": "https://kanban-service.azurewebsites.net/",
+    "reports-service": "https://reports-service.azurewebsites.net/"
   }
 }
