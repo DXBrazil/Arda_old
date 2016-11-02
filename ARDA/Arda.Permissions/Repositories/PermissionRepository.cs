@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Arda.Common.ViewModels.Main;
 using Arda.Kanban.Models;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Arda.Permissions.Repositories
 {
@@ -319,10 +320,11 @@ namespace Arda.Permissions.Repositories
             EmailLogic clientEmail = new EmailLogic();
 
             // Mounting parameters and message.
-            string FromName = "Arda Team";
-            string FromEmail = "ardaapp@microsoft.com";
+            var Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
+            var admin = Configuration["Email:Administrator"];
+
             string ToName = "Arda Administrator";
-            string ToEmail = "fabsanc@microsoft.com";
+            string ToEmail = admin;
             string Subject = "[ARDA] A new user has been logged @ Arda";
 
             StringBuilder StructureModified = new StringBuilder();
@@ -345,7 +347,7 @@ namespace Arda.Permissions.Repositories
 
             try
             {
-                var EmailTask = EmailObject.SendEmailAsync(FromName, FromEmail, ToName, ToEmail, Subject, StructureModified.ToString());
+                var EmailTask = EmailObject.SendEmailAsync(ToName, ToEmail, Subject, StructureModified.ToString());
                 return true;
             }
             catch (Exception)

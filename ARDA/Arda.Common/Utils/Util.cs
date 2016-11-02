@@ -26,20 +26,7 @@ namespace Arda.Common.Utils
 
         static Util()
         {
-            // Set up configuration sources.
-            //var builder = new ConfigurationBuilder()
-            //    .AddJsonFile("secrets.json", true);
 
-            //var Configuration = builder.Build();
-
-            string redisConfig = "arda.redis.cache.windows.net:6380,password=66Tw+4fc8tkeHWr1Els4jtGF1pIhCSP0ncIXB4PuyDk=,ssl=True,abortConnect=False";
-            string redisInstance = "arda.redis.cache.windows.net";
-
-            _cache = new RedisCache(new RedisCacheOptions
-            {
-                Configuration = redisConfig, // Configuration["Storage:Redis:Configuration"],
-                InstanceName = redisInstance // Configuration["Storage:Redis:InstanceName"]
-            });
         }
 
         public static string GetUserPhoto(string user)
@@ -243,10 +230,16 @@ namespace Arda.Common.Utils
 
         public static void SetEnvironmentVariables(IConfiguration config)
         {
-            MainURL = config["ardaapp"];
-            PermissionsURL = config["permissions-service"];
-            KanbanURL = config["kanban-service"];
-            ReportsURL = config["reports-service"];
+            MainURL = config["Endpoints:ardaapp"];
+            PermissionsURL = config["Endpoints:permissions-service"];
+            KanbanURL = config["Endpoints:kanban-service"];
+            ReportsURL = config["Endpoints:reports-service"];
+
+            _cache = new RedisCache(new RedisCacheOptions
+            {
+                Configuration = config["Storage:Redis:Configuration"],
+                InstanceName = config["Storage:Redis:InstanceName"]
+            });
         }
     }
 }

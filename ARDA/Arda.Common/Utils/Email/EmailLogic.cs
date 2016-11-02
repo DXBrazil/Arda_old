@@ -5,33 +5,40 @@ using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
 using MailKit.Security;
+using Microsoft.Extensions.Configuration;
 
 namespace Arda.Common.Email
 {
     public class EmailLogic
     {
-        public async Task SendEmailAsync(string FromName, string FromEmail, string ToName, string ToEmail, string Subject, string Body)
+        public async Task SendEmailAsync(string ToName, string ToEmail, string Subject, string Body)
         {
+            var Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
+            var team = Configuration["Email:Team"];
+            var host = Configuration["Email:Host"];
+            var port = int.Parse(Configuration["Email:Port"]);
+            var user = Configuration["Email:Username"];
+            var pass = Configuration["Email:Password"];
+
             var message = new MimeMessage();
+
+            string FromName = "Arda Team";
+            string FromEmail = team;
+
             message.From.Add(new MailboxAddress(FromName, FromEmail));
             message.To.Add(new MailboxAddress(ToName, ToEmail));
             message.Subject = Subject;
 
             var Builder = new BodyBuilder();
 
-            //message.Body = new TextPart("plain")
-            //{
-            //    Text = Body
-            //};
-
             Builder.HtmlBody = Body;
             message.Body = Builder.ToMessageBody();
 
             using (var client = new SmtpClient())
             {
-                client.Connect("smtp.sendgrid.net", 587, false);
+                client.Connect(host, port, false);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate("azure_4ef2ae00a532aaf67c72e8a105e71f8c@azure.com", "arda0987");
+                client.Authenticate(user, pass);
                 await client.SendAsync(message);
                 client.Disconnect(true);
             }

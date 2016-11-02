@@ -46,7 +46,7 @@ namespace Arda.Main
         public void ConfigureServices(IServiceCollection services)
         {
             //Injecting endpoints
-            Arda.Common.Utils.Util.SetEnvironmentVariables(Configuration.GetSection("Endpoints"));
+            Arda.Common.Utils.Util.SetEnvironmentVariables(Configuration);
 
             services.AddCors(x => x.AddPolicy("AllowAll", c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 

@@ -390,8 +390,6 @@ namespace Arda.Kanban.Repositories
             EmailLogic clientEmail = new EmailLogic();
 
             // Mounting parameters and message.
-            string FromName = "Arda Team";
-            string FromEmail = "ardaapp@microsoft.com";
             string ToName = Util.GetUserAlias(uniqueName);
             string ToEmail = uniqueName;
             string Subject = "";
@@ -431,7 +429,7 @@ namespace Arda.Kanban.Repositories
 
             try
             {
-                var EmailTask = EmailObject.SendEmailAsync(FromName, FromEmail, ToName, ToEmail, Subject, StructureModified.ToString());
+                var EmailTask = EmailObject.SendEmailAsync(ToName, ToEmail, Subject, StructureModified.ToString());
                 return true;
             }
             catch (Exception)
